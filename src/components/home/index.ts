@@ -1,0 +1,9 @@
+export { HeroSection } from "./HeroSection";
+export { TrustBadges } from "./TrustBadges";
+export { FeaturedCaravans } from "./FeaturedCaravans";
+export { WhyChooseUs } from "./WhyChooseUs";
+export { ReviewsSection } from "./ReviewsSection";
+export { CTASection } from "./CTASection";
+export { Newsletter } from "./Newsletter";
+export { VideoSection } from "./VideoSection";
+export { MetricsSection } from "./MetricsSection";

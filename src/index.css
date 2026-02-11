@@ -1,0 +1,217 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
+@layer base {
+  :root {
+    /* Australian Outback Premium Palette */
+    --background: 40 25% 97%;
+    --foreground: 220 15% 15%;
+
+    --card: 40 20% 99%;
+    --card-foreground: 220 15% 15%;
+
+    --popover: 40 20% 99%;
+    --popover-foreground: 220 15% 15%;
+
+    /* Deep Charcoal - Primary brand color */
+    --primary: 220 15% 18%;
+    --primary-foreground: 40 25% 97%;
+
+    /* Dusty Sand - Secondary warm tone */
+    --secondary: 38 30% 92%;
+    --secondary-foreground: 220 15% 18%;
+
+    /* Soft gray muted */
+    --muted: 40 15% 90%;
+    --muted-foreground: 220 10% 45%;
+
+    /* Olive Green - Accent for CTAs */
+    --accent: 85 35% 35%;
+    --accent-foreground: 40 25% 97%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 40 25% 97%;
+
+    --border: 40 20% 85%;
+    --input: 40 20% 85%;
+    --ring: 85 35% 35%;
+
+    --radius: 0.75rem;
+
+    /* Custom brand colors */
+    --sand: 38 35% 85%;
+    --sand-light: 40 30% 95%;
+    --charcoal: 220 15% 18%;
+    --charcoal-light: 220 12% 30%;
+    --olive: 85 35% 35%;
+    --olive-light: 85 30% 45%;
+    --rust: 25 60% 45%;
+    --cream: 45 40% 96%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(220 15% 18% / 0.85), hsl(220 15% 18% / 0.4));
+    --gradient-card: linear-gradient(180deg, hsl(40 20% 99%), hsl(40 25% 97%));
+    --gradient-accent: linear-gradient(135deg, hsl(85 35% 35%), hsl(85 30% 45%));
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px hsl(220 15% 18% / 0.06);
+    --shadow-md: 0 4px 20px hsl(220 15% 18% / 0.08);
+    --shadow-lg: 0 8px 40px hsl(220 15% 18% / 0.12);
+    --shadow-glow: 0 0 30px hsl(85 35% 35% / 0.2);
+
+    --sidebar-background: 40 20% 99%;
+    --sidebar-foreground: 220 15% 15%;
+    --sidebar-primary: 220 15% 18%;
+    --sidebar-primary-foreground: 40 25% 97%;
+    --sidebar-accent: 38 30% 92%;
+    --sidebar-accent-foreground: 220 15% 18%;
+    --sidebar-border: 40 20% 85%;
+    --sidebar-ring: 85 35% 35%;
+  }
+
+  .dark {
+    --background: 220 15% 10%;
+    --foreground: 40 25% 95%;
+
+    --card: 220 15% 14%;
+    --card-foreground: 40 25% 95%;
+
+    --popover: 220 15% 14%;
+    --popover-foreground: 40 25% 95%;
+
+    --primary: 40 25% 95%;
+    --primary-foreground: 220 15% 10%;
+
+    --secondary: 220 12% 20%;
+    --secondary-foreground: 40 25% 95%;
+
+    --muted: 220 12% 20%;
+    --muted-foreground: 40 15% 60%;
+
+    --accent: 85 35% 45%;
+    --accent-foreground: 220 15% 10%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 40 25% 95%;
+
+    --border: 220 12% 25%;
+    --input: 220 12% 25%;
+    --ring: 85 35% 45%;
+
+    --sand: 38 25% 25%;
+    --sand-light: 40 20% 18%;
+    --charcoal: 220 15% 85%;
+    --charcoal-light: 220 12% 70%;
+    --olive: 85 30% 50%;
+    --olive-light: 85 25% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-olive to-olive-light;
+  }
+
+  .card-elevated {
+    @apply bg-card rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-charcoal-light px-6 py-3 rounded-lg font-medium transition-all duration-200;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-accent-foreground hover:bg-olive-light px-6 py-3 rounded-lg font-medium transition-all duration-200;
+  }
+
+  .link-underline {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full;
+  }
+}
+
+@layer utilities {
+  .animate-fade-up {
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.4s ease-out forwards;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+}
