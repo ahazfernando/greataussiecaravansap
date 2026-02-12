@@ -40,10 +40,7 @@ export const DealerCard = ({ dealer, index }: DealerCardProps) => {
         </h3>
 
         {/* Location Badge */}
-        <Badge className="relative mb-4 w-fit bg-gradient-to-r from-accent/20 to-accent/10 text-accent border border-accent/30 px-2.5 py-1 rounded-full hover:from-accent/30 hover:to-accent/20 transition-all text-xs">
-          <MapPin className="h-3 w-3 mr-1" />
-          {dealer.city}, {dealer.state}
-        </Badge>
+
 
         {/* Contact Information */}
         <div className="relative space-y-2.5 mb-4 flex-grow">

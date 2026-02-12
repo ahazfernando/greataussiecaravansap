@@ -49,75 +49,70 @@ const dealers: Record<string, Array<{
     },
     {
       id: "2",
-      name: "Newcastle Caravan World",
-      address: "456 Hunter Street",
-      city: "Newcastle",
+      name: "RV Central – Port Macquarie",
+      address: "183 Hastings River Dr",
+      city: "Port Macquarie",
       state: "NSW",
-      phone: "(02) 9000 0001",
-      email: "newcastle@gac.com.au",
+      phone: "02 6584 1555",
+      email: "sales@rvcentral.com.au",
+      website: "https://www.rvcentral.com.au",
       hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
     },
     {
       id: "nsw-3",
-      name: "Wollongong Caravan Depot",
-      address: "789 Princes Highway",
-      city: "Wollongong",
+      name: "RV Central – Nowra",
+      address: "334 Princes Hwy",
+      city: "Bomaderry",
       state: "NSW",
-      phone: "(02) 9000 0011",
-      email: "wollongong@gac.com.au",
+      phone: "02 4422 4200",
+      email: "sales@rvcentral.com.au",
+      website: "https://www.rvcentral.com.au",
       hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
     },
     {
       id: "nsw-4",
-      name: "Central Coast Caravan Hub",
-      address: "321 Pacific Highway",
-      city: "Gosford",
+      name: "RV Central – Coffs Harbour",
+      address: "14/380 Pacific Hwy",
+      city: "Coffs Harbour",
       state: "NSW",
-      phone: "(02) 9000 0012",
-      email: "centralcoast@gac.com.au",
+      phone: "02 6652 1515",
+      email: "sales@rvcentral.com.au",
+      website: "https://www.rvcentral.com.au",
       hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
     },
     {
       id: "nsw-5",
-      name: "Wagga Wagga Caravan Centre",
-      address: "147 Sturt Highway",
-      city: "Wagga Wagga",
+      name: "RV Central – Morisset",
+      address: "57 Alliance Ave",
+      city: "Morisset",
       state: "NSW",
-      phone: "(02) 9000 0013",
-      email: "wagga@gac.com.au",
+      phone: "02 4970 4131",
+      email: "sales@rvcentral.com.au",
+      website: "https://www.rvcentral.com.au",
       hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
     },
     {
       id: "nsw-6",
-      name: "Albury Caravan Centre",
-      address: "258 Wodonga Place",
-      city: "Albury",
+      name: "RV Central – Morisset",
+      address: "57 Alliance Ave",
+      city: "Morisset",
       state: "NSW",
-      phone: "(02) 9000 0014",
-      email: "albury@gac.com.au",
+      phone: "02 4970 4131",
+      email: "sales@rvcentral.com.au",
+      website: "https://www.rvcentral.com.au",
       hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
     },
   ],
   vic: [
     {
-      id: "3",
-      name: "Melbourne Caravan Showroom",
-      address: "789 Collins Street",
-      city: "Melbourne",
+      id: "vic-1",
+      name: "Ballarat City Caravans",
+      address: "152, Albert st",
+      city: "Sebastopol",
       state: "VIC",
-      phone: "(03) 9000 0002",
-      email: "melbourne@gac.com.au",
-      website: "https://melbourne.gac.com.au",
-      hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
-    },
-    {
-      id: "vic-2",
-      name: "Geelong Caravan World",
-      address: "456 Moorabool Street",
-      city: "Geelong",
-      state: "VIC",
-      phone: "(03) 9000 0015",
-      email: "geelong@gac.com.au",
+      phone: "03 5335 9999",
+      email: "sales@ballaratcaravans.com.au",
+      website: "https://www.ballaratcaravans.com.au",
       hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
     },
   ],
@@ -150,54 +145,19 @@ const dealers: Record<string, Array<{
   sa: [
     {
       id: "6",
-      name: "Great Aussie Caravans",
-      address: "88 – 106 Kyabram Street",
-      city: "Coolaroo",
-      state: "VIC",
-      phone: "(03) 9308 8511",
-      email: "sales@greataussiecaravans.com.au",
-      website: "https://www.greataussiecaravans.com.au",
-      hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
+      name: "Dario Caravans",
+      address: "1 Pinn St",
+      city: "St Marys",
+      state: "SA",
+      phone: "(08) 8277 4388",
+      email: "sales@dariocaravans.com.au",
+      website: "https://www.dariocaravans.com.au",
+      hours: "Mon-Fri: 8:30am-5pm, Sat: 9am-12pm",
     },
   ],
-  act: [
-    {
-      id: "7",
-      name: "Canberra Caravan Centre",
-      address: "147 Northbourne Avenue",
-      city: "Canberra",
-      state: "ACT",
-      phone: "(02) 9000 0006",
-      email: "canberra@gac.com.au",
-      hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
-    },
-  ],
-  tas: [
-    {
-      id: "8",
-      name: "Great Aussie Caravans",
-      address: "88 – 106 Kyabram Street",
-      city: "Coolaroo",
-      state: "VIC",
-      phone: "(03) 9308 8511",
-      email: "sales@greataussiecaravans.com.au",
-      website: "https://www.greataussiecaravans.com.au",
-      hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
-    },
-  ],
-  nt: [
-    {
-      id: "9",
-      name: "Great Aussie Caravans",
-      address: "88 – 106 Kyabram Street",
-      city: "Coolaroo",
-      state: "VIC",
-      phone: "(03) 9308 8511",
-      email: "sales@greataussiecaravans.com.au",
-      website: "https://www.greataussiecaravans.com.au",
-      hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
-    },
-  ],
+  act: [],
+  tas: [],
+  nt: [],
   "nz-north": [
     {
       id: "10",
@@ -289,7 +249,7 @@ export default function DealersPage() {
             {/* Map Section - Dynamic width based on selection */}
             <div
               className={
-                selectedRegion
+                selectedRegion && displayDealers.length > 0
                   ? "col-span-12 lg:col-span-7 transition-all duration-500"
                   : "col-span-12 lg:col-span-12 transition-all duration-500"
               }
@@ -328,7 +288,7 @@ export default function DealersPage() {
             </div>
 
             {/* Dealers Cards - Slide in from right */}
-            {selectedRegion && (
+            {selectedRegion && displayDealers.length > 0 && (
               <div
                 className={
                   isAnimating
@@ -353,7 +313,9 @@ export default function DealersPage() {
                 ) : (
                   <div className="bg-black border border-gray-800 rounded-xl p-8 text-center">
                     <p className="text-white">
-                      No dealers found in {regionNames[selectedRegion] || 'this region'}. Please check back soon or contact us directly.
+                      {['nt', 'tas'].includes(selectedRegion || '')
+                        ? `Currently we don't have a dealer in ${selectedRegion === 'tas' ? 'Tasmania' : 'the Northern Territory'}, but we're working on it! In the meantime, please contact us directly and we'll be happy to assist you.`
+                        : `No dealers found in ${selectedRegion ? regionNames[selectedRegion] : 'this region'}. Please check back soon or contact us directly.`}
                     </p>
                   </div>
                 )}

@@ -31,22 +31,22 @@ const dealerPinPositions: Array<{ x: number; y: number; dealerId: string; region
   { x: 295, y: 165, dealerId: '1', regionId: 'nsw' },       // Sydney (coast, mid-state)
   { x: 275, y: 140, dealerId: '2', regionId: 'nsw' },       // Newcastle (coast, north) Complete
   { x: 255, y: 190, dealerId: 'nsw-3', regionId: 'nsw' },   // Wollongong (coast, south)Complete
-  { x: 274, y: 150, dealerId: 'nsw-4', regionId: 'nsw' },   // Central Coast (coast, between Sydney & Newcastle)Complete
+  { x: 275, y: 130, dealerId: 'nsw-4', regionId: 'nsw' },   // Coffs Harbour (north coast)
   { x: 260, y: 175, dealerId: 'nsw-5', regionId: 'nsw' },   // Wagga Wagga (inland, southwest)
   { x: 268, y: 158, dealerId: 'nsw-6', regionId: 'nsw' },   // Albury (border, near VIC)
 
   // Single dealers for other regions
   { x: 30, y: 160, dealerId: '5', regionId: 'wa' },
-  { x: 144, y: 25, dealerId: '9', regionId: 'nt' },
+
   { x: 274, y: 120, dealerId: '4', regionId: 'qld' },
   { x: 160, y: 170, dealerId: '6', regionId: 'sa' },
   { x: 245, y: 184, dealerId: '7', regionId: 'act' },
 
   // Victoria dealers - 2 pins
-  { x: 230, y: 205, dealerId: '3', regionId: 'vic' },      // Melbourne (capital)
-  { x: 212, y: 205, dealerId: 'vic-2', regionId: 'vic' },  // Geelong (southwest of Melbourne)
 
-  { x: 228, y: 232, dealerId: '8', regionId: 'tas' },
+  { x: 208, y: 200, dealerId: 'vic-1', regionId: 'vic' },  // Ballarat
+
+
 ];
 
 interface MapPinProps {

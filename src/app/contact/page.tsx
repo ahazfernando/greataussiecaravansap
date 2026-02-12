@@ -126,12 +126,13 @@ export default function ContactPage() {
       },
       {
         id: "2",
-        name: "Newcastle Caravan World",
-        address: "456 Hunter Street",
-        city: "Newcastle",
+        name: "RV Central – Port Macquarie",
+        address: "183 Hastings River Dr",
+        city: "Port Macquarie",
         state: "NSW",
-        phone: "(02) 9000 0001",
-        email: "newcastle@gac.com.au",
+        phone: "02 6584 1555",
+        email: "sales@rvcentral.com.au",
+        website: "https://www.rvcentral.com.au",
         hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
       },
     ],
@@ -185,18 +186,7 @@ export default function ContactPage() {
         hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
       },
     ],
-    act: [
-      {
-        id: "7",
-        name: "Canberra Caravan Centre",
-        address: "147 Northbourne Avenue",
-        city: "Canberra",
-        state: "ACT",
-        phone: "(02) 9000 0006",
-        email: "canberra@gac.com.au",
-        hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
-      },
-    ],
+    act: [],
     tas: [
       {
         id: "8",
