@@ -223,6 +223,9 @@ export default function DealersPage() {
       setSelectedRegion(regionId);
       setSelectedDealerId(dealerId);
       setDisplayDealers([dealer]);
+    } else {
+      // Fallback for regions with pins but no currently active dealers (e.g. ACT)
+      handleRegionClick(regionId);
     }
   };
 
