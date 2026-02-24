@@ -48,7 +48,7 @@ export default function AllyTechPage() {
               Advanced Aluminium Frame Construction
             </Badge>
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              AllyTech Construction{" "}
+              AllyTech Construction <br />{" "}
               <span className="text-accent">Strength Without Compromise</span>
             </h1>
             <p className="text-lg md:text-xl text-white/80 mb-8 leading-relaxed max-w-2xl">

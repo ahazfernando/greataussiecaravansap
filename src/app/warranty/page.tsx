@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { MultiImageUpload } from "@/components/ui/multi-image-upload";
 import {
   Shield,
   CheckCircle2,
@@ -87,6 +88,7 @@ export default function WarrantyPage() {
     dealerName: "",
     chassisNumber: "",
     reason: "",
+    images: [] as string[],
   });
 
   useEffect(() => {
@@ -140,6 +142,7 @@ export default function WarrantyPage() {
         dealerName: formData.dealerName,
         chassisNumber: formData.chassisNumber,
         reason: formData.reason,
+        images: formData.images,
         status: 'new',
         createdAt: Timestamp.now(),
       });
@@ -159,6 +162,7 @@ export default function WarrantyPage() {
         dealerName: "",
         chassisNumber: "",
         reason: "",
+        images: [],
       });
     } catch (error) {
       console.error("Error submitting claim:", error);
@@ -350,7 +354,7 @@ export default function WarrantyPage() {
             {/* Right Side - Warranty Claim Form */}
             <div className="order-1 lg:order-2">
               <div className="relative">
-                <div className="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative z-10">
+                <div className="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-8 md:p-10 shadow-2xl relative z-10">
                   {isSubmitted ? (
                     <div className="text-center py-12">
                       <div className="w-20 h-20 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center mx-auto mb-6">
@@ -575,6 +579,15 @@ export default function WarrantyPage() {
                             required
                             placeholder="Please describe the issue in detail..."
                             className="bg-black/40 border-gray-800 min-h-[120px] focus:border-accent/50 text-white resize-none"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <MultiImageUpload
+                            value={formData.images}
+                            onChange={(urls) => setFormData(prev => ({ ...prev, images: urls }))}
+                            label="Supporting Images (Optional)"
+                            maxFiles={5}
                           />
                         </div>
 

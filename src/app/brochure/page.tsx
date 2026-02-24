@@ -61,13 +61,13 @@ const getModelLogo = (modelName: string): string => {
 
 // Available models
 const models = [
-  {
+  /* {
     id: "striker",
     name: "Striker",
     tagline: "Hybrid Adventure Ready",
     heroImage: "/caravan/CaravanImage(D1V1C1).webp",
     category: "hybrid",
-  },
+  }, */
   {
     id: "20urer",
     name: "20URER",
@@ -103,13 +103,13 @@ const models = [
     heroImage: "/caravan/CaravanImage(D1V1C1).webp",
     category: "off-road",
   },
-  {
+  /* {
     id: "paragon",
     name: "Paragon",
     tagline: "Premium Motorhome Experience",
     heroImage: "/caravan/CaravanImage(D1V1C2).png",
     category: "motorhome",
-  },
+  }, */
 ];
 
 export default function BrochurePage() {
@@ -433,7 +433,7 @@ export default function BrochurePage() {
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                    
+
                     {/* Model Logo Overlay */}
                     <div className="absolute bottom-4 left-4 right-4">
                       <div className="relative h-12 w-full max-w-[200px]">
@@ -481,7 +481,7 @@ export default function BrochurePage() {
                   />
                 </div>
               </div>
-              
+
               <div className="flex items-center justify-center mb-4">
                 {selectedModel && (
                   <div className="relative h-12 w-32">
@@ -516,7 +516,7 @@ export default function BrochurePage() {
                   />
                 </div>
               )}
-              
+
               {/* Thank You Message in Center */}
               <div className="flex-1 flex flex-col items-center justify-center">
                 <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-accent/20 border-2 border-accent/30 mb-6">
@@ -526,7 +526,7 @@ export default function BrochurePage() {
                   Thank You!
                 </h3>
                 <p className="text-gray-300 mb-8 leading-relaxed max-w-md">
-                  Your brochure request has been submitted successfully. We'll send the {selectedModel?.name} brochure 
+                  Your brochure request has been submitted successfully. We'll send the {selectedModel?.name} brochure
                   to your email address shortly.
                 </p>
                 <Button

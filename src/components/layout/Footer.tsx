@@ -17,9 +17,9 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 const footerNavigation = {
   caravans: [
     { name: "All Caravans", href: "/caravans" },
-    { name: "Hybrids", href: "/caravans?type=hybrids" },
+    // { name: "Hybrids", href: "/caravans?type=hybrids" },
     { name: "Caravans", href: "/caravans?type=caravans" },
-    { name: "Motorhomes", href: "/caravans?type=motorhomes" },
+    // { name: "Motorhomes", href: "/caravans?type=motorhomes" },
   ],
   company: [
     { name: "About Us", href: "/about" },

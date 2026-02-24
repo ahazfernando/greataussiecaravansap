@@ -79,13 +79,13 @@ const navigation = [
     hasSubmenu: true,
     submenu: {
       categories: [
-        {
+        /* {
           name: "Striker",
           href: "/caravans/striker",
           icon: Caravan,
           image: "/caravan/CaravanImage(D1V1C1).webp",
           description: "HYBRID MODELS"
-        },
+        }, */
         {
           name: "20URER LITE",
           href: "/caravans/20urer-lite",
@@ -121,13 +121,13 @@ const navigation = [
           image: "/caravan/CaravanImage(D1V1C1).webp",
           description: "CARAVAN MODELS"
         },
-        {
+        /* {
           name: "Paragon",
           href: "/caravans/paragon",
           icon: Caravan,
           image: "/caravan/CaravanImage(D1V1C2).png",
           description: "MOTORHOME MODELS"
-        },
+        }, */
       ],
       services: [],
       description: "Explore our complete range of caravans, hybrid models, and motorhomes. Each model is designed for Australian adventures with quality craftsmanship and reliability.",
