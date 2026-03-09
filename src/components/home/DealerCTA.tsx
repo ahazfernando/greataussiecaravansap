@@ -10,8 +10,8 @@ export function DealerCTA() {
         <section className="relative w-full overflow-hidden bg-black pb-0 pt-16 lg:pt-24 border-t border-gray-900">
             <div className="relative w-full flex flex-col lg:flex-row min-h-[500px] lg:min-h-[600px]">
                 {/* Left Side Container - Text Content */}
-                {/* We use standard container to align with other content, but limit width */}
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 lg:w-1/2 flex flex-col justify-center pb-16 lg:pb-24">
+                {/* Aligned further to the left instead of centered container */}
+                <div className="w-full px-4 sm:px-8 lg:pl-16 xl:pl-32 relative z-10 lg:w-1/2 flex flex-col justify-center pb-16 lg:pb-24">
                     <div className="max-w-xl">
                         {/* Top link */}
                         <Link
