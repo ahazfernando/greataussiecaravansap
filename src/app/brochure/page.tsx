@@ -185,6 +185,16 @@ export default function BrochurePage() {
     }));
   };
 
+  const getBrochurePath = (modelId: string | undefined): string | null => {
+    const paths: Record<string, string> = {
+      "20urer": "/brochure/2ouerer2026.pdf_compressed.pdf",
+      "gravity": "/brochure/Gravity 2026_compressed.pdf",
+      "tonka": "/brochure/Tonka 2026 _compressed.pdf",
+      "xplora": "/brochure/XPLORA 2026_compressed.pdf",
+    };
+    return modelId ? paths[modelId] || null : null;
+  };
+
   const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -212,11 +222,22 @@ export default function BrochurePage() {
         lastUpdated: Timestamp.now(),
       });
 
+      // Trigger automatic PDF download
+      const brochureUrl = getBrochurePath(selectedModel?.id);
+      if (brochureUrl) {
+        const link = document.createElement('a');
+        link.href = brochureUrl;
+        link.download = brochureUrl.split('/').pop() || 'Brochure.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
       setIsSubmitting(false);
       setIsSubmitted(true);
       toast({
         title: "Brochure Request Submitted!",
-        description: "We'll send you the brochure via email shortly.",
+        description: "Your brochure download has started and we'll send a copy via email shortly.",
       });
     } catch (error: any) {
       console.error("Error submitting brochure request:", error);
@@ -470,9 +491,9 @@ export default function BrochurePage() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-gray-900 border-gray-800 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {!isSubmitted && (
             <DialogHeader className="pb-4 border-b border-gray-800">
-              {/* Navbar Logo - Centered */}
-              <div className="flex justify-center mb-6">
-                <div className="relative h-16 w-64">
+              {/* Logos - Inline */}
+              <div className="flex items-center justify-center gap-6 mb-4">
+                <div className="relative h-14 w-48">
                   <Image
                     src="/logo/greataussielogo.png"
                     alt="Great Aussie Caravans"
@@ -480,18 +501,19 @@ export default function BrochurePage() {
                     className="object-contain"
                   />
                 </div>
-              </div>
 
-              <div className="flex items-center justify-center mb-4">
                 {selectedModel && (
-                  <div className="relative h-12 w-32">
-                    <Image
-                      src={getModelLogo(selectedModel.name)}
-                      alt={`${selectedModel.name} Logo`}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
+                  <>
+                    <div className="h-10 w-px bg-gray-600"></div>
+                    <div className="relative h-10 w-28">
+                      <Image
+                        src={getModelLogo(selectedModel.name)}
+                        alt={`${selectedModel.name} Logo`}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                  </>
                 )}
               </div>
               <DialogTitle className="text-2xl font-bold text-white text-center">
@@ -636,17 +658,42 @@ export default function BrochurePage() {
                     State <span className="text-accent">*</span>
                   </Label>
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input
-                      id="state"
-                      name="state"
-                      type="text"
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10 pointer-events-none" />
+                    <Select
                       value={formData.state}
-                      onChange={handleChange}
-                      placeholder="NSW, VIC, QLD, etc."
+                      onValueChange={(value) => handleSelectChange("state", value)}
                       required
-                      className="pl-10 bg-gray-800 border-gray-700 text-white placeholder:text-gray-400 focus:ring-accent focus:border-accent"
-                    />
+                    >
+                      <SelectTrigger className="w-full pl-10 bg-gray-800 border-gray-700 text-white focus:ring-accent focus:border-accent">
+                        <SelectValue placeholder="Select a State" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-900 border-gray-800 text-white">
+                        <SelectItem value="New South Wales" className="focus:bg-gray-800 focus:text-white">
+                          New South Wales
+                        </SelectItem>
+                        <SelectItem value="Victoria" className="focus:bg-gray-800 focus:text-white">
+                          Victoria
+                        </SelectItem>
+                        <SelectItem value="Queensland" className="focus:bg-gray-800 focus:text-white">
+                          Queensland
+                        </SelectItem>
+                        <SelectItem value="Western Australia" className="focus:bg-gray-800 focus:text-white">
+                          Western Australia
+                        </SelectItem>
+                        <SelectItem value="South Australia" className="focus:bg-gray-800 focus:text-white">
+                          South Australia
+                        </SelectItem>
+                        <SelectItem value="Tasmania" className="focus:bg-gray-800 focus:text-white">
+                          Tasmania
+                        </SelectItem>
+                        <SelectItem value="Australian Capital Territory" className="focus:bg-gray-800 focus:text-white">
+                          Australian Capital Territory
+                        </SelectItem>
+                        <SelectItem value="Northern Territory" className="focus:bg-gray-800 focus:text-white">
+                          Northern Territory
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -704,17 +751,17 @@ export default function BrochurePage() {
                   type="submit"
                   variant="accent"
                   size="lg"
-                  className="flex-1"
+                  className="flex-1 text-black font-semibold"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
                     <>
-                      <span className="animate-spin mr-2">⏳</span>
+                      <span className="animate-spin mr-2 text-black">⏳</span>
                       Submitting...
                     </>
                   ) : (
                     <>
-                      <Download className="mr-2 h-5 w-5" />
+                      <Download className="mr-2 h-5 w-5 text-black" />
                       Request Brochure
                     </>
                   )}
