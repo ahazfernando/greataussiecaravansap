@@ -7,6 +7,7 @@ import {
   ReviewsSection,
   HomeMetrics,
 } from "@/components/home";
+import { DealerCTA } from "@/components/home/DealerCTA";
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <HeroSection />
       {/* <TrustBadges /> */}
       {/* <FeaturedCaravans /> */}
+      <DealerCTA />
       <WhyChooseUs />
       <HomeMetrics />
       <ReviewsSection />
