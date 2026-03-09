@@ -23,9 +23,9 @@ export function DealerCTA() {
                         </Link>
 
                         {/* Main Headline */}
-                        <h2 className="font-display text-4xl sm:text-5xl lg:text-[56px] font-bold text-white uppercase leading-[1.1] mb-6 tracking-tight">
-                            Connect with our dealers<br />
-                            and find your perfect caravan
+                        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white uppercase leading-[1.1] mb-6 tracking-tight">
+                            Connect with our <span className="italic font-medium">dealers</span>
+                            and find your <span className="text-accent">perfect caravan.</span>
                         </h2>
 
                         {/* Paragraph */}
@@ -34,18 +34,31 @@ export function DealerCTA() {
                             their dream caravans with guidance from our authorized dealers.
                         </p>
 
-                        {/* CTA Button */}
-                        <Button
-                            variant="default"
-                            size="lg"
-                            className="bg-white text-black hover:bg-gray-200 rounded-full px-8 py-6 text-sm sm:text-base font-semibold transition-all duration-300 group shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
-                            asChild
-                        >
-                            <Link href="/dealers" className="flex items-center">
-                                Find a Dealer
-                                <ArrowRight className="ml-3 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                            </Link>
-                        </Button>
+                        {/* CTA Buttons */}
+                        <div className="flex flex-wrap gap-4 items-center">
+                            <Button
+                                variant="default"
+                                size="lg"
+                                className="bg-white text-black hover:bg-gray-200 rounded-full px-8 py-6 text-sm sm:text-base font-semibold transition-all duration-300 group shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                                asChild
+                            >
+                                <Link href="/dealers" className="flex items-center">
+                                    Find a Dealer
+                                    <ArrowRight className="ml-3 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                </Link>
+                            </Button>
+
+                            <Button
+                                variant="outline"
+                                size="lg"
+                                className="bg-transparent border-white text-white hover:bg-white/10 rounded-full px-8 py-6 text-sm sm:text-base font-semibold transition-all duration-300"
+                                asChild
+                            >
+                                <Link href="/contact">
+                                    Contact Us
+                                </Link>
+                            </Button>
+                        </div>
                     </div>
                 </div>
 
