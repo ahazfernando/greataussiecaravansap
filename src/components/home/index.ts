@@ -7,3 +7,4 @@ export { CTASection } from "./CTASection";
 export { Newsletter } from "./Newsletter";
 export { VideoSection } from "./VideoSection";
 export { MetricsSection } from "./MetricsSection";
+export { HomeMetrics } from "./HomeMetrics";

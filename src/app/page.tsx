@@ -5,7 +5,7 @@ import {
   FeaturedCaravans,
   WhyChooseUs,
   ReviewsSection,
-  MetricsSection,
+  HomeMetrics,
 } from "@/components/home";
 
 export default function HomePage() {
@@ -15,7 +15,7 @@ export default function HomePage() {
       {/* <TrustBadges /> */}
       {/* <FeaturedCaravans /> */}
       <WhyChooseUs />
-      <MetricsSection />
+      <HomeMetrics />
       <ReviewsSection />
     </Layout>
   );

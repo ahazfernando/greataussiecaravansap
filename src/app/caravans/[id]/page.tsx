@@ -41,6 +41,11 @@ interface Caravan {
     interior: string[];
     electrical: string[];
     offGrid: string[];
+    plumbing?: string[];
+    appliances?: string[];
+    chassis?: string[];
+    internal?: string[];
+    external?: string[];
   };
   layouts: string[];
   isFeatured: boolean;
@@ -80,19 +85,19 @@ const getModelLogo = (modelName: string): string => {
     "Outback Explorer": "/caravanmodels/strikerlogo.png",
     "Outback": "/caravanmodels/strikerlogo.png",
   };
-  
+
   // Try exact match first
   if (logoMap[modelName]) {
     return logoMap[modelName];
   }
-  
+
   // Try partial matches
   for (const [key, value] of Object.entries(logoMap)) {
     if (modelName.toLowerCase().includes(key.toLowerCase())) {
       return value;
     }
   }
-  
+
   // Default fallback
   return "/caravanlogos/litelogo.png";
 };
@@ -122,7 +127,7 @@ function AnimatedCount({ value, suffix = "", duration = 2, delay = 0 }: { value:
     if (typeof val === "number") {
       return { num: val, unit: "" };
     }
-    
+
     // Match numbers (including decimals) and any text after
     const match = val.match(/^([\d.]+)\s*(.*)$/);
     if (match) {
@@ -147,7 +152,7 @@ function AnimatedCount({ value, suffix = "", duration = 2, delay = 0 }: { value:
 
     const animate = () => {
       const elapsed = (Date.now() - startTime) / 1000 - delay;
-      
+
       if (elapsed < 0) {
         requestAnimationFrame(animate);
         return;
@@ -677,37 +682,122 @@ const caravanData: Record<string, Caravan> = {
     type: "touring",
     features: {
       exterior: [
-        "Full annexe walls",
-        "Roll-out awning (4.5m)",
-        "External BBQ point",
-        "Bike rack compatible",
-        "External shower",
-        "Entertainment hatch",
-        "LED awning lights",
-        "Large external storage",
+        "Anderson plug for fridge",
+        "Aluminum composite outside walls",
+        "Checker plate for protection",
+        "Premium, one-piece, fiberglass roof",
+        "One-piece honeycomb composite floor",
+        "Roll-out awning",
+        "Full length tunnel boot with lights inside",
+        "External TV bracket, antenna, 12V and 240V power outlets",
+        "Premium 3-point locking system, alloy SecuraMesh door",
+        "Built-in external generator compartment (as per floor plan)",
+        "Wheel arch with aluminium checker plate armour moulds",
+        "External gas bayonet to the awning side of the caravan for BBQ",
+        "Anderson plug to charge battery from car",
+        "External grab handle with LED light",
+        "NCE picnic table with USB + USB-C",
+      ],
+      external: [
+        "Anderson plug for fridge",
+        "Aluminum composite outside walls",
+        "Checker plate for protection",
+        "Premium, one-piece, fiberglass roof",
+        "One-piece honeycomb composite floor",
+        "Roll-out awning",
+        "Full length tunnel boot with lights inside",
+        "External TV bracket, antenna, 12V and 240V power outlets",
+        "Premium 3-point locking system, alloy SecuraMesh door",
+        "Built-in external generator compartment (as per floor plan)",
+        "Wheel arch with aluminium checker plate armour moulds",
+        "External gas bayonet to the awning side of the caravan for BBQ",
+        "Anderson plug to charge battery from car",
+        "External grab handle with LED light",
+        "NCE picnic table with USB + USB-C",
       ],
       interior: [
-        "Queen-size bed with premium mattress",
-        "Full kitchen with oven and cooktop",
-        "Large fridge/freezer (200L)",
-        "Separate toilet and shower",
-        "Club lounge seating",
-        "TV mounting point",
-        "Ducted air conditioning",
-        "Premium finishes throughout",
+        "Deluxe 6’2” pillow-top mattress",
+        "Large size double glazed windows",
+        "Nooks beside master bed with 240V & USB, USB-C outlets for electronic device charging",
+        "Ensuite vanity draw x 6",
+        "Modern CNC interior",
+        "Comfortable dual density lounges with premium automotive grade upholstery",
+        "Soft close drawers on ball-bearing runners",
+        "Premium brushed door & drawer catches (as per your build selection)",
+        "Block out blinds and pull down mesh screens to all windows",
+        "Stylish acrylic finished cabinetry",
+        "Recessed stove cover",
+        "Pull-out pantries (as per floor plan)",
+        "Large stylish grab handle on entry wall",
+        "One bank larger kitchen drawer (layout dependent)",
+        "Premium quality ensuite mirror with additional magnifying glass",
+      ],
+      internal: [
+        "Deluxe 6’2” pillow-top mattress",
+        "Large size double glazed windows",
+        "Nooks beside master bed with 240V & USB, USB-C outlets for electronic device charging",
+        "Ensuite vanity draw x 6",
+        "Modern CNC interior",
+        "Comfortable dual density lounges with premium automotive grade upholstery",
+        "Soft close drawers on ball-bearing runners",
+        "Premium brushed door & drawer catches (as per your build selection)",
+        "Block out blinds and pull down mesh screens to all windows",
+        "Stylish acrylic finished cabinetry",
+        "Recessed stove cover",
+        "Pull-out pantries (as per floor plan)",
+        "Large stylish grab handle on entry wall",
+        "One bank larger kitchen drawer (layout dependent)",
+        "Premium quality ensuite mirror with additional magnifying glass",
       ],
       electrical: [
-        "180Ah AGM battery",
-        "250W solar panel",
-        "40A charger",
-        "2000W pure sine wave inverter",
-        "240V connections throughout",
+        "200W of solar power (1 x 200W panel)",
+        "120Ah Victron lithium battery",
+        "Projecta Intelli-RV GEN II battery management system",
+        "External rear camera",
+        "Internal LED bulkhead lighting",
+        "LED reading lights at bed head & dinette with USB & USB-C output",
+        "Remote LED lights throughout the van",
+        "Premium quality roof hatch with LED lights",
+        "Rear LED tail lights",
+        "Radio antenna",
+      ],
+      plumbing: [
+        "190L of drinking water capacity (2 x 95L tanks)",
+        "12V water pump",
+        "2 x 9Kg gas bottles",
+        "Global gas / electric hot water system",
+        "Digital water tank level display",
+        "Ceramic inlay cassette toilet",
+        "Flick mixer taps throughout",
+        "Hidden plumbing and waste lines inside cabinetry (wherever possible)",
+        "Lockable water filler to each water tank",
+        "Tap on A-Frame with guard",
+      ],
+      chassis: [
+        "Reliable leaf spring suspension (2.5T single axle & 3.2T tandem axle)",
+        "235/75/R15 all terrain tyres on load-rated alloys",
+        "10” drum brakes (tandem axle) or 12” drum brakes (single axle)",
+        "Standard 50mm ball coupling",
+        "Supagal chassis made with Australian RHS steel",
+        "6” drawbar with 6” chassis and 2” chassis raiser (tandem axle)",
+        "Rear 2 arm bumper bar",
+        "Mud flaps to avoid stones",
+      ],
+      appliances: [
+        "Dometic reverse cycle air-conditioner",
+        "188L 3-way fridge / freezer",
+        "Premium front loader 3.5 kg washing machine (Excludes 17’ model)",
+        "24” Smart TV (12V)",
+        "Dome style TV antenna",
+        "3 Gas + 1 electric cooktop with built in microwave below",
+        "Bluetooth sound system with internal & external speakers",
+        "Smoke alarm",
       ],
       offGrid: [
         "Enhanced solar power",
         "Large water capacity",
-        "AGM battery system",
-        "Full inverter power",
+        "Lithium battery system",
+        "Battery management system",
       ],
     },
     layouts: ["Club Lounge", "Island Bed"],
@@ -719,37 +809,56 @@ const caravanData: Record<string, Caravan> = {
       tare: "2,200kg",
       atm: "3,200kg",
       sleeps: 4,
-      chassis: "Hot-dipped galvanised steel",
-      suspension: "Tandem axle with leaf springs",
-      brakes: "Electric drum brakes",
-      wheels: "15\" alloy wheels",
+      chassis: "Supagal chassis – Australian RHS steel",
+      suspension: "Leaf spring (2.5T single / 3.2T tandem axle)",
+      brakes: "10\" drum brakes (tandem) / 12\" (single axle)",
+      wheels: "235/75/R15 all terrain on load-rated alloys",
     },
     interiorFeatures: [
-      "Queen-size bed with premium mattress",
-      "Full kitchen with oven and cooktop",
-      "Large fridge/freezer (200L)",
-      "Separate toilet and shower",
-      "Club lounge seating",
-      "TV mounting point",
-      "Ducted air conditioning",
-      "Premium finishes throughout",
+      "Deluxe 6’2” pillow-top mattress",
+      "Large size double glazed windows",
+      "Nooks beside master bed with 240V & USB, USB-C outlets for electronic device charging",
+      "Ensuite vanity draw x 6",
+      "Modern CNC interior",
+      "Comfortable dual density lounges with premium automotive grade upholstery",
+      "Soft close drawers on ball-bearing runners",
+      "Premium brushed door & drawer catches (as per your build selection)",
+      "Block out blinds and pull down mesh screens to all windows",
+      "Stylish acrylic finished cabinetry",
+      "Recessed stove cover",
+      "Pull-out pantries (as per floor plan)",
+      "Large stylish grab handle on entry wall",
+      "One bank larger kitchen drawer (layout dependent)",
+      "Premium quality ensuite mirror with additional magnifying glass",
     ],
     exteriorFeatures: [
-      "Full annexe walls",
-      "Roll-out awning (4.5m)",
-      "External BBQ point",
-      "Bike rack compatible",
-      "External shower",
-      "Entertainment hatch",
-      "LED awning lights",
-      "Large external storage",
+      "Anderson plug for fridge",
+      "Aluminum composite outside walls",
+      "Checker plate for protection",
+      "Premium, one-piece, fiberglass roof",
+      "One-piece honeycomb composite floor",
+      "Roll-out awning",
+      "Full length tunnel boot with lights inside",
+      "External TV bracket, antenna, 12V and 240V power outlets",
+      "Premium 3-point locking system, alloy SecuraMesh door",
+      "Built-in external generator compartment (as per floor plan)",
+      "Wheel arch with aluminium checker plate armour moulds",
+      "External gas bayonet to the awning side of the caravan for BBQ",
+      "Anderson plug to charge battery from car",
+      "External grab handle with LED light",
+      "NCE picnic table with USB + USB-C",
     ],
     electricals: [
-      "180Ah AGM battery",
-      "250W solar panel",
-      "40A charger",
-      "2000W pure sine wave inverter",
-      "240V connections throughout",
+      "200W of solar power (1 x 200W panel)",
+      "120Ah Victron lithium battery",
+      "Projecta Intelli-RV GEN II battery management system",
+      "External rear camera",
+      "Internal LED bulkhead lighting",
+      "LED reading lights at bed head & dinette with USB & USB-C output",
+      "Remote LED lights throughout the van",
+      "Premium quality roof hatch with LED lights",
+      "Rear LED tail lights",
+      "Radio antenna",
     ],
     images: ["/caravan/CaravanImage(D1V1C3).webp", "/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C2).png"],
   },
@@ -764,10 +873,10 @@ const caravanData: Record<string, Caravan> = {
     gallery: ["/caravan/CaravanImage(D1V1C5).webp", "/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C3).webp"],
     highlights: {
       solar: "400W",
-      battery: "300Ah Lithium",
-      water: "200L",
+      battery: "200Ah Lithium",
+      water: "190L",
       inverter: "3000W Pure Sine",
-      suspension: "Independent Trailing Arm",
+      suspension: "Independent Coil Spring",
     },
     shortDescription: "Ultimate off-road caravan built for the toughest Australian conditions.",
     description: "The Gravity is our most capable off-road caravan, engineered for serious adventurers who demand the absolute best. With heavy-duty construction, advanced suspension, and premium off-grid systems, the Gravity can take you anywhere.",
@@ -775,34 +884,120 @@ const caravanData: Record<string, Caravan> = {
     type: "offroad",
     features: {
       exterior: [
-        "Full external shower with hot water",
-        "Roll-out awning (4.5m)",
-        "External speakers with Bluetooth",
-        "Heavy-duty roof racks",
-        "Dual jerry can holders",
-        "External gas bayonet",
-        "LED exterior lighting system",
-        "Front and rear recovery points",
-        "Stone guard protection",
+        "Aluminum composite outside walls",
+        "Extra high checker plate for protection",
+        "Premium, one-piece, fibreglass roof",
+        "Roll-out awning",
+        "Full length tunnel boot with lights inside",
+        "External TV bracket, antenna, 12V and 240V power outlets",
+        "Premium 3-point locking system, alloy SecuraMesh door",
+        "Built-in external generator compartment (as per floor plan)",
+        "Wheel arch with aluminium checker plate armour moulds",
+        "External gas bayonet to the awning side of the caravan for BBQ",
+        "Anderson plug to charge battery from car",
+        "External grab handle with LED light",
+        "Premium quality picnic table with LEDs",
+      ],
+      external: [
+        "Aluminum composite outside walls",
+        "Extra high checker plate for protection",
+        "Premium, one-piece, fibreglass roof",
+        "Roll-out awning",
+        "Full length tunnel boot with lights inside",
+        "External TV bracket, antenna, 12V and 240V power outlets",
+        "Premium 3-point locking system, alloy SecuraMesh door",
+        "Built-in external generator compartment (as per floor plan)",
+        "Wheel arch with aluminium checker plate armour moulds",
+        "External gas bayonet to the awning side of the caravan for BBQ",
+        "Anderson plug to charge battery from car",
+        "External grab handle with LED light",
+        "Premium quality picnic table with LEDs",
       ],
       interior: [
-        "Queen-size island bed with premium mattress",
-        "Full kitchen with gas/electric cooktop and oven",
-        "Large 3-way fridge/freezer (220L)",
-        "Microwave oven",
-        "Full ensuite with separate toilet and shower",
-        "LED lighting throughout with dimmers",
-        "Reverse cycle air conditioning",
-        "Diesel heater with thermostat",
-        "Premium cabinetry and finishes",
+        "Deluxe 6’2” pillow-top mattress",
+        "Large size double glazed windows",
+        "Stylish waterfall bench top",
+        "Nooks beside master bed with 240V & USB-C outlets for electronic device charging",
+        "Modern CNC interior cabinetry",
+        "Comfortable dual density lounges with premium automotive grade upholstery",
+        "Recess footrest to dinette seats (as per your floor plan)",
+        "Soft close drawers on ball-bearing runners",
+        "Premium brushed door & drawer catches (as per your build selection)",
+        "Block out blinds and pull down mesh screens to all windows",
+        "Recessed stove cover",
+        "Pull-out pantries (as per floor plan)",
+        "Large stylish grab handle on entry door",
+        "Premium quality ensuite mirror with additional magnifying glass",
+        "NCE picnic table with USB + USB-C",
+        "Fire extinguisher",
+      ],
+      internal: [
+        "Deluxe 6’2” pillow-top mattress",
+        "Large size double glazed windows",
+        "Stylish waterfall bench top",
+        "Nooks beside master bed with 240V & USB-C outlets for electronic device charging",
+        "Modern CNC interior cabinetry",
+        "Comfortable dual density lounges with premium automotive grade upholstery",
+        "Recess footrest to dinette seats (as per your floor plan)",
+        "Soft close drawers on ball-bearing runners",
+        "Premium brushed door & drawer catches (as per your build selection)",
+        "Block out blinds and pull down mesh screens to all windows",
+        "Recessed stove cover",
+        "Pull-out pantries (as per floor plan)",
+        "Large stylish grab handle on entry door",
+        "Premium quality ensuite mirror with additional magnifying glass",
+        "NCE picnic table with USB + USB-C",
+        "Fire extinguisher",
       ],
       electrical: [
-        "300Ah lithium battery system",
-        "400W solar panels with MPPT controller",
-        "50A DC-DC charger",
-        "3000W pure sine wave inverter",
-        "Advanced battery management system",
-        "12V/240V dual power system",
+        "400W of solar power (2 x 200W panels)",
+        "200Ah Arizon lithium battery",
+        "Victron micro-touch bundle",
+        "External rear camera",
+        "Anti-dazzle LED strip light around the underbody of the caravan",
+        "Internal LED bulkhead lighting",
+        "LED reading lights at bed head & dinette with USB & USB-C output",
+        "Remote LED lights throughout the van",
+        "Premium quality roof hatch with LED lights",
+        "Rear LED tail lights",
+        "Radio antenna",
+      ],
+      plumbing: [
+        "190L drinking water capacity (2 x 95L tanks)",
+        "12V water pump",
+        "95L grey water tank with large water outlet",
+        "2 x 9Kg gas bottles",
+        "Gas / electric hot water system",
+        "Digital water tank level display",
+        "Ceramic inlay cassette toilet",
+        "Flick mixer taps throughout",
+        "Hidden plumbing and waste lines inside cabinetry (wherever possible)",
+        "Lockable water filler to each water tank",
+        "Tap on A-Frame with guard",
+      ],
+      chassis: [
+        "Independent coil spring suspension (2.75T single axle & 3.3T tandem axle)",
+        "265/75/R16 mud terrain tyres on load-rated alloys",
+        "10” drum brakes (tandem axle) or 12” drum brakes (single axle)",
+        "Large front toolbox with 2 Jerry can holders and generator slide inside",
+        "50cm A-frame extension",
+        "DO35 Cruisemaster articulating coupling",
+        "Supagal chassis made with Australian RHS steel",
+        "6” drawbar with 6” chassis and 2” chassis raiser",
+        "Rear 3 arm bumper bar",
+        "Single alloy entry step",
+        "Mud flaps to avoid stones",
+      ],
+      appliances: [
+        "Dometic reverse cycle air-conditioner",
+        "Dometic RUC 840X 216 L (internal ventilation) fridge",
+        "Premium front loader 3.5 kg washing machine",
+        "24” Smart TV (12V)",
+        "Dome TV antenna",
+        "Microwave in kitchen under bench",
+        "Stove top with 3 gas, 1 electric element with separate grill",
+        "Bluetooth sound system with internal & external speakers",
+        "Smoke alarm",
       ],
       offGrid: [
         "High-capacity solar power system",
@@ -821,40 +1016,56 @@ const caravanData: Record<string, Caravan> = {
       tare: "2,800kg",
       atm: "3,500kg",
       sleeps: 4,
-      chassis: "Heavy-duty galvanised steel with reinforcement",
-      suspension: "Independent trailing arm with twin shock absorbers",
-      brakes: "Electric drum brakes with breakaway system",
-      wheels: "16\" alloy wheels with all-terrain tyres",
+      chassis: "Supagal chassis made with Australian RHS steel",
+      suspension: "Independent coil spring suspension",
+      brakes: "10” drum brakes (tandem) or 12” (single axle)",
+      wheels: "265/75/R16 mud terrain tyres on load-rated alloys",
     },
     interiorFeatures: [
-      "Queen-size island bed with premium mattress",
-      "Full kitchen with gas/electric cooktop and oven",
-      "Large 3-way fridge/freezer (220L)",
-      "Microwave oven",
-      "Full ensuite with separate toilet and shower",
-      "LED lighting throughout with dimmers",
-      "Reverse cycle air conditioning",
-      "Diesel heater with thermostat",
-      "Premium cabinetry and finishes",
+      "Deluxe 6’2” pillow-top mattress",
+      "Large size double glazed windows",
+      "Stylish waterfall bench top",
+      "Nooks beside master bed with 240V & USB-C outlets for electronic device charging",
+      "Modern CNC interior cabinetry",
+      "Comfortable dual density lounges with premium automotive grade upholstery",
+      "Recess footrest to dinette seats (as per your floor plan)",
+      "Soft close drawers on ball-bearing runners",
+      "Premium brushed door & drawer catches (as per your build selection)",
+      "Block out blinds and pull down mesh screens to all windows",
+      "Recessed stove cover",
+      "Pull-out pantries (as per floor plan)",
+      "Large stylish grab handle on entry door",
+      "Premium quality ensuite mirror with additional magnifying glass",
+      "NCE picnic table with USB + USB-C",
+      "Fire extinguisher",
     ],
     exteriorFeatures: [
-      "Full external shower with hot water",
-      "Roll-out awning (4.5m)",
-      "External speakers with Bluetooth",
-      "Heavy-duty roof racks",
-      "Dual jerry can holders",
-      "External gas bayonet",
-      "LED exterior lighting system",
-      "Front and rear recovery points",
-      "Stone guard protection",
+      "Aluminum composite outside walls",
+      "Extra high checker plate for protection",
+      "Premium, one-piece, fibreglass roof",
+      "Roll-out awning",
+      "Full length tunnel boot with lights inside",
+      "External TV bracket, antenna, 12V and 240V power outlets",
+      "Premium 3-point locking system, alloy SecuraMesh door",
+      "Built-in external generator compartment (as per floor plan)",
+      "Wheel arch with aluminium checker plate armour moulds",
+      "External gas bayonet to the awning side of the caravan for BBQ",
+      "Anderson plug to charge battery from car",
+      "External grab handle with LED light",
+      "Premium quality picnic table with LEDs",
     ],
     electricals: [
-      "300Ah lithium battery system",
-      "400W solar panels with MPPT controller",
-      "50A DC-DC charger",
-      "3000W pure sine wave inverter",
-      "Advanced battery management system",
-      "12V/240V dual power system",
+      "400W of solar power (2 x 200W panels)",
+      "200Ah Arizon lithium battery",
+      "Victron micro-touch bundle",
+      "External rear camera",
+      "Anti-dazzle LED strip light around the underbody of the caravan",
+      "Internal LED bulkhead lighting",
+      "LED reading lights at bed head & dinette with USB & USB-C output",
+      "Remote LED lights throughout the van",
+      "Premium quality roof hatch with LED lights",
+      "Rear LED tail lights",
+      "Radio antenna",
     ],
     images: ["/caravan/CaravanImage(D1V1C5).webp", "/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C3).webp"],
   },
@@ -880,33 +1091,129 @@ const caravanData: Record<string, Caravan> = {
     type: "offroad",
     features: {
       exterior: [
-        "Full external shower",
-        "Roll-out awning (4m)",
-        "External speakers",
-        "Roof racks",
-        "Jerry can holders",
-        "External gas bayonet",
-        "LED exterior lighting",
-        "Front and rear recovery points",
-        "Underbody protection",
+        "Aluminum composite outside walls",
+        "Extra high flat plate for protection with metal extrusions & cappings",
+        "Premium, one-piece, fibreglass roof",
+        "One-piece floor as per your build selection",
+        "Dust reduction system (DRS)",
+        "Roll-out awning",
+        "Full length tunnel boot with lights inside",
+        "Entertainment hatch with TV bracket, antenna and 12V and 240V power outlets (in external pantry table)",
+        "Premium 3-point locking system with SecuraMesh door",
+        "Built-in external generator compartment (if applicable)",
+        "Wheel arch with aluminium checker plate armor moulds",
+        "External gas bayonet to the awning side of the caravan for BBQ",
+        "Anderson plug to charge battery while driving",
+        "External grab handle with push button LED light",
+        "External table with built in pantry with ally extrusions",
+      ],
+      external: [
+        "Aluminum composite outside walls",
+        "Extra high flat plate for protection with metal extrusions & cappings",
+        "Premium, one-piece, fibreglass roof",
+        "One-piece floor as per your build selection",
+        "Dust reduction system (DRS)",
+        "Roll-out awning",
+        "Full length tunnel boot with lights inside",
+        "Entertainment hatch with TV bracket, antenna and 12V and 240V power outlets (in external pantry table)",
+        "Premium 3-point locking system with SecuraMesh door",
+        "Built-in external generator compartment (if applicable)",
+        "Wheel arch with aluminium checker plate armor moulds",
+        "External gas bayonet to the awning side of the caravan for BBQ",
+        "Anderson plug to charge battery while driving",
+        "External grab handle with push button LED light",
+        "External table with built in pantry with ally extrusions",
       ],
       interior: [
-        "Queen-size island bed",
-        "Full kitchen with gas/electric cooktop",
-        "3-way fridge/freezer (200L)",
-        "Microwave oven",
-        "Ensuite with toilet and shower",
-        "LED lighting throughout",
-        "Reverse cycle air conditioning",
-        "Diesel heater",
-        "Adventure-ready storage",
+        "Deluxe 6’2” innerspring pillow-top mattress",
+        "Large size double glazed windows",
+        "Internal ‘Black Pack’ consisting of black sink, tapware, shower trim, rail and fittings, cupboard door & drawer catches",
+        "Stylish waterfall bench top",
+        "Nooks beside master bed with 240V & USB, USB-C outlets for electronic device charging",
+        "Comfortable dual density lounges with premium automotive grade upholstery",
+        "Recess footrest to dinette seats (as per floor plan)",
+        "Soft close metal side drawers",
+        "Premium brushed door & drawer catches (as per your build selection)",
+        "Block out blinds and pull down mesh screens to all windows",
+        "Recessed stove cover with laminated lid over stove",
+        "Pull-out pantries (as per floor plan)",
+        "Premium acrylic splash-backs",
+        "Large stylish grab handle on entry wall at door",
+        "Premium quality ensuite mirror with additional magnifying glass",
+        "Fire extinguisher",
+        "Bin drawer & cutlery drawer",
+      ],
+      internal: [
+        "Deluxe 6’2” innerspring pillow-top mattress",
+        "Large size double glazed windows",
+        "Internal ‘Black Pack’ consisting of black sink, tapware, shower trim, rail and fittings, cupboard door & drawer catches",
+        "Stylish waterfall bench top",
+        "Nooks beside master bed with 240V & USB, USB-C outlets for electronic device charging",
+        "Comfortable dual density lounges with premium automotive grade upholstery",
+        "Recess footrest to dinette seats (as per floor plan)",
+        "Soft close metal side drawers",
+        "Premium brushed door & drawer catches (as per your build selection)",
+        "Block out blinds and pull down mesh screens to all windows",
+        "Recessed stove cover with laminated lid over stove",
+        "Pull-out pantries (as per floor plan)",
+        "Premium acrylic splash-backs",
+        "Large stylish grab handle on entry wall at door",
+        "Premium quality ensuite mirror with additional magnifying glass",
+        "Fire extinguisher",
+        "Bin drawer & cutlery drawer",
       ],
       electrical: [
-        "250Ah lithium battery system",
-        "350W solar panels",
-        "45A DC-DC charger",
-        "2500W pure sine wave inverter",
-        "Battery management system",
+        "800W of solar power (4 x 200W panels)",
+        "ARIZON 2 x 200Ah high discharge lithium batteries (chassis mounted)",
+        "VICTRON BMS with Micro touch plus 90 12v board",
+        "3000 VA Victron inverter",
+        "External rear camera",
+        "Front & rear external LED light bars",
+        "Anti-dazzle LED strip light around the underbody of the caravan",
+        "Internal LED bulkhead lighting",
+        "LED reading lights at bed head & dinette with USB & USB-C output",
+        "Remote LED lights throughout the van",
+        "Premium quality roof hatch with LED lights",
+        "Rear LED tail lights",
+        "Radio antenna",
+      ],
+      plumbing: [
+        "285L of drinking water capacity (3 x 95L tanks)",
+        "12V water pump",
+        "95L grey water tank (with large water outlet)",
+        "External hot / cold shower",
+        "2 x 9Kg gas bottles",
+        "Gas / electric hot water system",
+        "Digital water tank level display",
+        "Ceramic inlay cassette toilet",
+        "Flick mixer taps throughout",
+        "Hidden plumbing and waste lines inside cabinetry (wherever possible)",
+        "Lockable water filler to each water tank",
+        "Tap on A Frame with guard",
+      ],
+      chassis: [
+        "Independent coil spring suspension with twin shock absorbers (3T single axle & 3.5T tandem axle)",
+        "265/75/R16 premium mud terrain tyres on load-rated alloys",
+        "12” drum brakes",
+        "Large front UNI 20 flat plate toolbox with gas bottles inside",
+        "50cm A-frame extension with front stone guard",
+        "DO35 Cruisemaster articulating coupling",
+        "Supagal chassis made with Australian RHS steel",
+        "6” drawbar with 4” chassis and 4” chassis raiser",
+        "Rear 3 arm bumper bar with wood box",
+        "Double alloy entry step",
+        "Mud flaps to avoid stones",
+      ],
+      appliances: [
+        "Dometic reverse cycle air-conditioner",
+        "Thetford T2208c 221L compressor fridge 12V",
+        "Premium front loader 3.5 kg washing machine (layout dependent)",
+        "24” smart TV (12V)",
+        "Dome TV antenna",
+        "4 in 1 microwave/air fryer",
+        "Portable induction (10A) with designated double power points",
+        "Bluetooth sound system with internal & external speakers",
+        "Smoke alarm",
       ],
       offGrid: [
         "High-capacity solar power",
@@ -924,39 +1231,61 @@ const caravanData: Record<string, Caravan> = {
       tare: "2,500kg",
       atm: "3,400kg",
       sleeps: 4,
-      chassis: "Heavy-duty galvanised steel",
-      suspension: "Independent trailing arm with twin shock absorbers",
-      brakes: "Electric drum brakes with breakaway system",
-      wheels: "16\" alloy wheels with all-terrain tyres",
+      chassis: "Supagal chassis made with Australian RHS steel",
+      suspension: "Independent coil spring suspension with twin shock absorbers",
+      brakes: "12” drum brakes",
+      wheels: "265/75/R16 premium mud terrain tyres on load-rated alloys",
     },
     interiorFeatures: [
-      "Queen-size island bed",
-      "Full kitchen with gas/electric cooktop",
-      "3-way fridge/freezer (200L)",
-      "Microwave oven",
-      "Ensuite with toilet and shower",
-      "LED lighting throughout",
-      "Reverse cycle air conditioning",
-      "Diesel heater",
-      "Adventure-ready storage",
+      "Deluxe 6’2” innerspring pillow-top mattress",
+      "Large size double glazed windows",
+      "Internal ‘Black Pack’ consisting of black sink, tapware, shower trim, rail and fittings, cupboard door & drawer catches",
+      "Stylish waterfall bench top",
+      "Nooks beside master bed with 240V & USB, USB-C outlets for electronic device charging",
+      "Comfortable dual density lounges with premium automotive grade upholstery",
+      "Recess footrest to dinette seats (as per floor plan)",
+      "Soft close metal side drawers",
+      "Premium brushed door & drawer catches (as per your build selection)",
+      "Block out blinds and pull down mesh screens to all windows",
+      "Recessed stove cover with laminated lid over stove",
+      "Pull-out pantries (as per floor plan)",
+      "Premium acrylic splash-backs",
+      "Large stylish grab handle on entry wall at door",
+      "Premium quality ensuite mirror with additional magnifying glass",
+      "Fire extinguisher",
+      "Bin drawer & cutlery drawer",
     ],
     exteriorFeatures: [
-      "Full external shower",
-      "Roll-out awning (4m)",
-      "External speakers",
-      "Roof racks",
-      "Jerry can holders",
-      "External gas bayonet",
-      "LED exterior lighting",
-      "Front and rear recovery points",
-      "Underbody protection",
+      "Aluminum composite outside walls",
+      "Extra high flat plate for protection with metal extrusions & cappings",
+      "Premium, one-piece, fibreglass roof",
+      "One-piece floor as per your build selection",
+      "Dust reduction system (DRS)",
+      "Roll-out awning",
+      "Full length tunnel boot with lights inside",
+      "Entertainment hatch with TV bracket, antenna and 12V and 240V power outlets (in external pantry table)",
+      "Premium 3-point locking system with SecuraMesh door",
+      "Built-in external generator compartment (if applicable)",
+      "Wheel arch with aluminium checker plate armor moulds",
+      "External gas bayonet to the awning side of the caravan for BBQ",
+      "Anderson plug to charge battery while driving",
+      "External grab handle with push button LED light",
+      "External table with built in pantry with ally extrusions",
     ],
     electricals: [
-      "250Ah lithium battery system",
-      "350W solar panels",
-      "45A DC-DC charger",
-      "2500W pure sine wave inverter",
-      "Battery management system",
+      "800W of solar power (4 x 200W panels)",
+      "ARIZON 2 x 200Ah high discharge lithium batteries (chassis mounted)",
+      "VICTRON BMS with Micro touch plus 90 12v board",
+      "3000 VA Victron inverter",
+      "External rear camera",
+      "Front & rear external LED light bars",
+      "Anti-dazzle LED strip light around the underbody of the caravan",
+      "Internal LED bulkhead lighting",
+      "LED reading lights at bed head & dinette with USB & USB-C output",
+      "Remote LED lights throughout the van",
+      "Premium quality roof hatch with LED lights",
+      "Rear LED tail lights",
+      "Radio antenna",
     ],
     images: ["/caravan/cfi_featured_image.png", "/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C3).webp"],
   },
@@ -982,34 +1311,128 @@ const caravanData: Record<string, Caravan> = {
     type: "offroad",
     features: {
       exterior: [
-        "Full external shower",
-        "Roll-out awning (4m)",
-        "External speakers",
-        "Heavy-duty roof racks",
-        "Jerry can holders",
-        "External gas bayonet",
-        "LED exterior lighting",
-        "Front and rear recovery points",
+        "Aluminum composite outside walls",
+        "Extra high raptor coated bottom panels for protection",
+        "Premium, one-piece, fiberglass roof",
+        "Roll-out awning",
+        "Full length tunnel boot with lights inside",
+        "External Kitchen pantry, shelf & alloy table",
+        "Entertainment hatch with TV bracket, antenna and 12V and 240V power outlets (inside ext-table)",
+        "Premium 3-point locking door with midge screens",
+        "Built-in external generator compartment (as per floor plan)",
+        "External gas bayonet to the awning side of the caravan for BBQ",
+        "Anderson plug to charge battery while driving",
+        "External grab handle with push button LED light",
+        "Premium quality picnic table with LED lights",
+      ],
+      external: [
+        "Aluminum composite outside walls",
+        "Extra high raptor coated bottom panels for protection",
+        "Premium, one-piece, fiberglass roof",
+        "Roll-out awning",
+        "Full length tunnel boot with lights inside",
+        "External Kitchen pantry, shelf & alloy table",
+        "Entertainment hatch with TV bracket, antenna and 12V and 240V power outlets (inside ext-table)",
+        "Premium 3-point locking door with midge screens",
+        "Built-in external generator compartment (as per floor plan)",
+        "External gas bayonet to the awning side of the caravan for BBQ",
+        "Anderson plug to charge battery while driving",
+        "External grab handle with push button LED light",
+        "Premium quality picnic table with LED lights",
       ],
       interior: [
-        "Queen-size island bed",
-        "Full kitchen with gas/electric cooktop",
-        "3-way fridge/freezer (184L)",
-        "Microwave oven",
-        "Ensuite with toilet and shower",
-        "LED lighting throughout",
-        "Reverse cycle air conditioning",
-        "Diesel heater",
+        "Deluxe 6’2” innerspring pillow-top mattress",
+        "Large size double glazed windows",
+        "Internal ‘Black Pack’ consisting of black sink, tapware, shower trim, rail and fittings, cupboard door & drawer catches",
+        "Stylish waterfall bench top",
+        "Nooks beside master bed with 240V & USB-C outlets for electronic device charging",
+        "Comfortable dual density lounges with premium automotive grade upholstery",
+        "Recess footrest to dinette seats (as per floor plan)",
+        "Soft close drawers",
+        "Premium brushed door & drawer catches (as per your build selection)",
+        "Block out blinds and pulldown mesh screens to all windows",
+        "Recessed stove cover with laminated lid over stove",
+        "Pull-out pantries (as per floor plan)",
+        "Premium acrylic splash-backs",
+        "Large stylish grab handle on entry wall at door",
+        "Premium quality ensuite mirror with additional magnifying glass",
+        "Fire extinguisher",
+      ],
+      internal: [
+        "Deluxe 6’2” innerspring pillow-top mattress",
+        "Large size double glazed windows",
+        "Internal ‘Black Pack’ consisting of black sink, tapware, shower trim, rail and fittings, cupboard door & drawer catches",
+        "Stylish waterfall bench top",
+        "Nooks beside master bed with 240V & USB-C outlets for electronic device charging",
+        "Comfortable dual density lounges with premium automotive grade upholstery",
+        "Recess footrest to dinette seats (as per floor plan)",
+        "Soft close drawers",
+        "Premium brushed door & drawer catches (as per your build selection)",
+        "Block out blinds and pulldown mesh screens to all windows",
+        "Recessed stove cover with laminated lid over stove",
+        "Pull-out pantries (as per floor plan)",
+        "Premium acrylic splash-backs",
+        "Large stylish grab handle on entry wall at door",
+        "Premium quality ensuite mirror with additional magnifying glass",
+        "Fire extinguisher",
       ],
       electrical: [
-        "200Ah lithium battery system",
-        "300W solar panels",
-        "40A DC-DC charger",
-        "2000W pure sine wave inverter",
-        "Battery management system",
+        "1000W of solar power (5 x 200W panels) 24V",
+        "2x230Ah Arizon Lithium batteries (24v)",
+        "Explorer plus 24V Victron BMS",
+        "5000VA (24V) Victron inverter",
+        "Positive pressure, anti-dust system",
+        "Additional Anderson plug for portable solar input",
+        "External rear camera",
+        "Front & rear external LED light bars",
+        "Anti-dazzle LED strip light around the underbody of the caravan",
+        "Internal LED bulkhead lighting",
+        "LED reading lights at bed head & dinette with USB & USB-C output",
+        "Remote LED lights throughout the van",
+        "Premium quality roof hatches with LED lights",
+        "Rear LED tail lights",
+        "Radio antenna",
+      ],
+      plumbing: [
+        "285L of drinking water capacity (3 x 95L tanks)",
+        "2 water pump",
+        "95L gray water tank with large water outlet",
+        "External hot / cold shower",
+        "2 x 9Kg gas bottles",
+        "Gas / electric hot water system",
+        "Digital water tank level display",
+        "Ceramic inlay cassette toilet",
+        "Flick mixer taps throughout",
+        "Hidden plumbing and waste lines inside cabinetry (wherever possible)",
+        "Lockable water filler to each water tank",
+      ],
+      chassis: [
+        "Cruisemaster ATX base next gen air control airbags BCS 4500kg",
+        "285/70/R17 Premium mud terrain tyres on load-rated alloy rims",
+        "Ventilated disc brakes",
+        "GAC Super front box with Weber slide, generator slide, jerry can holder, table & chairs storage section",
+        "50cm A-frame extension with front stone guard",
+        "DO45 articulating coupling",
+        "GAC exclusive raptor coated Truss chassis with removeable laser cut aluminium panels",
+        "Underbody checker plate protection",
+        "Stylish rear bumper bar with drawer",
+        "Double alloy entry step",
+        "Mud flaps to avoid stones",
+      ],
+      appliances: [
+        "Dometic reverse cycle air-conditioner",
+        "Thetford 274L compressor fridge",
+        "Premium front loader 3.5 kg washing machine (layout dependent)",
+        "32\" Smart TV (12V)",
+        "Dome style TV antenna",
+        "4 in 1 microwave / air fryer",
+        "Portable induction (10A) with designated double power points",
+        "Bluetooth sound system with internal & external speakers",
+        "Smoke alarm",
+        "2 x 12v fans",
       ],
       offGrid: [
-        "Solar power system",
+        "High-capacity solar power",
         "Large water capacity",
         "Lithium battery",
         "DC-DC charging",
@@ -1024,37 +1447,60 @@ const caravanData: Record<string, Caravan> = {
       tare: "2,400kg",
       atm: "3,300kg",
       sleeps: 4,
-      chassis: "Heavy-duty galvanised steel",
-      suspension: "Independent trailing arm with twin shock absorbers",
-      brakes: "Electric drum brakes with breakaway system",
-      wheels: "16\" alloy wheels with all-terrain tyres",
+      chassis: "GAC exclusive raptor coated Truss chassis",
+      suspension: "Cruisemaster ATX base next gen air control airbags",
+      brakes: "Ventilated disc brakes",
+      wheels: "285/70/R17 Premium mud terrain tyres on load-rated alloy rims",
     },
     interiorFeatures: [
-      "Queen-size island bed",
-      "Full kitchen with gas/electric cooktop",
-      "3-way fridge/freezer (184L)",
-      "Microwave oven",
-      "Ensuite with toilet and shower",
-      "LED lighting throughout",
-      "Reverse cycle air conditioning",
-      "Diesel heater",
+      "Deluxe 6’2” innerspring pillow-top mattress",
+      "Large size double glazed windows",
+      "Internal ‘Black Pack’ consisting of black sink, tapware, shower trim, rail and fittings, cupboard door & drawer catches",
+      "Stylish waterfall bench top",
+      "Nooks beside master bed with 240V & USB-C outlets for electronic device charging",
+      "Comfortable dual density lounges with premium automotive grade upholstery",
+      "Recess footrest to dinette seats (as per floor plan)",
+      "Soft close drawers",
+      "Premium brushed door & drawer catches (as per your build selection)",
+      "Block out blinds and pulldown mesh screens to all windows",
+      "Recessed stove cover with laminated lid over stove",
+      "Pull-out pantries (as per floor plan)",
+      "Premium acrylic splash-backs",
+      "Large stylish grab handle on entry wall at door",
+      "Premium quality ensuite mirror with additional magnifying glass",
+      "Fire extinguisher",
     ],
     exteriorFeatures: [
-      "Full external shower",
-      "Roll-out awning (4m)",
-      "External speakers",
-      "Heavy-duty roof racks",
-      "Jerry can holders",
-      "External gas bayonet",
-      "LED exterior lighting",
-      "Front and rear recovery points",
+      "Aluminum composite outside walls",
+      "Extra high raptor coated bottom panels for protection",
+      "Premium, one-piece, fiberglass roof",
+      "Roll-out awning",
+      "Full length tunnel boot with lights inside",
+      "External Kitchen pantry, shelf & alloy table",
+      "Entertainment hatch with TV bracket, antenna and 12V and 240V power outlets (inside ext-table)",
+      "Premium 3-point locking door with midge screens",
+      "Built-in external generator compartment (as per floor plan)",
+      "External gas bayonet to the awning side of the caravan for BBQ",
+      "Anderson plug to charge battery while driving",
+      "External grab handle with push button LED light",
+      "Premium quality picnic table with LED lights",
     ],
     electricals: [
-      "200Ah lithium battery system",
-      "300W solar panels",
-      "40A DC-DC charger",
-      "2000W pure sine wave inverter",
-      "Battery management system",
+      "1000W of solar power (5 x 200W panels) 24V",
+      "2x230Ah Arizon Lithium batteries (24v)",
+      "Explorer plus 24V Victron BMS",
+      "5000VA (24V) Victron inverter",
+      "Positive pressure, anti-dust system",
+      "Additional Anderson plug for portable solar input",
+      "External rear camera",
+      "Front & rear external LED light bars",
+      "Anti-dazzle LED strip light around the underbody of the caravan",
+      "Internal LED bulkhead lighting",
+      "LED reading lights at bed head & dinette with USB & USB-C output",
+      "Remote LED lights throughout the van",
+      "Premium quality roof hatches with LED lights",
+      "Rear LED tail lights",
+      "Radio antenna",
     ],
     images: ["/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C2).png", "/caravan/CaravanImage(D1V1C3).webp"],
   },
@@ -1262,14 +1708,14 @@ export default function ModelDetail() {
               <div className="col-span-12 lg:col-span-6 xl:col-span-5">
                 {/* Breadcrumb */}
                 <nav className="flex items-center gap-2 text-gray-400 mb-4" aria-label="Breadcrumb">
-                  <Link 
+                  <Link
                     href="/"
                     className="inline-flex items-center hover:text-white transition-colors"
                   >
                     <Home className="w-4 h-4" />
                   </Link>
                   <span className="text-gray-500">/</span>
-                  <Link 
+                  <Link
                     href={`/caravans?category=${caravan.category === "off-road" ? "off-road" : caravan.type || "touring"}`}
                     className="hover:text-white transition-colors"
                   >
@@ -1278,8 +1724,8 @@ export default function ModelDetail() {
                   <span className="text-gray-500">/</span>
                   <span className="text-white">{caravan.name}</span>
                 </nav>
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }} 
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.6 }}
                   className="flex flex-col"
@@ -1507,11 +1953,10 @@ export default function ModelDetail() {
             <div className="flex flex-wrap gap-4 md:gap-8">
               <button
                 onClick={() => setActiveTab("chassis")}
-                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${
-                  activeTab === "chassis"
-                    ? "text-white"
-                    : "text-gray-500 hover:text-gray-300"
-                }`}
+                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${activeTab === "chassis"
+                  ? "text-white"
+                  : "text-gray-500 hover:text-gray-300"
+                  }`}
               >
                 Chassis & Suspension
                 {activeTab === "chassis" && (
@@ -1524,11 +1969,10 @@ export default function ModelDetail() {
               </button>
               <button
                 onClick={() => setActiveTab("build")}
-                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${
-                  activeTab === "build"
-                    ? "text-white"
-                    : "text-gray-500 hover:text-gray-300"
-                }`}
+                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${activeTab === "build"
+                  ? "text-white"
+                  : "text-gray-500 hover:text-gray-300"
+                  }`}
               >
                 Build
                 {activeTab === "build" && (
@@ -1541,11 +1985,10 @@ export default function ModelDetail() {
               </button>
               <button
                 onClick={() => setActiveTab("construction")}
-                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${
-                  activeTab === "construction"
-                    ? "text-white"
-                    : "text-gray-500 hover:text-gray-300"
-                }`}
+                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${activeTab === "construction"
+                  ? "text-white"
+                  : "text-gray-500 hover:text-gray-300"
+                  }`}
               >
                 Construction Methods
                 {activeTab === "construction" && (
@@ -1638,15 +2081,15 @@ export default function ModelDetail() {
                   activeTab === "chassis"
                     ? "/caravninfo/chasis.jpg"
                     : activeTab === "build"
-                    ? "/caravninfo/layouts.jpg"
-                    : "/caravninfo/Trooper_Platinum_TRP199_LC8161_105-2048x1366.jpg"
+                      ? "/caravninfo/layouts.jpg"
+                      : "/caravninfo/Trooper_Platinum_TRP199_LC8161_105-2048x1366.jpg"
                 }
                 alt={
                   activeTab === "chassis"
                     ? "Chassis and Suspension"
                     : activeTab === "build"
-                    ? "Build Details"
-                    : "Construction Methods"
+                      ? "Build Details"
+                      : "Construction Methods"
                 }
                 fill
                 className="object-cover"
@@ -1656,274 +2099,257 @@ export default function ModelDetail() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="bg-black py-10 md:py-14">
+      {/* Features Section — Command Center Design */}
+      <section className="bg-black py-16 md:py-24" style={{ background: "linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%)" }}>
         <div className="container-wide">
+          {/* Section Header */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-10"
+            className="text-center mb-14"
           >
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">
-              Features & Inclusions
+            <p className="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-4">What's Included</p>
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+              Features &amp; <span className="text-accent">Inclusions</span>
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Everything you need for your next adventure
+            <p className="text-gray-500 max-w-xl mx-auto text-base">
+              Tap a category to explore every detail engineered into your {caravan.name}
             </p>
           </motion.div>
 
-          {/* Tab Navigation */}
-          <div className="border-b border-gray-800 mb-8">
-            <div className="flex flex-wrap gap-4 md:gap-6 justify-center">
-              <button
-                onClick={() => setActiveFeatureTab("electrical")}
-                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${
-                  activeFeatureTab === "electrical"
-                    ? "text-white"
-                    : "text-gray-500 hover:text-gray-300"
-                }`}
-              >
-                <Zap className="w-4 h-4" />
-                Electrical
-                {activeFeatureTab === "electrical" && (
-                  <motion.div
-                    layoutId="activeFeatureTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-                  />
-                )}
-              </button>
-              <button
-                onClick={() => setActiveFeatureTab("chassis")}
-                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${
-                  activeFeatureTab === "chassis"
-                    ? "text-white"
-                    : "text-gray-500 hover:text-gray-300"
-                }`}
-              >
-                <Truck className="w-4 h-4" />
-                Chassis
-                {activeFeatureTab === "chassis" && (
-                  <motion.div
-                    layoutId="activeFeatureTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-                  />
-                )}
-              </button>
-              <button
-                onClick={() => setActiveFeatureTab("appliances")}
-                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${
-                  activeFeatureTab === "appliances"
-                    ? "text-white"
-                    : "text-gray-500 hover:text-gray-300"
-                }`}
-              >
-                <ChefHat className="w-4 h-4" />
-                Appliances
-                {activeFeatureTab === "appliances" && (
-                  <motion.div
-                    layoutId="activeFeatureTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-                  />
-                )}
-              </button>
-              <button
-                onClick={() => setActiveFeatureTab("internal")}
-                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${
-                  activeFeatureTab === "internal"
-                    ? "text-white"
-                    : "text-gray-500 hover:text-gray-300"
-                }`}
-              >
-                <Home className="w-4 h-4" />
-                Internal
-                {activeFeatureTab === "internal" && (
-                  <motion.div
-                    layoutId="activeFeatureTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-                  />
-                )}
-              </button>
-              <button
-                onClick={() => setActiveFeatureTab("external")}
-                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${
-                  activeFeatureTab === "external"
-                    ? "text-white"
-                    : "text-gray-500 hover:text-gray-300"
-                }`}
-              >
-                <Building2 className="w-4 h-4" />
-                External
-                {activeFeatureTab === "external" && (
-                  <motion.div
-                    layoutId="activeFeatureTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-                  />
-                )}
-              </button>
-              <button
-                onClick={() => setActiveFeatureTab("plumbing")}
-                className={`relative pb-4 text-sm md:text-base font-medium uppercase tracking-wider transition-colors flex items-center gap-2 ${
-                  activeFeatureTab === "plumbing"
-                    ? "text-white"
-                    : "text-gray-500 hover:text-gray-300"
-                }`}
-              >
-                <Droplets className="w-4 h-4" />
-                Plumbing
-                {activeFeatureTab === "plumbing" && (
-                  <motion.div
-                    layoutId="activeFeatureTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-                  />
-                )}
-              </button>
-            </div>
+          {/* Category Selector — Pill bar on desktop, icon grid on mobile */}
+
+          {/* Desktop: horizontal pill tab bar */}
+          <div className="hidden md:flex items-center bg-white/5 border border-white/10 rounded-full p-1.5 mb-10 gap-1">
+            {[
+              { key: "electrical", label: "Electrical", Icon: Zap },
+              { key: "chassis", label: "Chassis & Protection", Icon: Truck },
+              { key: "appliances", label: "Appliances", Icon: ChefHat },
+              { key: "internal", label: "Internal", Icon: Home },
+              { key: "external", label: "External", Icon: Building2 },
+              { key: "plumbing", label: "Plumbing", Icon: Droplets },
+            ].map(({ key, label, Icon }) => {
+              const isActive = activeFeatureTab === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setActiveFeatureTab(key as "electrical" | "chassis" | "appliances" | "internal" | "external" | "plumbing")}
+                  className="relative flex-1 flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap"
+                  style={{
+                    background: isActive ? "#f59e0b" : "transparent",
+                    color: isActive ? "#000" : "#9ca3af",
+                  }}
+                >
+                  <Icon className="w-4 h-4 flex-shrink-0" />
+                  {label}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Tab Content */}
-          <motion.div
-            key={activeFeatureTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="bg-gray-900 rounded-xl p-6 md:p-8 border border-gray-800"
-          >
-              {activeFeatureTab === "electrical" && (
-                <>
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-800">
-                    <Zap className="w-6 h-6 text-accent" />
-                    <h3 className="font-display text-2xl md:text-3xl font-bold text-white">Electrical Specifications</h3>
+          {/* Mobile: icon grid */}
+          <div className="grid grid-cols-3 gap-3 mb-10 md:hidden">
+            {[
+              { key: "electrical", label: "Electrical", Icon: Zap, color: "#f59e0b" },
+              { key: "chassis", label: "Chassis", Icon: Truck, color: "#f59e0b" },
+              { key: "appliances", label: "Appliances", Icon: ChefHat, color: "#f59e0b" },
+              { key: "internal", label: "Internal", Icon: Home, color: "#f59e0b" },
+              { key: "external", label: "External", Icon: Building2, color: "#f59e0b" },
+              { key: "plumbing", label: "Plumbing", Icon: Droplets, color: "#f59e0b" },
+            ].map(({ key, label, Icon, color }, i) => (
+              <motion.button
+                key={key}
+                onClick={() => setActiveFeatureTab(key as "electrical" | "chassis" | "appliances" | "internal" | "external" | "plumbing")}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.07, duration: 0.4 }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  background: activeFeatureTab === key
+                    ? `linear-gradient(135deg, ${color}22 0%, ${color}11 100%)`
+                    : "rgba(255,255,255,0.03)",
+                  borderColor: activeFeatureTab === key ? color : "rgba(255,255,255,0.08)",
+                  boxShadow: activeFeatureTab === key ? `0 0 24px ${color}33, inset 0 1px 0 ${color}44` : "none",
+                }}
+                className="relative flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border transition-all duration-300 cursor-pointer overflow-hidden"
+              >
+                {activeFeatureTab === key && (
+                  <div
+                    className="absolute inset-0 opacity-20 blur-xl"
+                    style={{ background: `radial-gradient(circle at 50% 50%, ${color}, transparent 70%)` }}
+                  />
+                )}
+                <div
+                  className="relative z-10 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300"
+                  style={{
+                    background: activeFeatureTab === key ? `${color}22` : "rgba(255,255,255,0.06)",
+                    border: `1px solid ${activeFeatureTab === key ? color + "66" : "rgba(255,255,255,0.1)"}`,
+                  }}
+                >
+                  <Icon
+                    className="w-5 h-5 transition-all duration-300"
+                    style={{ color: activeFeatureTab === key ? color : "#6b7280" }}
+                  />
+                </div>
+                <span
+                  className="relative z-10 text-xs font-semibold uppercase tracking-wider transition-colors duration-300 leading-tight text-center"
+                  style={{ color: activeFeatureTab === key ? "#fff" : "#6b7280" }}
+                >
+                  {label}
+                </span>
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Feature Display Area */}
+          {(() => {
+            const tabConfig: Record<string, { label: string; Icon: typeof Zap; color: string; items: string[] }> = {
+              electrical: {
+                label: "Electrical",
+                Icon: Zap,
+                color: "#f59e0b",
+                items: caravan.features.electrical,
+              },
+              chassis: {
+                label: "Chassis & Protection",
+                Icon: Truck,
+                color: "#f59e0b",
+                items: caravan.features.chassis || [
+                  `Chassis: ${caravan.specs.chassis}`,
+                  `Suspension: ${caravan.specs.suspension}`,
+                  `Brakes: ${caravan.specs.brakes}`,
+                  `Wheels: ${caravan.specs.wheels}`,
+                ],
+              },
+              appliances: {
+                label: "Appliances",
+                Icon: ChefHat,
+                color: "#f59e0b",
+                items: caravan.features.appliances || caravan.features.interior.filter((f) =>
+                  ["fridge", "microwave", "cooktop", "oven", "stove", "kitchen"].some((k) => f.toLowerCase().includes(k))
+                ),
+              },
+              internal: {
+                label: "Internal",
+                Icon: Home,
+                color: "#f59e0b",
+                items: caravan.features.internal || caravan.features.interior.filter((f) =>
+                  !["fridge", "microwave", "cooktop", "oven", "stove", "kitchen", "shower", "toilet", "bathroom"].some((k) => f.toLowerCase().includes(k))
+                ),
+              },
+              external: {
+                label: "External",
+                Icon: Building2,
+                color: "#f59e0b",
+                items: caravan.features.external || caravan.features.exterior,
+              },
+              plumbing: {
+                label: "Plumbing",
+                Icon: Droplets,
+                color: "#f59e0b",
+                items: caravan.features.plumbing || [
+                  ...caravan.features.interior.filter((f) =>
+                    ["shower", "toilet", "bathroom", "ensuite"].some((k) => f.toLowerCase().includes(k))
+                  ),
+                  ...caravan.features.exterior.filter((f) =>
+                    ["shower", "water"].some((k) => f.toLowerCase().includes(k))
+                  ),
+                  `Water Capacity: ${caravan.highlights.water}`,
+                ],
+              },
+            };
+            const tab = tabConfig[activeFeatureTab];
+            if (!tab) return null;
+            const { label, Icon, color, items } = tab;
+            return (
+              <motion.div
+                key={activeFeatureTab}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.35 }}
+                className="relative rounded-3xl overflow-hidden"
+                style={{
+                  background: "linear-gradient(135deg, #0d0d0d 0%, #111 100%)",
+                  border: `1px solid ${color}22`,
+                  boxShadow: `0 0 60px ${color}11`,
+                }}
+              >
+                {/* Ghost icon watermark */}
+                <div className="absolute top-6 right-6 pointer-events-none select-none" aria-hidden>
+                  <Icon
+                    className="w-48 h-48 md:w-64 md:h-64 opacity-[0.04]"
+                    style={{ color }}
+                  />
+                </div>
+
+                {/* Inner content */}
+                <div className="relative z-10 p-8 md:p-12">
+                  {/* Category heading row */}
+                  <div className="flex items-center gap-4 mb-10">
+                    <div
+                      className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: `${color}18`, border: `1px solid ${color}44` }}
+                    >
+                      <Icon className="w-6 h-6" style={{ color }} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.25em] mb-0.5" style={{ color }}>
+                        Category
+                      </p>
+                      <h3 className="font-display text-2xl md:text-3xl font-bold text-white leading-none">
+                        {label}
+                      </h3>
+                    </div>
+                    <div className="ml-auto hidden md:flex items-center gap-2 text-sm" style={{ color: color + "99" }}>
+                      <Check className="w-4 h-4" />
+                      <span>{items.length} features included</span>
+                    </div>
                   </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {caravan.features.electrical.map((feature) => (
-                      <div key={feature} className="flex items-start gap-3 p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:border-accent/30 transition-colors">
-                        <div className="w-2 h-2 rounded-full bg-accent mt-2 flex-shrink-0" />
-                        <span className="text-sm text-gray-300 leading-relaxed">{feature}</span>
-                      </div>
+
+                  {/* Divider */}
+                  <div className="w-full h-px mb-10" style={{ background: `linear-gradient(90deg, ${color}44, transparent)` }} />
+
+                  {/* Feature chips — full-width on mobile, mosaic on md+ */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {items.map((feature, idx) => (
+                      <motion.div
+                        key={feature + idx}
+                        initial={{ opacity: 0, scale: 0.85, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ delay: idx * 0.04, duration: 0.3, ease: "easeOut" }}
+                        className="group flex items-center gap-2.5 px-4 py-2.5 rounded-full cursor-default transition-all duration-300"
+                        style={{
+                          background: `${color}0d`,
+                          border: `1px solid ${color}22`,
+                        }}
+                        whileHover={{
+                          background: `${color}1a`,
+                          borderColor: `${color}55`,
+                          scale: 1.03,
+                        }}
+                      >
+                        <div
+                          className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                          style={{ background: color, boxShadow: `0 0 6px ${color}` }}
+                        />
+                        <span className="text-sm text-gray-300 group-hover:text-white transition-colors duration-200 leading-snug">
+                          {feature}
+                        </span>
+                      </motion.div>
                     ))}
                   </div>
-                </>
-              )}
-              {activeFeatureTab === "chassis" && (
-                <>
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-800">
-                    <Truck className="w-6 h-6 text-accent" />
-                    <h3 className="font-display text-2xl md:text-3xl font-bold text-white">Chassis Specifications</h3>
+
+                  {/* Bottom count badge — mobile */}
+                  <div className="mt-8 flex md:hidden items-center gap-2 text-sm" style={{ color: color + "99" }}>
+                    <Check className="w-4 h-4" />
+                    <span>{items.length} features included</span>
                   </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {[
-                      `Chassis: ${caravan.specs.chassis}`,
-                      `Suspension: ${caravan.specs.suspension}`,
-                      `Brakes: ${caravan.specs.brakes}`,
-                      `Wheels: ${caravan.specs.wheels}`,
-                    ].map((spec, index) => (
-                      <div key={index} className="flex items-start gap-3 p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:border-accent/30 transition-colors">
-                        <div className="w-2 h-2 rounded-full bg-accent mt-2 flex-shrink-0" />
-                        <span className="text-sm text-gray-300 leading-relaxed">{spec}</span>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-              {activeFeatureTab === "appliances" && (
-                <>
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-800">
-                    <ChefHat className="w-6 h-6 text-accent" />
-                    <h3 className="font-display text-2xl md:text-3xl font-bold text-white">Appliances</h3>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {caravan.features.interior
-                      .filter((feature) => 
-                        feature.toLowerCase().includes("fridge") ||
-                        feature.toLowerCase().includes("microwave") ||
-                        feature.toLowerCase().includes("cooktop") ||
-                        feature.toLowerCase().includes("oven") ||
-                        feature.toLowerCase().includes("stove") ||
-                        feature.toLowerCase().includes("kitchen")
-                      )
-                      .map((feature) => (
-                        <div key={feature} className="flex items-start gap-3 p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:border-accent/30 transition-colors">
-                          <div className="w-2 h-2 rounded-full bg-accent mt-2 flex-shrink-0" />
-                          <span className="text-sm text-gray-300 leading-relaxed">{feature}</span>
-                        </div>
-                      ))}
-                  </div>
-                </>
-              )}
-              {activeFeatureTab === "internal" && (
-                <>
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-800">
-                    <Home className="w-6 h-6 text-accent" />
-                    <h3 className="font-display text-2xl md:text-3xl font-bold text-white">Internal Features</h3>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {caravan.features.interior
-                      .filter((feature) => 
-                        !feature.toLowerCase().includes("fridge") &&
-                        !feature.toLowerCase().includes("microwave") &&
-                        !feature.toLowerCase().includes("cooktop") &&
-                        !feature.toLowerCase().includes("oven") &&
-                        !feature.toLowerCase().includes("stove") &&
-                        !feature.toLowerCase().includes("kitchen") &&
-                        !feature.toLowerCase().includes("shower") &&
-                        !feature.toLowerCase().includes("toilet") &&
-                        !feature.toLowerCase().includes("bathroom")
-                      )
-                      .map((feature) => (
-                        <div key={feature} className="flex items-start gap-3 p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:border-accent/30 transition-colors">
-                          <div className="w-2 h-2 rounded-full bg-accent mt-2 flex-shrink-0" />
-                          <span className="text-sm text-gray-300 leading-relaxed">{feature}</span>
-                        </div>
-                      ))}
-                  </div>
-                </>
-              )}
-              {activeFeatureTab === "external" && (
-                <>
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-800">
-                    <Building2 className="w-6 h-6 text-accent" />
-                    <h3 className="font-display text-2xl md:text-3xl font-bold text-white">External Features</h3>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {caravan.features.exterior.map((feature) => (
-                      <div key={feature} className="flex items-start gap-3 p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:border-accent/30 transition-colors">
-                        <div className="w-2 h-2 rounded-full bg-accent mt-2 flex-shrink-0" />
-                        <span className="text-sm text-gray-300 leading-relaxed">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-              {activeFeatureTab === "plumbing" && (
-                <>
-                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-800">
-                    <Droplets className="w-6 h-6 text-accent" />
-                    <h3 className="font-display text-2xl md:text-3xl font-bold text-white">Plumbing</h3>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {[
-                      ...caravan.features.interior.filter((feature) => 
-                        feature.toLowerCase().includes("shower") ||
-                        feature.toLowerCase().includes("toilet") ||
-                        feature.toLowerCase().includes("bathroom") ||
-                        feature.toLowerCase().includes("ensuite")
-                      ),
-                      ...caravan.features.exterior.filter((feature) => 
-                        feature.toLowerCase().includes("shower") ||
-                        feature.toLowerCase().includes("water")
-                      ),
-                      `Water Capacity: ${caravan.highlights.water}`,
-                    ].map((feature, index) => (
-                      <div key={index} className="flex items-start gap-3 p-4 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:border-accent/30 transition-colors">
-                        <div className="w-2 h-2 rounded-full bg-accent mt-2 flex-shrink-0" />
-                        <span className="text-sm text-gray-300 leading-relaxed">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-            </motion.div>
+                </div>
+              </motion.div>
+            );
+          })()}
         </div>
       </section>
 
