@@ -37,7 +37,7 @@ const footerNavigation = {
     { name: "Instagram", href: "https://www.instagram.com/greataussiecaravans/", icon: Instagram },
     { name: "YouTube", href: "#", icon: Youtube },
     { name: "TikTok", href: "#", icon: TikTokIcon },
-    { name: "LinkedIn", href: "#", icon: Linkedin },
+    { name: "LinkedIn", href: "https://au.linkedin.com/company/great-aussie-caravans", icon: Linkedin },
   ],
 };
 
