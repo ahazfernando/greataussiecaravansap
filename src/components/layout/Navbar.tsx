@@ -51,7 +51,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const getModelLogo = (modelName: string): string => {
   const logoMap: Record<string, string> = {
     "Striker": "/caravanmodels/strikerlogo.png",
-    "20URER LITE": "/caravanmodels/euorerlitelogo.png",
+    // "20URER LITE": "/caravanmodels/euorerlitelogo.png",
     "20URER": "/caravanmodels/eourerlogo.png",
     "Gravity": "/caravanmodels/gravitylogo.png",
     "Xplora": "/caravanmodels/xploralogo.png",
@@ -86,13 +86,14 @@ const navigation = [
           image: "/caravan/CaravanImage(D1V1C1).webp",
           description: "HYBRID MODELS"
         }, */
-        {
-          name: "20URER LITE",
-          href: "/caravans/20urer-lite",
-          icon: Caravan,
-          image: "/caravan/CaravanImage(D1V1C2).png",
-          description: "CARAVAN MODELS"
-        },
+        // 20URER LITE model commented out
+        // {
+        //   name: "20URER LITE",
+        //   href: "/caravans/20urer-lite",
+        //   icon: Caravan,
+        //   image: "/caravan/CaravanImage(D1V1C2).png",
+        //   description: "CARAVAN MODELS"
+        // },
         {
           name: "20URER",
           href: "/caravans/20urer",

@@ -147,7 +147,7 @@ export default function QuoteRequestsPage() {
     const labels: Record<string, string> = {
       striker: "Striker",
       "20urer": "20URER",
-      "20urer-lite": "20URER LITE",
+      // "20urer-lite": "20URER LITE",
       gravity: "Gravity",
       xplora: "Xplora",
       tonka: "Tonka",

@@ -11,7 +11,7 @@ import Link from "next/link";
 const getModelLogo = (modelName: string): string => {
   const logoMap: Record<string, string> = {
     "Striker": "/caravanmodels/strikerlogo.png",
-    "20URER LITE": "/caravanmodels/euorerlitelogo.png",
+    // "20URER LITE": "/caravanmodels/euorerlitelogo.png",
     "20URER": "/caravanmodels/eourerlogo.png",
     "Gravity": "/caravanmodels/gravitylogo.png",
     "Xplora": "/caravanmodels/xploralogo.png",

@@ -48,7 +48,7 @@ export default function GetQuotePage() {
   const caravanTypes = [
     { value: "striker", label: "Striker" },
     { value: "20urer", label: "20URER" },
-    { value: "20urer-lite", label: "20URER LITE" },
+    // { value: "20urer-lite", label: "20URER LITE" },
     { value: "gravity", label: "Gravity" },
     { value: "xplora", label: "Xplora" },
     { value: "tonka", label: "Tonka" },

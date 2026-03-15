@@ -118,13 +118,14 @@ const featuredModels = [
     heroImage: "/caravan/cfi_featured_image.png",
     category: "off-road",
   },
-  {
-    id: "20urer-lite",
-    name: "20URER LITE",
-    tagline: "Lightweight Caravan Excellence",
-    heroImage: "/caravan/CaravanImage(D1V1C2).png",
-    category: "touring",
-  },
+  // 20URER LITE model commented out
+  // {
+  //   id: "20urer-lite",
+  //   name: "20URER LITE",
+  //   tagline: "Lightweight Caravan Excellence",
+  //   heroImage: "/caravan/CaravanImage(D1V1C2).png",
+  //   category: "touring",
+  // },
   {
     id: "tonka",
     name: "Tonka",

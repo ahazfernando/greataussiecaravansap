@@ -33,8 +33,8 @@ const footerNavigation = {
     { name: "FAQs", href: "/faqs" },
   ],
   social: [
-    { name: "Facebook", href: "#", icon: Facebook },
-    { name: "Instagram", href: "#", icon: Instagram },
+    { name: "Facebook", href: "https://www.facebook.com/greataussi/", icon: Facebook },
+    { name: "Instagram", href: "https://www.instagram.com/greataussiecaravans/", icon: Instagram },
     { name: "YouTube", href: "#", icon: Youtube },
     { name: "TikTok", href: "#", icon: TikTokIcon },
     { name: "LinkedIn", href: "#", icon: Linkedin },
@@ -69,6 +69,8 @@ export function Footer() {
                 <a
                   key={item.name}
                   href={item.href}
+                  target={item.href.startsWith("http") ? "_blank" : undefined}
+                  rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
                   className="text-gray-400 hover:text-accent transition-colors"
                 >
                   <span className="sr-only">{item.name}</span>

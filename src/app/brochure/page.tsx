@@ -49,7 +49,7 @@ import {
 const getModelLogo = (modelName: string): string => {
   const logoMap: Record<string, string> = {
     "Striker": "/caravanmodels/strikerlogo.png",
-    "20URER LITE": "/caravanmodels/euorerlitelogo.png",
+    // "20URER LITE": "/caravanmodels/euorerlitelogo.png",
     "20URER": "/caravanmodels/eourerlogo.png",
     "Gravity": "/caravanmodels/gravitylogo.png",
     "Xplora": "/caravanmodels/xploralogo.png",
@@ -89,13 +89,14 @@ const models = [
     heroImage: "/caravan/cfi_featured_image.png",
     category: "off-road",
   },
-  {
-    id: "20urer-lite",
-    name: "20URER LITE",
-    tagline: "Lightweight Caravan Excellence",
-    heroImage: "/caravan/CaravanImage(D1V1C2).png",
-    category: "touring",
-  },
+  // 20URER LITE model commented out
+  // {
+  //   id: "20urer-lite",
+  //   name: "20URER LITE",
+  //   tagline: "Lightweight Caravan Excellence",
+  //   heroImage: "/caravan/CaravanImage(D1V1C2).png",
+  //   category: "touring",
+  // },
   {
     id: "tonka",
     name: "Tonka",
