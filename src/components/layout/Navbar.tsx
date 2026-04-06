@@ -98,28 +98,28 @@ const navigation = [
           name: "20URER",
           href: "/caravans/20urer",
           icon: Caravan,
-          image: "/caravan/CaravanImage(D1V1C3).webp",
+          image: "/2ourer/2ourerImage01.png",
           description: "CARAVAN MODELS"
         },
         {
           name: "Gravity",
           href: "/caravans/gravity",
           icon: Caravan,
-          image: "/caravan/CaravanImage(D1V1C5).webp",
+          image: "/Gravity/GravityImage01.png",
           description: "CARAVAN MODELS"
         },
         {
           name: "Xplora",
           href: "/caravans/xplora",
           icon: Caravan,
-          image: "/caravan/cfi_featured_image.png",
+          image: "/XPloraNew/XploraImage01.png",
           description: "CARAVAN MODELS"
         },
         {
           name: "Tonka",
           href: "/caravans/tonka",
           icon: Caravan,
-          image: "/caravan/CaravanImage(D1V1C1).webp",
+          image: "/newmodeltonka/TonkaImg01.png",
           description: "CARAVAN MODELS"
         },
         /* {
