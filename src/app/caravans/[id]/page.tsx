@@ -197,6 +197,30 @@ const TONKA_GALLERY = [
   "/newmodeltonka/TonkaImg04.png",
 ] as const;
 
+const XPLORE_NEW_GALLERY = [
+  "/XPloraNew/XploraImage01.png",
+  "/XPloraNew/XploraImage02.png",
+  "/XPloraNew/XploraImage03.png",
+  "/XPloraNew/XploraImage04.png",
+] as const;
+
+const OURER_GALLERY = [
+  "/2ourer/2ourerImage01.png",
+  "/2ourer/2ourerImage02.png",
+  "/2ourer/2ourerImage03.png",
+  "/2ourer/2ourerImage04.png",
+] as const;
+
+const GRAVITY_NEW_GALLERY = [
+  "/Gravity/GravityImage01.png",
+  "/Gravity/GravityImage02.png",
+  "/Gravity/GravityImage03.png",
+  "/Gravity/GravityImage04.png",
+] as const;
+
+/** Model detail pages that show the hero thumbnail strip + synced main image */
+const HERO_SIDE_PANEL_MODEL_IDS = new Set(["tonka", "xplora", "20urer", "gravity"]);
+
 // Mock data - in production this would come from a database
 const caravanData: Record<string, Caravan> = {
   "outback-explorer-21": {
@@ -675,8 +699,8 @@ const caravanData: Record<string, Caravan> = {
     category: "touring",
     sizes: ["20'", "22'"],
     startingPrice: 105000,
-    heroImage: "/caravan/CaravanImage(D1V1C3).webp",
-    gallery: ["/caravan/CaravanImage(D1V1C3).webp", "/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C2).png"],
+    heroImage: OURER_GALLERY[0],
+    gallery: [...OURER_GALLERY],
     highlights: {
       solar: "250W",
       battery: "180Ah AGM",
@@ -868,7 +892,7 @@ const caravanData: Record<string, Caravan> = {
       "Rear LED tail lights",
       "Radio antenna",
     ],
-    images: ["/caravan/CaravanImage(D1V1C3).webp", "/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C2).png"],
+    images: [...OURER_GALLERY],
   },
   "gravity": {
     id: "gravity",
@@ -877,8 +901,8 @@ const caravanData: Record<string, Caravan> = {
     category: "off-road",
     sizes: ["21'", "24'"],
     startingPrice: 130000,
-    heroImage: "/caravan/CaravanImage(D1V1C5).webp",
-    gallery: ["/caravan/CaravanImage(D1V1C5).webp", "/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C3).webp"],
+    heroImage: GRAVITY_NEW_GALLERY[0],
+    gallery: [...GRAVITY_NEW_GALLERY],
     highlights: {
       solar: "400W",
       battery: "200Ah Lithium",
@@ -1075,7 +1099,7 @@ const caravanData: Record<string, Caravan> = {
       "Rear LED tail lights",
       "Radio antenna",
     ],
-    images: ["/caravan/CaravanImage(D1V1C5).webp", "/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C3).webp"],
+    images: [...GRAVITY_NEW_GALLERY],
   },
   "xplora": {
     id: "xplora",
@@ -1084,8 +1108,8 @@ const caravanData: Record<string, Caravan> = {
     category: "off-road",
     sizes: ["19'", "21'"],
     startingPrice: 120000,
-    heroImage: "/caravan/cfi_featured_image.png",
-    gallery: ["/caravan/cfi_featured_image.png", "/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C3).webp"],
+    heroImage: XPLORE_NEW_GALLERY[0],
+    gallery: [...XPLORE_NEW_GALLERY],
     highlights: {
       solar: "350W",
       battery: "250Ah Lithium",
@@ -1295,7 +1319,7 @@ const caravanData: Record<string, Caravan> = {
       "Rear LED tail lights",
       "Radio antenna",
     ],
-    images: ["/caravan/cfi_featured_image.png", "/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C3).webp"],
+    images: [...XPLORE_NEW_GALLERY],
   },
   "tonka": {
     id: "tonka",
@@ -1620,12 +1644,12 @@ export default function ModelDetail() {
   const params = useParams();
   const id = (params.id as string)?.toLowerCase();
   const heroRef = useRef<HTMLDivElement>(null);
-  const [tonkaGalleryIndex, setTonkaGalleryIndex] = useState(0);
+  const [heroGalleryIndex, setHeroGalleryIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<"chassis" | "build" | "construction">("chassis");
   const [activeFeatureTab, setActiveFeatureTab] = useState<"electrical" | "chassis" | "appliances" | "internal" | "external" | "plumbing">("electrical");
 
   useEffect(() => {
-    setTonkaGalleryIndex(0);
+    setHeroGalleryIndex(0);
   }, [id]);
 
   const { scrollYProgress } = useScroll({
@@ -1653,10 +1677,12 @@ export default function ModelDetail() {
 
   const modelCode = caravan.sizes[0]?.replace(/['"]/g, "").substring(0, 4) || caravan.name.substring(0, 4).toUpperCase();
   const baseHeroSrc = typeof caravan.heroImage === "string" ? caravan.heroImage : (caravan.heroImage as any).src || caravan.heroImage;
-  const tonkaGallery =
-    id === "tonka" ? (caravan.gallery as string[]).filter((s): s is string => typeof s === "string") : null;
+  const heroSidePanelGallery = HERO_SIDE_PANEL_MODEL_IDS.has(id)
+    ? (caravan.gallery as string[]).filter((s): s is string => typeof s === "string")
+    : null;
+  const showHeroSidePanel = Boolean(heroSidePanelGallery && heroSidePanelGallery.length > 1);
   const heroImageSrc =
-    tonkaGallery?.length ? tonkaGallery[tonkaGalleryIndex] ?? baseHeroSrc : baseHeroSrc;
+    heroSidePanelGallery?.length ? heroSidePanelGallery[heroGalleryIndex] ?? baseHeroSrc : baseHeroSrc;
 
   const specItems = [
     { icon: Sun, label: "Solar", value: caravan.highlights.solar },
@@ -1698,12 +1724,12 @@ export default function ModelDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{ y: productY }}
-            className={`relative mx-auto px-4 ${id === "tonka" ? "max-w-7xl" : "max-w-6xl"}`}
+            className={`relative mx-auto px-4 ${showHeroSidePanel ? "max-w-7xl" : "max-w-6xl"}`}
           >
             <div
-              className={`relative ${id === "tonka" && tonkaGallery && tonkaGallery.length > 1 ? "flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-5 xl:gap-6" : ""}`}
+              className={`relative ${showHeroSidePanel ? "flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-5 xl:gap-6" : ""}`}
             >
-              <div className={`relative ${id === "tonka" && tonkaGallery && tonkaGallery.length > 1 ? "flex-1 min-w-0" : ""}`}>
+              <div className={`relative ${showHeroSidePanel ? "flex-1 min-w-0" : ""}`}>
                 <motion.div
                   animate={{ y: [0, -8, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -1718,22 +1744,22 @@ export default function ModelDetail() {
                 </motion.div>
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-gradient-to-b from-black/30 via-black/20 to-transparent blur-xl" />
               </div>
-              {id === "tonka" && tonkaGallery && tonkaGallery.length > 1 && (
+              {showHeroSidePanel && heroSidePanelGallery && (
                 <div
                   className="flex flex-row lg:flex-col gap-2 sm:gap-2.5 shrink-0 justify-center lg:justify-center lg:w-32 xl:w-36 overflow-x-auto lg:overflow-visible pb-1 lg:pb-0 px-1 lg:px-0 -mx-1 lg:mx-0"
                   role="tablist"
                   aria-label={`${caravan.name} photo gallery`}
                 >
-                  {tonkaGallery.map((thumbSrc, idx) => (
+                  {heroSidePanelGallery.map((thumbSrc, idx) => (
                     <button
                       key={thumbSrc}
                       type="button"
                       role="tab"
-                      aria-selected={tonkaGalleryIndex === idx}
-                      aria-label={`View image ${idx + 1} of ${tonkaGallery.length}`}
-                      onClick={() => setTonkaGalleryIndex(idx)}
+                      aria-selected={heroGalleryIndex === idx}
+                      aria-label={`View image ${idx + 1} of ${heroSidePanelGallery.length}`}
+                      onClick={() => setHeroGalleryIndex(idx)}
                       className={`relative h-[72px] w-[72px] sm:h-20 sm:w-20 lg:h-[4.75rem] lg:w-full lg:aspect-square shrink-0 rounded-lg overflow-hidden border-2 transition-all bg-zinc-900/80 ${
-                        tonkaGalleryIndex === idx
+                        heroGalleryIndex === idx
                           ? "border-accent ring-2 ring-accent/40"
                           : "border-white/20 hover:border-white/40 opacity-90 hover:opacity-100"
                       }`}
