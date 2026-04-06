@@ -190,6 +190,13 @@ function AnimatedCount({ value, suffix = "", duration = 2, delay = 0 }: { value:
   );
 }
 
+const TONKA_GALLERY = [
+  "/newmodeltonka/TonkaImg01.png",
+  "/newmodeltonka/TonkaImg02.png",
+  "/newmodeltonka/TonkaImg03.png",
+  "/newmodeltonka/TonkaImg04.png",
+] as const;
+
 // Mock data - in production this would come from a database
 const caravanData: Record<string, Caravan> = {
   "outback-explorer-21": {
@@ -1297,8 +1304,8 @@ const caravanData: Record<string, Caravan> = {
     category: "off-road",
     sizes: ["20'", "22'"],
     startingPrice: 118000,
-    heroImage: "/caravan/CaravanImage(D1V1C1).webp",
-    gallery: ["/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C2).png", "/caravan/CaravanImage(D1V1C3).webp"],
+    heroImage: TONKA_GALLERY[0],
+    gallery: [...TONKA_GALLERY],
     highlights: {
       solar: "300W",
       battery: "200Ah Lithium",
@@ -1503,7 +1510,7 @@ const caravanData: Record<string, Caravan> = {
       "Rear LED tail lights",
       "Radio antenna",
     ],
-    images: ["/caravan/CaravanImage(D1V1C1).webp", "/caravan/CaravanImage(D1V1C2).png", "/caravan/CaravanImage(D1V1C3).webp"],
+    images: [...TONKA_GALLERY],
   },
   "paragon": {
     id: "paragon",
@@ -1613,8 +1620,13 @@ export default function ModelDetail() {
   const params = useParams();
   const id = (params.id as string)?.toLowerCase();
   const heroRef = useRef<HTMLDivElement>(null);
+  const [tonkaGalleryIndex, setTonkaGalleryIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<"chassis" | "build" | "construction">("chassis");
   const [activeFeatureTab, setActiveFeatureTab] = useState<"electrical" | "chassis" | "appliances" | "internal" | "external" | "plumbing">("electrical");
+
+  useEffect(() => {
+    setTonkaGalleryIndex(0);
+  }, [id]);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -1640,7 +1652,11 @@ export default function ModelDetail() {
   }
 
   const modelCode = caravan.sizes[0]?.replace(/['"]/g, "").substring(0, 4) || caravan.name.substring(0, 4).toUpperCase();
-  const heroImageSrc = typeof caravan.heroImage === 'string' ? caravan.heroImage : (caravan.heroImage as any).src || caravan.heroImage;
+  const baseHeroSrc = typeof caravan.heroImage === "string" ? caravan.heroImage : (caravan.heroImage as any).src || caravan.heroImage;
+  const tonkaGallery =
+    id === "tonka" ? (caravan.gallery as string[]).filter((s): s is string => typeof s === "string") : null;
+  const heroImageSrc =
+    tonkaGallery?.length ? tonkaGallery[tonkaGalleryIndex] ?? baseHeroSrc : baseHeroSrc;
 
   const specItems = [
     { icon: Sun, label: "Solar", value: caravan.highlights.solar },
@@ -1682,25 +1698,59 @@ export default function ModelDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{ y: productY }}
-            className="relative mx-auto max-w-6xl px-4"
+            className={`relative mx-auto px-4 ${id === "tonka" ? "max-w-7xl" : "max-w-6xl"}`}
           >
-            <div className="relative">
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="relative z-10"
-              >
-                <img
-                  src={heroImageSrc}
-                  alt={caravan.name}
-                  className="w-full h-auto max-h-[50vh] sm:max-h-[60vh] md:max-h-[75vh] object-contain mx-auto drop-shadow-2xl"
-                  style={{ filter: "drop-shadow(0 40px 60px rgba(0,0,0,0.3))" }}
-                />
-              </motion.div>
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-gradient-to-b from-black/30 via-black/20 to-transparent blur-xl" />
+            <div
+              className={`relative ${id === "tonka" && tonkaGallery && tonkaGallery.length > 1 ? "flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-5 xl:gap-6" : ""}`}
+            >
+              <div className={`relative ${id === "tonka" && tonkaGallery && tonkaGallery.length > 1 ? "flex-1 min-w-0" : ""}`}>
+                <motion.div
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative z-10"
+                >
+                  <img
+                    src={heroImageSrc}
+                    alt={caravan.name}
+                    className="w-full h-auto max-h-[50vh] sm:max-h-[60vh] md:max-h-[75vh] object-contain mx-auto drop-shadow-2xl"
+                    style={{ filter: "drop-shadow(0 40px 60px rgba(0,0,0,0.3))" }}
+                  />
+                </motion.div>
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-gradient-to-b from-black/30 via-black/20 to-transparent blur-xl" />
+              </div>
+              {id === "tonka" && tonkaGallery && tonkaGallery.length > 1 && (
+                <div
+                  className="flex flex-row lg:flex-col gap-2 sm:gap-2.5 shrink-0 justify-center lg:justify-center lg:w-32 xl:w-36 overflow-x-auto lg:overflow-visible pb-1 lg:pb-0 px-1 lg:px-0 -mx-1 lg:mx-0"
+                  role="tablist"
+                  aria-label={`${caravan.name} photo gallery`}
+                >
+                  {tonkaGallery.map((thumbSrc, idx) => (
+                    <button
+                      key={thumbSrc}
+                      type="button"
+                      role="tab"
+                      aria-selected={tonkaGalleryIndex === idx}
+                      aria-label={`View image ${idx + 1} of ${tonkaGallery.length}`}
+                      onClick={() => setTonkaGalleryIndex(idx)}
+                      className={`relative h-[72px] w-[72px] sm:h-20 sm:w-20 lg:h-[4.75rem] lg:w-full lg:aspect-square shrink-0 rounded-lg overflow-hidden border-2 transition-all bg-zinc-900/80 ${
+                        tonkaGalleryIndex === idx
+                          ? "border-accent ring-2 ring-accent/40"
+                          : "border-white/20 hover:border-white/40 opacity-90 hover:opacity-100"
+                      }`}
+                    >
+                      <img
+                        src={thumbSrc}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </motion.div>
         </div>
+
 
         {/* Breadcrumb and Model Name Section */}
         <div className="absolute top-[90px] md:top-[100px] left-0 right-0 z-20 mt-2 md:mt-5">
