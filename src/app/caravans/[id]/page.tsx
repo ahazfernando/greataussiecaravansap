@@ -1803,7 +1803,13 @@ export default function ModelDetail() {
                   className="flex flex-col"
                 >
                   <span className="text-accent text-sm font-display uppercase tracking-wider leading-none mb-3 md:mb-0 md:-mt-1">
-                    {caravan.category === "off-road" ? "OFF-ROAD" : caravan.category === "family" ? "FAMILY" : "TOURING"}
+                    {caravan.id === "tonka"
+                      ? "OFF GRID"
+                      : caravan.category === "off-road"
+                        ? "OFF-ROAD"
+                        : caravan.category === "family"
+                          ? "FAMILY"
+                          : "TOURING"}
                   </span>
                   <div className="relative w-full max-w-xs h-16 md:h-20 lg:h-24 mt-0 md:-mt-1 mb-3 md:mb-0">
                     <Image
