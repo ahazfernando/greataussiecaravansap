@@ -202,6 +202,22 @@ const navigation = [
   },
 ];
 
+type SubmenuFeaturedWidget = {
+  name: string;
+  href: string;
+  image: string;
+  description: string;
+};
+
+function getSubmenuFeaturedWidget(
+  submenu: NonNullable<(typeof navigation)[number]["submenu"]>
+): SubmenuFeaturedWidget | undefined {
+  if (!submenu || typeof submenu !== "object" || !("featuredWidget" in submenu)) {
+    return undefined;
+  }
+  return (submenu as { featuredWidget?: SubmenuFeaturedWidget }).featuredWidget;
+}
+
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -657,17 +673,20 @@ export function Navbar() {
                                     );
                                   })}
                                   {/* Events Featured Widget Card */}
-                                  {item.submenu.featuredWidget && (
+                                  {(() => {
+                                    const featuredWidget = getSubmenuFeaturedWidget(item.submenu);
+                                    if (!featuredWidget) return null;
+                                    return (
                                     <Link
-                                      href={item.submenu.featuredWidget.href}
+                                      href={featuredWidget.href}
                                       className="group relative overflow-hidden rounded-xl border border-gray-800 bg-gray-900 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1 col-span-2"
                                       onClick={() => setOpenDropdown(null)}
-                                      aria-label={`Explore ${item.submenu.featuredWidget.name}`}
+                                      aria-label={`Explore ${featuredWidget.name}`}
                                     >
                                       <div className="relative h-32 overflow-hidden">
                                         <Image
-                                          src={item.submenu.featuredWidget.image}
-                                          alt={item.submenu.featuredWidget.name}
+                                          src={featuredWidget.image}
+                                          alt={featuredWidget.name}
                                           fill
                                           className="object-cover group-hover:scale-105 transition-transform duration-300"
                                         />
@@ -676,16 +695,17 @@ export function Navbar() {
                                       <div className="p-4 flex items-start justify-between">
                                         <div className="flex-1 min-w-0">
                                           <div className="font-semibold text-base text-white group-hover:text-accent transition-colors mb-1">
-                                            {item.submenu.featuredWidget.name}
+                                            {featuredWidget.name}
                                           </div>
                                           <div className="text-xs text-gray-400 line-clamp-1">
-                                            {item.submenu.featuredWidget.description}
+                                            {featuredWidget.description}
                                           </div>
                                         </div>
                                         <ChevronRight className="h-5 w-5 text-accent flex-shrink-0 ml-3 group-hover:translate-x-1 transition-transform duration-200" />
                                       </div>
                                     </Link>
-                                  )}
+                                    );
+                                  })()}
                                 </div>
                               </div>
 
@@ -922,21 +942,25 @@ export function Navbar() {
                                       })
                                     )}
                                     {/* Events widget - moved down after categories for mobile */}
-                                    {item.submenu.featuredWidget && (
+                                    {(() => {
+                                      const featuredWidget = getSubmenuFeaturedWidget(item.submenu);
+                                      if (!featuredWidget) return null;
+                                      return (
                                       <Link
-                                        href={item.submenu.featuredWidget.href}
+                                        href={featuredWidget.href}
                                         className="flex items-center gap-2 sm:gap-3 rounded-lg px-3 py-2.5 text-sm text-white/80 hover:bg-gray-900 hover:text-white transition-colors"
                                         onClick={() => setMobileMenuOpen(false)}
                                       >
                                         <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-accent flex-shrink-0" />
                                         <div className="min-w-0 flex-1">
-                                          <div className="font-medium truncate">{item.submenu.featuredWidget.name}</div>
+                                          <div className="font-medium truncate">{featuredWidget.name}</div>
                                           <div className="text-xs text-gray-400 line-clamp-1">
-                                            {item.submenu.featuredWidget.description}
+                                            {featuredWidget.description}
                                           </div>
                                         </div>
                                       </Link>
-                                    )}
+                                      );
+                                    })()}
                                     {item.submenu.services.map((service) => {
                                       const Icon = service.icon;
                                       return (

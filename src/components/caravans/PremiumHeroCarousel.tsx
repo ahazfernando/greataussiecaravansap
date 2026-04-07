@@ -228,22 +228,22 @@ export function PremiumHeroCarousel({ models }: PremiumHeroCarouselProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="flex flex-col sm:flex-row gap-3 md:gap-4 items-center justify-center"
+          className="mx-auto flex w-full max-w-sm flex-col items-stretch justify-center gap-3 sm:max-w-none sm:flex-1 sm:flex-row sm:items-stretch md:gap-4 lg:mx-auto lg:max-w-3xl"
         >
         <Button
           asChild
-          className="bg-[#F2A900] hover:bg-[#E09A00] text-black px-4 md:px-6 py-3 md:py-4 text-sm md:text-base font-semibold rounded-lg min-w-[160px] md:min-w-[180px]"
+          className="h-auto w-full rounded-[24px] bg-[#F2A900] px-4 py-3 text-sm font-semibold text-black hover:bg-[#E09A00] sm:flex-1 md:px-6 md:py-4 md:text-base"
         >
-          <Link href={`/caravans/${activeModel.id}`}>
+          <Link href={`/caravans/${activeModel.id}`} className="inline-flex items-center justify-center">
             Explore the Model
           </Link>
         </Button>
         <Button
           variant="outline"
           asChild
-          className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 px-4 md:px-6 py-3 md:py-4 text-sm md:text-base font-semibold rounded-lg min-w-[160px] md:min-w-[180px]"
+          className="h-auto w-full rounded-[24px] border-2 border-white bg-transparent px-4 py-3 text-sm font-semibold text-white hover:bg-white hover:text-gray-900 sm:flex-1 md:px-6 md:py-4 md:text-base"
         >
-          <Link href="/brochure" className="flex items-center gap-2 justify-center">
+          <Link href="/brochure" className="inline-flex items-center justify-center gap-2">
             <Download className="w-3 h-3 md:w-4 md:h-4" />
             Download Brochure
           </Link>

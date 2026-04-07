@@ -29,15 +29,15 @@ export function InteriorComfortCarousel({ modelName }: { modelName: string }) {
 
   useEffect(() => {
     if (!api) return;
-    let id: ReturnType<typeof setInterval>;
+    let id: number | undefined;
     const armAutoplay = () => {
-      window.clearInterval(id);
-      id = window.setInterval(() => api.scrollNext(), AUTOPLAY_MS);
+      if (id !== undefined) window.clearInterval(id);
+      id = window.setInterval(() => api.scrollNext(), AUTOPLAY_MS) as number;
     };
     armAutoplay();
     api.on("select", armAutoplay);
     return () => {
-      window.clearInterval(id);
+      if (id !== undefined) window.clearInterval(id);
       api.off("select", armAutoplay);
     };
   }, [api]);

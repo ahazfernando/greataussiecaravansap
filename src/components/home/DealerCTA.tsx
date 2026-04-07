@@ -34,27 +34,27 @@ export function DealerCTA() {
                             their dream caravans with guidance from our authorized dealers.
                         </p>
 
-                        {/* CTA Buttons */}
-                        <div className="flex flex-wrap gap-4 items-center">
+                        {/* CTA Buttons — single row + compact on mobile */}
+                        <div className="flex flex-row flex-nowrap items-center gap-2 sm:gap-3 lg:gap-4">
                             <Button
                                 variant="default"
                                 size="lg"
-                                className="bg-white text-black hover:bg-gray-200 rounded-full px-8 py-6 text-sm sm:text-base font-semibold transition-all duration-300 group shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                                className="h-auto min-h-10 shrink-0 rounded-full bg-white px-3.5 py-2 text-xs font-semibold text-black transition-all duration-300 group shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:bg-gray-200 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] sm:min-h-11 sm:px-5 sm:py-2.5 sm:text-sm lg:min-h-0 lg:px-8 lg:py-6 lg:text-base"
                                 asChild
                             >
-                                <Link href="/dealers" className="flex items-center">
+                                <Link href="/dealers" className="inline-flex items-center justify-center gap-1.5 sm:gap-2">
                                     Find a Dealer
-                                    <ArrowRight className="ml-3 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                    <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 sm:h-4 sm:w-4 sm:group-hover:translate-x-1" />
                                 </Link>
                             </Button>
 
                             <Button
                                 variant="outline"
                                 size="lg"
-                                className="bg-transparent border-white text-white hover:bg-white/10 rounded-full px-8 py-6 text-sm sm:text-base font-semibold transition-all duration-300"
+                                className="h-auto min-h-10 shrink-0 rounded-full border-2 border-white bg-transparent px-3.5 py-2 text-xs font-semibold text-white transition-all duration-300 hover:bg-white/10 hover:text-white sm:min-h-11 sm:px-5 sm:py-2.5 sm:text-sm lg:min-h-0 lg:px-8 lg:py-6 lg:text-base"
                                 asChild
                             >
-                                <Link href="/contact">
+                                <Link href="/contact" className="inline-flex items-center justify-center">
                                     Contact Us
                                 </Link>
                             </Button>
