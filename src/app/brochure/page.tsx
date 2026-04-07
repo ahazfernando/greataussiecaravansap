@@ -71,7 +71,7 @@ const models = [
   {
     id: "20urer",
     name: "20URER",
-    tagline: "Premium Caravan Experience",
+    tagline: "Premium On-Road Caravan Experience",
     heroImage: "/caravan/CaravanImage(D1V1C3).webp",
     category: "touring",
   },

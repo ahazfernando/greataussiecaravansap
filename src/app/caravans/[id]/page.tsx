@@ -695,7 +695,7 @@ const caravanData: Record<string, Caravan> = {
   "20urer": {
     id: "20urer",
     name: "20URER",
-    tagline: "Premium Caravan Experience",
+    tagline: "Premium On-Road Caravan Experience",
     category: "touring",
     sizes: ["20'", "22'"],
     startingPrice: 105000,
@@ -1658,7 +1658,6 @@ export default function ModelDetail() {
   });
 
   const watermarkY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const productY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
   const caravan = caravanData[id];
 
@@ -1723,30 +1722,25 @@ export default function ModelDetail() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            style={{ y: productY }}
             className={`relative mx-auto px-4 ${showHeroSidePanel ? "max-w-7xl" : "max-w-6xl"}`}
           >
             <div
-              className={`relative ${showHeroSidePanel ? "flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-5 xl:gap-6" : ""}`}
+              className={`relative ${showHeroSidePanel ? "flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-4 xl:gap-5" : ""}`}
             >
               <div className={`relative ${showHeroSidePanel ? "flex-1 min-w-0" : ""}`}>
-                <motion.div
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="relative z-10"
-                >
+                <div className="relative z-10">
                   <img
                     src={heroImageSrc}
                     alt={caravan.name}
                     className="w-full h-auto max-h-[50vh] sm:max-h-[60vh] md:max-h-[75vh] object-contain mx-auto drop-shadow-2xl"
                     style={{ filter: "drop-shadow(0 40px 60px rgba(0,0,0,0.3))" }}
                   />
-                </motion.div>
+                </div>
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-gradient-to-b from-black/30 via-black/20 to-transparent blur-xl" />
               </div>
               {showHeroSidePanel && heroSidePanelGallery && (
                 <div
-                  className="flex flex-row lg:flex-col gap-2 sm:gap-2.5 shrink-0 justify-center lg:justify-center lg:w-32 xl:w-36 overflow-x-auto lg:overflow-visible pb-1 lg:pb-0 px-1 lg:px-0 -mx-1 lg:mx-0"
+                  className="flex flex-row lg:flex-col gap-1.5 sm:gap-2 shrink-0 justify-center lg:justify-center w-[68px] sm:w-[76px] lg:w-20 xl:w-[5.25rem] overflow-x-auto lg:overflow-visible pb-1 lg:pb-0 px-1 lg:px-0 -mx-1 lg:mx-0"
                   role="tablist"
                   aria-label={`${caravan.name} photo gallery`}
                 >
@@ -1758,9 +1752,9 @@ export default function ModelDetail() {
                       aria-selected={heroGalleryIndex === idx}
                       aria-label={`View image ${idx + 1} of ${heroSidePanelGallery.length}`}
                       onClick={() => setHeroGalleryIndex(idx)}
-                      className={`relative h-[72px] w-[72px] sm:h-20 sm:w-20 lg:h-[4.75rem] lg:w-full lg:aspect-square shrink-0 rounded-lg overflow-hidden border-2 transition-all bg-zinc-900/80 ${
+                      className={`relative h-[60px] w-[60px] sm:h-[68px] sm:w-[68px] lg:h-[3.25rem] lg:w-full lg:aspect-square shrink-0 rounded-md overflow-hidden border-2 transition-all bg-zinc-900/80 ${
                         heroGalleryIndex === idx
-                          ? "border-accent ring-2 ring-accent/40"
+                          ? "border-accent ring-1 ring-accent/40"
                           : "border-white/20 hover:border-white/40 opacity-90 hover:opacity-100"
                       }`}
                     >
@@ -2388,15 +2382,15 @@ export default function ModelDetail() {
                   {/* Divider */}
                   <div className="w-full h-px mb-10" style={{ background: `linear-gradient(90deg, ${color}44, transparent)` }} />
 
-                  {/* Feature chips — full-width on mobile, mosaic on md+ */}
-                  <div className="grid grid-cols-2 gap-3">
+                  {/* Feature chips — one column on narrow screens so long copy wraps cleanly; two columns from md */}
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-3">
                     {items.map((feature, idx) => (
                       <motion.div
                         key={feature + idx}
-                        initial={{ opacity: 0, scale: 0.85, y: 10 }}
+                        initial={{ opacity: 0, scale: 0.98, y: 8 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{ delay: idx * 0.04, duration: 0.3, ease: "easeOut" }}
-                        className="group flex items-center gap-2.5 px-4 py-2.5 rounded-full cursor-default transition-all duration-300"
+                        className="group flex items-start gap-2.5 px-4 py-3 rounded-2xl cursor-default transition-all duration-300 w-full min-w-0"
                         style={{
                           background: `${color}0d`,
                           border: `1px solid ${color}22`,
@@ -2404,14 +2398,13 @@ export default function ModelDetail() {
                         whileHover={{
                           background: `${color}1a`,
                           borderColor: `${color}55`,
-                          scale: 1.03,
                         }}
                       >
                         <div
-                          className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                          className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-2"
                           style={{ background: color, boxShadow: `0 0 6px ${color}` }}
                         />
-                        <span className="text-sm text-gray-300 group-hover:text-white transition-colors duration-200 leading-snug">
+                        <span className="text-sm text-gray-300 group-hover:text-white transition-colors duration-200 leading-snug text-left break-words [overflow-wrap:anywhere]">
                           {feature}
                         </span>
                       </motion.div>
