@@ -8,8 +8,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Great Aussie Caravans | Quality Australian-Built Caravans",
-  description: "Family-owned Australian caravan manufacturer. Premium off-road, family, and touring caravans built for adventure. Over 25 years of quality craftsmanship.",
-  keywords: "caravans, Australian caravans, off-road caravans, family caravans, touring caravans, caravan manufacturer, Melbourne caravans",
+  description: "Family-owned Australian caravan manufacturer. Premium off-grid, family, and touring caravans built for adventure. Over 25 years of quality craftsmanship.",
+  keywords: "caravans, Australian caravans, off-grid caravans, family caravans, touring caravans, caravan manufacturer, Melbourne caravans",
   authors: [{ name: "Great Aussie Caravans" }],
   icons: {
     icon: "/logo/greataussielogo.png",
@@ -24,14 +24,14 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://greataussiecaravans.com.au/",
     title: "Great Aussie Caravans | Quality Australian-Built Caravans",
-    description: "Family-owned Australian caravan manufacturer. Premium off-road, family, and touring caravans built for adventure.",
+    description: "Family-owned Australian caravan manufacturer. Premium off-grid, family, and touring caravans built for adventure.",
     images: ["https://greataussiecaravans.com.au/logo/greataussielogo.png"],
   },
   twitter: {
     card: "summary_large_image",
     site: "@GreatAussieCaravans",
     title: "Great Aussie Caravans | Quality Australian-Built Caravans",
-    description: "Family-owned Australian caravan manufacturer. Premium off-road, family, and touring caravans built for adventure.",
+    description: "Family-owned Australian caravan manufacturer. Premium off-grid, family, and touring caravans built for adventure.",
     images: ["https://greataussiecaravans.com.au/logo/greataussielogo.png"],
   },
 };

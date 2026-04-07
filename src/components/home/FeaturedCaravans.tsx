@@ -11,7 +11,7 @@ const featuredCaravans = [
     id: "outback-explorer-21",
     name: "Outback Explorer 21",
     image: caravanOffroad,
-    shortDescription: "Built for serious off-road adventures. Heavy-duty chassis, independent suspension, and all-terrain capability.",
+    shortDescription: "Built for serious off-grid adventures. Heavy-duty chassis, independent suspension, and all-terrain capability.",
     sleeps: 4,
     length: "6.4m",
     type: "offroad" as const,

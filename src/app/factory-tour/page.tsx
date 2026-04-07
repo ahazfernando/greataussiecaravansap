@@ -139,7 +139,7 @@ export default function FactoryTourPage() {
     {
       id: "gravity",
       name: "Gravity",
-      tagline: "Semi-Off-Road Dominance",
+      tagline: "Semi-Off-Grid Dominance",
       heroImage: "/Gravity/GravityImage01.png",
       category: "off-road",
     },

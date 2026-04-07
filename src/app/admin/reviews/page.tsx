@@ -18,7 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 // Caravan models list - you can expand this or fetch from a database
 const caravanModels = [
   "Family Cruiser 23",
-  "Off-Road Explorer 25",
+  "Off-Grid Explorer 25",
   "Touring Elite 20",
   "Adventure Seeker 22",
   "Outback Warrior 24",

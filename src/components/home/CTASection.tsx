@@ -16,7 +16,7 @@ export function CTASection() {
             <div className="relative w-full h-full rounded-2xl lg:rounded-r-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.5)] lg:shadow-[0_30px_80px_rgba(0,0,0,0.6)]">
               <Image
                 src="/widget/GreatAussieD1V2 1-min.png"
-                alt="Great Aussie Caravans off-road caravan"
+                alt="Great Aussie Caravans off-grid caravan"
                 fill
                 className="object-cover object-left lg:object-left-center"
                 priority

@@ -101,8 +101,8 @@ const faqCategories = [
         answer: "Standard features include fresh water tanks, grey water tanks, pressure pumps, and hot water systems. Tank sizes vary by model. Options include larger tanks, water filtration systems, and external shower connections for extended off-grid stays.",
       },
       {
-        question: "Are your caravans suitable for off-road use?",
-        answer: "Many of our models are specifically designed for off-road adventures with heavy-duty chassis, independent suspension, and reinforced construction. We offer dedicated off-road models as well as touring models suitable for sealed roads and light gravel tracks.",
+        question: "Are your caravans suitable for off-grid use?",
+        answer: "Many of our models are specifically designed for off-grid adventures with heavy-duty chassis, independent suspension, and reinforced construction. We offer dedicated off-grid models as well as touring models suitable for sealed roads and light gravel tracks.",
       },
     ],
   },

@@ -25,7 +25,7 @@ export function CaravanCard({
   featured = false,
 }: CaravanCardProps) {
   const typeLabels = {
-    offroad: "Off-Road",
+    offroad: "Off-Grid",
     family: "Family",
     touring: "Touring",
   };

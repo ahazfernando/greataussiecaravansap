@@ -132,7 +132,7 @@ export default function OurStoryPage() {
                     Our Unique Promise
                   </p>
                   <p className="text-gray-300">
-                    Great Aussie Caravans are the only manufacturer in Australia to offer 100% timber free caravans, aluminium framed caravans with 100% timber free walls, floor, and roof, or traditional meranti framed caravans. Whether you are after an extreme off-road caravan or a lightweight touring van we’ve got you covered. Our extreme off-road range has been designed so you can “go your own way”, purpose built to tackle Australia’s toughest tracks.
+                    Great Aussie Caravans are the only manufacturer in Australia to offer 100% timber free caravans, aluminium framed caravans with 100% timber free walls, floor, and roof, or traditional meranti framed caravans. Whether you are after an extreme off-grid caravan or a lightweight touring van we’ve got you covered. Our extreme off-grid range has been designed so you can “go your own way”, purpose built to tackle Australia’s toughest tracks.
                   </p>
                 </div>
 

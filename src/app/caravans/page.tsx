@@ -16,7 +16,7 @@ const allCaravans = [
     id: "outback-explorer-21",
     name: "Outback Explorer 21",
     image: caravanOffroad,
-    shortDescription: "Built for serious off-road adventures with heavy-duty chassis and independent suspension.",
+    shortDescription: "Built for serious off-grid adventures with heavy-duty chassis and independent suspension.",
     sleeps: 4,
     length: "6.4m",
     type: "offroad" as const,
@@ -26,7 +26,7 @@ const allCaravans = [
     id: "outback-explorer-24",
     name: "Outback Explorer 24",
     image: caravanOffroad,
-    shortDescription: "The larger off-road option with extra storage and full ensuite bathroom.",
+    shortDescription: "The larger off-grid option with extra storage and full ensuite bathroom.",
     sleeps: 5,
     length: "7.3m",
     type: "offroad" as const,
@@ -76,7 +76,7 @@ const allCaravans = [
 
 const filterOptions = [
   { value: "all", label: "All Caravans" },
-  { value: "offroad", label: "Off-Road" },
+  { value: "offroad", label: "Off-Grid" },
   { value: "family", label: "Family" },
   { value: "touring", label: "Touring" },
 ];
@@ -107,7 +107,7 @@ const featuredModels = [
   {
     id: "gravity",
     name: "Gravity",
-    tagline: "Semi-Off-Road Dominance",
+    tagline: "Semi-Off-Grid Dominance",
     heroImage: "/Gravity/GravityImage01.png",
     category: "off-road",
   },

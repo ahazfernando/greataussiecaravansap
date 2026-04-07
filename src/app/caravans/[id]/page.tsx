@@ -106,7 +106,7 @@ const getModelLogo = (modelName: string): string => {
 // Function to get category name for breadcrumb
 const getCategoryName = (category: string, type: string): string => {
   if (category === "off-road" || type === "offroad") {
-    return "Off-Road Range";
+    return "Off-Grid Range";
   }
   if (category === "family" || type === "family") {
     return "Family Range";
@@ -227,7 +227,7 @@ const caravanData: Record<string, Caravan> = {
   "outback-explorer-21": {
     id: "outback-explorer-21",
     name: "Outback Explorer 21",
-    tagline: "Built for Serious Off-Road Adventures",
+    tagline: "Built for Serious Off-Grid Adventures",
     category: "off-road",
     sizes: ["21'", "24'"],
     startingPrice: 125000,
@@ -240,9 +240,9 @@ const caravanData: Record<string, Caravan> = {
       inverter: "2000W Pure Sine",
       suspension: "Independent Trailing Arm",
     },
-    shortDescription: "Built for serious off-road adventures with heavy-duty chassis and independent suspension.",
-    description: "The Outback Explorer 21 is engineered for those who demand the best from their off-road caravan. Built on a heavy-duty galvanised chassis with independent trailing arm suspension, this caravan can handle the toughest Australian conditions while keeping you comfortable.",
-    idealFor: "Off-road adventurers, remote camping, outback exploration",
+    shortDescription: "Built for serious off-grid adventures with heavy-duty chassis and independent suspension.",
+    description: "The Outback Explorer 21 is engineered for those who demand the best from their off-grid caravan. Built on a heavy-duty galvanised chassis with independent trailing arm suspension, this caravan can handle the toughest Australian conditions while keeping you comfortable.",
+    idealFor: "Off-grid adventurers, remote camping, outback exploration",
     type: "offroad",
     features: {
       exterior: [
@@ -521,7 +521,7 @@ const caravanData: Record<string, Caravan> = {
       suspension: "Independent Trailing Arm",
     },
     shortDescription: "Hybrid model designed for versatility and adventure.",
-    description: "The Striker hybrid model combines the best of both worlds - the comfort of a caravan with the flexibility of a hybrid design. Perfect for those who want to explore both on-road and off-road destinations.",
+    description: "The Striker hybrid model combines the best of both worlds - the comfort of a caravan with the flexibility of a hybrid design. Perfect for those who want to explore both on-road and off-grid destinations.",
     idealFor: "Adventure seekers, hybrid enthusiasts, versatile travelers",
     type: "offroad",
     features: {
@@ -898,7 +898,7 @@ const caravanData: Record<string, Caravan> = {
   "gravity": {
     id: "gravity",
     name: "Gravity",
-    tagline: "Semi-Off-Road Dominance",
+    tagline: "Semi-Off-Grid Dominance",
     category: "off-road",
     sizes: ["21'", "24'"],
     startingPrice: 130000,
@@ -911,9 +911,9 @@ const caravanData: Record<string, Caravan> = {
       inverter: "3000W Pure Sine",
       suspension: "Independent Coil Spring",
     },
-    shortDescription: "Ultimate off-road caravan built for the toughest Australian conditions.",
-    description: "The Gravity is our most capable off-road caravan, engineered for serious adventurers who demand the absolute best. With heavy-duty construction, advanced suspension, and premium off-grid systems, the Gravity can take you anywhere.",
-    idealFor: "Serious off-roaders, remote explorers, adventure enthusiasts",
+    shortDescription: "Ultimate off-grid caravan built for the toughest Australian conditions.",
+    description: "The Gravity is our most capable off-grid caravan, engineered for serious adventurers who demand the absolute best. With heavy-duty construction, advanced suspension, and premium off-grid systems, the Gravity can take you anywhere.",
+    idealFor: "Serious off-grid explorers, remote explorers, adventure enthusiasts",
     type: "offroad",
     features: {
       exterior: [
@@ -1120,7 +1120,7 @@ const caravanData: Record<string, Caravan> = {
     },
     shortDescription: "Adventure-ready caravan designed for exploration and discovery.",
     description: "The Xplora is built for those who want to explore the road less traveled. With robust construction, advanced off-grid capabilities, and thoughtful design, this caravan is your ticket to adventure.",
-    idealFor: "Adventure seekers, off-road explorers, discovery enthusiasts",
+    idealFor: "Adventure seekers, off-grid explorers, discovery enthusiasts",
     type: "offroad",
     features: {
       exterior: [
@@ -1338,9 +1338,9 @@ const caravanData: Record<string, Caravan> = {
       inverter: "2000W Pure Sine",
       suspension: "Independent Trailing Arm",
     },
-    shortDescription: "Rugged off-road caravan built to handle any adventure.",
-    description: "The Tonka lives up to its name - built tough and built right. This robust off-road caravan is designed for those who don't compromise on quality and need a vehicle that can handle the most challenging terrains.",
-    idealFor: "Rugged adventurers, off-road enthusiasts, quality seekers",
+    shortDescription: "Rugged off-grid caravan built to handle any adventure.",
+    description: "The Tonka lives up to its name - built tough and built right. This robust off-grid caravan is designed for those who don't compromise on quality and need a vehicle that can handle the most challenging terrains.",
+    idealFor: "Rugged adventurers, off-grid enthusiasts, quality seekers",
     type: "offroad",
     features: {
       exterior: [
@@ -1803,13 +1803,11 @@ export default function ModelDetail() {
                   className="flex flex-col"
                 >
                   <span className="text-accent text-sm font-display uppercase tracking-wider leading-none mb-3 md:mb-0 md:-mt-1">
-                    {caravan.id === "tonka"
-                      ? "OFF GRID"
-                      : caravan.category === "off-road"
-                        ? "OFF-ROAD"
-                        : caravan.category === "family"
-                          ? "FAMILY"
-                          : "TOURING"}
+                    {caravan.category === "off-road"
+                      ? "OFF-GRID"
+                      : caravan.category === "family"
+                        ? "FAMILY"
+                        : "TOURING"}
                   </span>
                   <div className="relative w-full max-w-xs h-16 md:h-20 lg:h-24 mt-0 md:-mt-1 mb-3 md:mb-0">
                     <Image
