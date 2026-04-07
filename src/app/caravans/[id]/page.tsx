@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/layout/Navbar";
 import { Newsletter } from "@/components/home/Newsletter";
 import { Footer } from "@/components/layout/Footer";
+import { InteriorComfortCarousel } from "@/components/caravans/InteriorComfortCarousel";
 // import { ReviewsSection } from "@/components/home/ReviewsSection";
 import Image from "next/image";
 import caravanInterior from "@/assets/caravan-interior.jpg";
@@ -1985,14 +1986,9 @@ export default function ModelDetail() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
-              {/* Image Content */}
-              <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden">
-                <Image
-                  src="/caravninfo/layouts.jpg"
-                  alt={`${caravan.name} Interior`}
-                  fill
-                  className="object-cover"
-                />
+              {/* Image Content — carousel from /public/caravaninterior */}
+              <div className="relative w-full min-w-0">
+                <InteriorComfortCarousel modelName={caravan.name} />
               </div>
               {/* Text Content */}
               <div className="space-y-6">
@@ -2152,14 +2148,14 @@ export default function ModelDetail() {
                   activeTab === "chassis"
                     ? "/caravninfo/chasis.jpg"
                     : activeTab === "build"
-                      ? "/caravninfo/layouts.jpg"
+                      ? "/caravaninterior/EDITED-08080.jpg"
                       : "/caravninfo/Trooper_Platinum_TRP199_LC8161_105-2048x1366.jpg"
                 }
                 alt={
                   activeTab === "chassis"
                     ? "Chassis and Suspension"
                     : activeTab === "build"
-                      ? "Build Details"
+                      ? "Precision craftsmanship"
                       : "Construction Methods"
                 }
                 fill

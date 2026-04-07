@@ -32,7 +32,6 @@ import {
   Building2,
   Briefcase,
   UsersRound,
-  Sparkles,
   History,
   Hammer,
   Layers,
@@ -171,18 +170,18 @@ const navigation = [
     submenu: {
       categories: [
         { name: "Our story", href: "/our-story", icon: History, description: "Our journey and heritage" },
-        { name: "Great Aussie Lifestyle", href: "/lifestyle", icon: Sparkles, description: "The caravan lifestyle" },
+        // { name: "Great Aussie Lifestyle", href: "/lifestyle", icon: Sparkles, description: "The caravan lifestyle" },
         { name: "Blog", href: "/blog", icon: BookOpen, description: "Latest insights & tips" },
         { name: "Factory Tour", href: "/factory-tour", icon: Building2, description: "Visit our facility" },
         // { name: "Careers", href: "/careers", icon: Briefcase, description: "Join our team" },
         // { name: "Owners Club", href: "/owners-club", icon: UsersRound, description: "Connect with owners" },
       ],
-      featuredWidget: {
-        name: "Events",
-        href: "/events",
-        image: "/widget/WidgetImages(D1V1C1).jpg",
-        description: "Find upcoming trips, meetups, and camping events across Australia.",
-      },
+      // featuredWidget: {
+      //   name: "Events",
+      //   href: "/events",
+      //   image: "/widget/WidgetImages(D1V1C1).jpg",
+      //   description: "Find upcoming trips, meetups, and camping events across Australia.",
+      // },
       services: [],
       description: "Discover more about Great Aussie Caravans. Learn our story, explore our blog, and connect with our community.",
     },
