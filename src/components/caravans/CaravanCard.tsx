@@ -30,6 +30,9 @@ export function CaravanCard({
     touring: "Touring",
   };
 
+  const typeBadge =
+    id === "xplora" && type === "offroad" ? "Off-Road" : typeLabels[type];
+
   return (
     <article
       className={cn(
@@ -58,7 +61,7 @@ export function CaravanCard({
       <div className="p-6">
         <div className="flex items-center gap-2 mb-2">
           <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-1 rounded">
-            {typeLabels[type]}
+            {typeBadge}
           </span>
         </div>
 

@@ -104,9 +104,9 @@ const getModelLogo = (modelName: string): string => {
 };
 
 // Function to get category name for breadcrumb
-const getCategoryName = (category: string, type: string): string => {
+const getCategoryName = (category: string, type: string, modelId?: string): string => {
   if (category === "off-road" || type === "offroad") {
-    return "Off-Grid Range";
+    return modelId === "xplora" ? "Off-Road Range" : "Off-Grid Range";
   }
   if (category === "family" || type === "family") {
     return "Family Range";
@@ -115,6 +115,34 @@ const getCategoryName = (category: string, type: string): string => {
     return "Touring Range";
   }
   return "Our Range";
+};
+
+/** First Performance Highlight metric: suspension copy by model (fallback: specs.suspension) */
+const getPerformanceHighlightsSuspension = (modelId: string, specs: Caravan["specs"]): string => {
+  const byId: Record<string, string> = {
+    "20urer": "Leaf Spring",
+    gravity: "Independent coil spring",
+    "outback-explorer-21": "Chassis independent coil spring",
+    tonka: "Cruisemaster",
+  };
+  return byId[modelId] ?? specs.suspension;
+};
+
+/** Second Performance Highlight metric (replaces Sleeps for mapped models) */
+type PerformanceSecondMetric =
+  | { kind: "custom"; label: string; value: string }
+  | { kind: "sleeps"; sleeps: number };
+
+const getPerformanceSecondMetric = (modelId: string, sleeps: number): PerformanceSecondMetric => {
+  const custom: Record<string, { label: string; value: string }> = {
+    tonka: { label: "Inverter", value: "5000 VA" },
+    "outback-explorer-21": { label: "Inverter", value: "3000 VA" },
+    gravity: { label: "Battery", value: "200 Ah" },
+    "20urer": { label: "Battery", value: "100 Ah" },
+  };
+  const entry = custom[modelId];
+  if (entry) return { kind: "custom", ...entry };
+  return { kind: "sleeps", sleeps };
 };
 
 // Count Animation Component
@@ -1119,8 +1147,8 @@ const caravanData: Record<string, Caravan> = {
       suspension: "Independent Trailing Arm",
     },
     shortDescription: "Adventure-ready caravan designed for exploration and discovery.",
-    description: "The Xplora is built for those who want to explore the road less traveled. With robust construction, advanced off-grid capabilities, and thoughtful design, this caravan is your ticket to adventure.",
-    idealFor: "Adventure seekers, off-grid explorers, discovery enthusiasts",
+    description: "The Xplora is built for those who want to explore the road less traveled. With robust construction, advanced off-road capabilities, and thoughtful design, this caravan is your ticket to adventure.",
+    idealFor: "Adventure seekers, off-road explorers, discovery enthusiasts",
     type: "offroad",
     features: {
       exterior: [
@@ -1791,7 +1819,7 @@ export default function ModelDetail() {
                     href={`/caravans?category=${caravan.category === "off-road" ? "off-road" : caravan.type || "touring"}`}
                     className="hover:text-white transition-colors"
                   >
-                    {getCategoryName(caravan.category, caravan.type)}
+                    {getCategoryName(caravan.category, caravan.type, caravan.id)}
                   </Link>
                   <span className="text-gray-500">/</span>
                   <span className="text-white">{caravan.name}</span>
@@ -1803,11 +1831,13 @@ export default function ModelDetail() {
                   className="flex flex-col"
                 >
                   <span className="text-accent text-sm font-display uppercase tracking-wider leading-none mb-3 md:mb-0 md:-mt-1">
-                    {caravan.category === "off-road"
-                      ? "OFF-GRID"
-                      : caravan.category === "family"
-                        ? "FAMILY"
-                        : "TOURING"}
+                    {caravan.id === "xplora"
+                      ? "OFF-ROAD"
+                      : caravan.category === "off-road"
+                        ? "OFF-GRID"
+                        : caravan.category === "family"
+                          ? "FAMILY"
+                          : "TOURING"}
                   </span>
                   <div className="relative w-full max-w-xs h-16 md:h-20 lg:h-24 mt-0 md:-mt-1 mb-3 md:mb-0">
                     <Image
@@ -1854,11 +1884,11 @@ export default function ModelDetail() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.1, duration: 0.5 }}
               >
-                <p className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-1">
-                  <AnimatedCount value={caravan.specs.length} duration={2} delay={0.1} />
+                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-display font-bold text-white mb-1 leading-[1.15] max-w-xl mx-auto lg:mx-0">
+                  {getPerformanceHighlightsSuspension(caravan.id, caravan.specs)}
                 </p>
                 <p className="text-sm md:text-base text-gray-300 font-normal">
-                  Length
+                  Suspension
                 </p>
               </motion.div>
 
@@ -1868,12 +1898,32 @@ export default function ModelDetail() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.5 }}
               >
-                <p className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-1">
-                  <AnimatedCount value={caravan.specs.sleeps.toString()} suffix="people" duration={2} delay={0.2} />
-                </p>
-                <p className="text-sm md:text-base text-gray-300 font-normal">
-                  Sleeps
-                </p>
+                {(() => {
+                  const second = getPerformanceSecondMetric(caravan.id, caravan.specs.sleeps);
+                  if (second.kind === "custom") {
+                    return (
+                      <>
+                        <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-1 leading-tight">
+                          {second.value}
+                        </p>
+                        <p className="text-sm md:text-base text-gray-300 font-normal">{second.label}</p>
+                      </>
+                    );
+                  }
+                  return (
+                    <>
+                      <p className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-1">
+                        <AnimatedCount
+                          value={second.sleeps.toString()}
+                          suffix="people"
+                          duration={2}
+                          delay={0.2}
+                        />
+                      </p>
+                      <p className="text-sm md:text-base text-gray-300 font-normal">Sleeps</p>
+                    </>
+                  );
+                })()}
               </motion.div>
 
               <motion.div
