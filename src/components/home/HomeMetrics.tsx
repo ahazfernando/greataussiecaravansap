@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 import { Caravan, Users, Calendar, Star, ArrowUpRight, type LucideIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 // Counter Hook for animated numbers
 function useCounter(end: number, duration: number = 2000, startWhenInView: boolean = true) {
@@ -51,25 +51,17 @@ interface MetricCardProps {
 }
 
 function MetricCard({ value, suffix = "", title, description, delay = 0, icon: Icon }: MetricCardProps) {
-    const { ref, inView } = useInView({
-        triggerOnce: true,
-        threshold: 0.2,
-    });
-
     const { count, setHasStarted } = useCounter(value, 2000, true);
-
-    useEffect(() => {
-        if (inView) {
-            setTimeout(() => setHasStarted(true), delay * 1000);
-        }
-    }, [inView, delay, setHasStarted]);
 
     return (
         <motion.div
-            ref={ref}
             initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: "some" }}
             transition={{ duration: 0.6, delay }}
+            onViewportEnter={() => {
+                window.setTimeout(() => setHasStarted(true), delay * 1000);
+            }}
             className="relative flex flex-col justify-center p-6 bg-[#0a0a0a] border border-white/5 rounded-2xl overflow-hidden group hover:border-accent/20 transition-colors duration-500"
         >
             {/* Gradient Link Icon */}
@@ -148,8 +140,6 @@ const metricsData: MetricData[] = [
         icon: Star,
     },
 ];
-
-import { Badge } from "@/components/ui/badge";
 
 export function HomeMetrics() {
     return (
