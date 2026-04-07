@@ -898,7 +898,7 @@ const caravanData: Record<string, Caravan> = {
   "gravity": {
     id: "gravity",
     name: "Gravity",
-    tagline: "Off-Road Dominance",
+    tagline: "Semi-Off-Road Dominance",
     category: "off-road",
     sizes: ["21'", "24'"],
     startingPrice: 130000,
