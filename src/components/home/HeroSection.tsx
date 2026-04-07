@@ -6,46 +6,78 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const HERO_MODEL_LOGOS = [
-  { name: "Striker", src: "/caravanmodels/strikerlogo.png", href: "/caravans/striker" },
   { name: "20URER", src: "/caravanmodels/eourerlogo.png", href: "/caravans/20urer" },
   { name: "Gravity", src: "/caravanmodels/gravitylogo.png", href: "/caravans/gravity" },
   { name: "Xplora", src: "/caravanmodels/xploralogo.png", href: "/caravans/xplora" },
   { name: "Tonka", src: "/caravanmodels/tonkologo.png", href: "/caravans/tonka" },
-  { name: "20URER LITE", src: "/caravanmodels/euorerlitelogo.png", href: "/caravans" },
 ] as const;
 
-function HeroLogoMarquee() {
+function HeroLogoLink({
+  logo,
+  imageClassName,
+}: {
+  logo: (typeof HERO_MODEL_LOGOS)[number];
+  imageClassName: string;
+}) {
+  return (
+    <Link
+      href={logo.href}
+      className="inline-flex shrink-0 items-center justify-center opacity-90 drop-shadow-[0_2px_8px_rgba(0,0,0,.6)] transition hover:opacity-100"
+    >
+      <Image
+        src={logo.src}
+        alt={`${logo.name} model`}
+        width={140}
+        height={48}
+        className={imageClassName}
+      />
+    </Link>
+  );
+}
+
+/** Scrolling strip — mobile / small screens only */
+function HeroLogoMarqueeMobile() {
   const row = (instance: "a" | "b") => (
-    <div className="flex shrink-0 items-center gap-10 pr-10 md:gap-14 md:pr-14">
+    <div className="flex shrink-0 items-center gap-10 pr-10">
       {HERO_MODEL_LOGOS.map((logo) => (
-        <Link
+        <HeroLogoLink
           key={`${instance}-${logo.src}`}
-          href={logo.href}
-          className="inline-flex shrink-0 items-center justify-center opacity-90 drop-shadow-[0_2px_8px_rgba(0,0,0,.6)] transition hover:opacity-100"
-        >
-          <Image
-            src={logo.src}
-            alt={`${logo.name} model`}
-            width={160}
-            height={56}
-            className="h-9 w-auto object-contain md:h-11"
-          />
-        </Link>
+          logo={logo}
+          imageClassName="h-8 w-auto max-h-8 object-contain"
+        />
       ))}
     </div>
   );
 
   return (
     <div
-      className="relative left-1/2 mt-10 w-screen max-w-[100vw] -translate-x-1/2 overflow-hidden py-4 md:mt-14 md:py-5"
+      className="relative left-1/2 mt-10 w-screen max-w-[100vw] -translate-x-1/2 overflow-hidden py-4 md:hidden"
       aria-label="Caravan model range"
     >
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-black/80 to-transparent md:w-24" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-black/80 to-transparent md:w-24" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-black/80 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-black/80 to-transparent" />
       <div className="flex w-max animate-marquee [animation-duration:45s] motion-reduce:animate-none">
         {row("a")}
         {row("b")}
       </div>
+    </div>
+  );
+}
+
+/** Static row — md and up (single line, compact) */
+function HeroLogosDesktop() {
+  return (
+    <div
+      className="mt-10 hidden flex-row flex-nowrap items-center gap-4 py-4 md:flex md:mt-14 md:gap-5 md:py-5 lg:gap-6"
+      aria-label="Caravan model range"
+    >
+      {HERO_MODEL_LOGOS.map((logo) => (
+        <HeroLogoLink
+          key={logo.src}
+          logo={logo}
+          imageClassName="h-6 w-auto max-h-6 max-w-[5.25rem] object-contain md:h-7 md:max-h-7 md:max-w-24 lg:h-8 lg:max-h-8 lg:max-w-28"
+        />
+      ))}
     </div>
   );
 }
@@ -111,7 +143,8 @@ export function HeroSection() {
             </Button>
           </div>
 
-          <HeroLogoMarquee />
+          <HeroLogoMarqueeMobile />
+          <HeroLogosDesktop />
         </div>
       </div>
 
