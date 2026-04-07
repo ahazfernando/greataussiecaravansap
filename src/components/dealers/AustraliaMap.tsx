@@ -39,12 +39,12 @@ const dealerPinPositions: Array<{ x: number; y: number; dealerId: string; region
   { x: 30, y: 160, dealerId: '5', regionId: 'wa' },
 
   { x: 274, y: 120, dealerId: '4', regionId: 'qld' },
-  { x: 160, y: 170, dealerId: '6', regionId: 'sa' },
+  { x: 180, y: 170, dealerId: '6', regionId: 'sa' },
   { x: 245, y: 184, dealerId: '7', regionId: 'act' },
 
   // Victoria dealers - 2 pins
 
-  { x: 208, y: 200, dealerId: 'vic-1', regionId: 'vic' },  // Ballarat
+  { x: 228, y: 206, dealerId: 'vic-1', regionId: 'vic' },  // Ballarat
 
 
 ];
@@ -65,10 +65,10 @@ const MapPin = ({ x, y, isActive, regionId, dealerId, onPinClick }: MapPinProps)
     onPinClick(dealerId, regionId);
   };
 
-  // Use red color for ACT region, accent color for others
-  const isACT = regionId === 'act';
-  const pinColor = isACT ? "hsl(0, 70%, 50%)" : "hsl(32, 95%, 55%)";
-  const shadowColor = isACT ? "hsl(0, 70%, 50%)" : "hsl(32, 95%, 55%)";
+  // Use red color for Ballarat City Caravans, accent color for others
+  const isBallaratDealer = dealerId === 'vic-1';
+  const pinColor = isBallaratDealer ? "hsl(0, 70%, 50%)" : "hsl(32, 95%, 55%)";
+  const shadowColor = isBallaratDealer ? "hsl(0, 70%, 50%)" : "hsl(32, 95%, 55%)";
 
   return (
     <g
@@ -122,18 +122,6 @@ export const AustraliaMap = ({ selectedRegion, onRegionClick, selectedDealerId, 
   const getPathStyle = (locationId: string) => {
     const region = getRegionFromId(locationId);
     const isSelected = region === selectedRegion;
-    const isACT = region === 'act';
-
-    // Use red color for ACT region, accent color for others
-    if (isACT) {
-      return {
-        fill: isSelected ? "hsl(0, 70%, 50%, 0.25)" : "hsl(0, 70%, 50%, 0.15)",
-        stroke: isSelected ? "hsl(0, 70%, 50%)" : "hsl(0, 70%, 45%)",
-        strokeWidth: isSelected ? 1.5 : 1,
-        cursor: 'pointer',
-        transition: 'all 0.3s ease',
-      };
-    }
 
     return {
       fill: isSelected ? "hsl(32, 95%, 55%, 0.25)" : "hsl(222, 47%, 11%)",

@@ -58,7 +58,7 @@ export const DealerCard = ({ dealer, index }: DealerCardProps) => {
               <Phone className="h-3.5 w-3.5 text-accent" />
             </div>
             <a
-              href={`tel:${dealer.phone}`}
+              href={`tel:${dealer.phone.replace(/[^\d+]/g, "")}`}
               className="hover:text-accent transition-colors font-medium"
             >
               {dealer.phone}
