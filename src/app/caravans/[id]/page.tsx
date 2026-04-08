@@ -1745,8 +1745,8 @@ export default function ModelDetail() {
         </motion.div>
 
 
-        {/* Product Image */}
-        <div className="relative z-10 pt-56 md:pt-32 lg:pt-40">
+        {/* Product Image — padding clears absolute breadcrumb / logo / tagline */}
+        <div className="relative z-10 pt-60">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
