@@ -220,31 +220,26 @@ function AnimatedCount({ value, suffix = "", duration = 2, delay = 0 }: { value:
 }
 
 const TONKA_GALLERY = [
-  "/newmodeltonka/TonkaImg01.png",
-  "/newmodeltonka/TonkaImg02.png",
-  "/newmodeltonka/TonkaImg03.png",
-  "/newmodeltonka/TonkaImg04.png",
+  "/Tonka/TonkaImageV01.png",
+  "/Tonka/TonkaImageV02.png",
+  "/Tonka/TonkaImageV03-1.png",
 ] as const;
 
 const XPLORE_NEW_GALLERY = [
-  "/XPloraNew/XploraImage01.png",
-  "/XPloraNew/XploraImage02.png",
-  "/XPloraNew/XploraImage03.png",
-  "/XPloraNew/XploraImage04.png",
+  "/Xplora/XploraImageV01.png",
+  "/Xplora/XploraImageV02.png",
+  "/Xplora/XploraImageV03.png",
 ] as const;
 
 const OURER_GALLERY = [
-  "/2ourer/2ourerImage01.png",
-  "/2ourer/2ourerImage02.png",
-  "/2ourer/2ourerImage03.png",
-  "/2ourer/2ourerImage04.png",
+  "/2ourerModel/2ourerImageV01.png",
+  "/2ourerModel/2ourerImageV02.png",
 ] as const;
 
 const GRAVITY_NEW_GALLERY = [
-  "/Gravity/GravityImage01.png",
-  "/Gravity/GravityImage02.png",
-  "/Gravity/GravityImage03.png",
-  "/Gravity/GravityImage04.png",
+  "/Gravity/GravityImageV01.png",
+  "/Gravity/GravityImageV02.png",
+  "/Gravity/GravityImageV03.png",
 ] as const;
 
 /** Model detail pages that show the hero thumbnail strip + synced main image */

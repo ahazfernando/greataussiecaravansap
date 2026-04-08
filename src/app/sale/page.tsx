@@ -84,21 +84,21 @@ const featuredModels = [
     id: "20urer",
     name: "20URER",
     tagline: "Premium On-Road Caravan Experience",
-    heroImage: "/2ourer/2ourerImage01.png",
+    heroImage: "/2ourerModel/2ourerImageV01.png",
     category: "touring",
   },
   {
     id: "gravity",
     name: "Gravity",
     tagline: "Semi-Off-Grid Dominance",
-    heroImage: "/Gravity/GravityImage01.png",
+    heroImage: "/Gravity/GravityImageV01.png",
     category: "off-road",
   },
   {
     id: "xplora",
     name: "Xplora",
     tagline: "Explore Without Limits",
-    heroImage: "/XPloraNew/XploraImage01.png",
+    heroImage: "/Xplora/XploraImageV01.png",
     category: "off-road",
   },
   // 20URER LITE model commented out
@@ -113,7 +113,7 @@ const featuredModels = [
     id: "tonka",
     name: "Tonka",
     tagline: "Built Tough, Built Right",
-    heroImage: "/newmodeltonka/TonkaImg01.png",
+    heroImage: "/Tonka/TonkaImageV01.png",
     category: "off-road",
   },
 ];
