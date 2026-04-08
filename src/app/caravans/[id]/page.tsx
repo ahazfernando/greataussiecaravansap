@@ -112,7 +112,7 @@ const getCategoryName = (category: string, type: string, modelId?: string): stri
     return "Family Range";
   }
   if (category === "touring" || type === "touring") {
-    return "Touring Range";
+    return "On-Road";
   }
   return "Our Range";
 };
@@ -1741,7 +1741,7 @@ export default function ModelDetail() {
 
 
         {/* Product Image — padding clears absolute breadcrumb / logo / tagline */}
-        <div className="relative z-10 pt-60">
+        <div className="relative z-10 pt-44 md:pt-48">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1832,7 +1832,7 @@ export default function ModelDetail() {
                         ? "OFF-GRID"
                         : caravan.category === "family"
                           ? "FAMILY"
-                          : "TOURING"}
+                          : "On-Road"}
                   </span>
                   <div className="relative w-full max-w-xs h-16 md:h-20 lg:h-24 mt-0 md:-mt-1 mb-3 md:mb-0">
                     <Image
