@@ -106,7 +106,9 @@ const getModelLogo = (modelName: string): string => {
 // Function to get category name for breadcrumb
 const getCategoryName = (category: string, type: string, modelId?: string): string => {
   if (category === "off-road" || type === "offroad") {
-    return modelId === "xplora" ? "Off-Road Range" : "Off-Grid Range";
+    if (modelId === "xplora") return "Off-Road Range";
+    if (modelId === "gravity") return "Semi Off-Grid Range";
+    return "Off-Grid Range";
   }
   if (category === "family" || type === "family") {
     return "Family Range";
@@ -220,7 +222,7 @@ function AnimatedCount({ value, suffix = "", duration = 2, delay = 0 }: { value:
 }
 
 const TONKA_GALLERY = [
-  "/Tonka/TonkaImageV01.png",
+  "/Tonka/TonkaImageV0111.png",
   "/Tonka/TonkaImageV02.png",
   "/Tonka/TonkaImageV03-1.png",
 ] as const;
@@ -1835,11 +1837,13 @@ export default function ModelDetail() {
                   <span className="text-accent text-sm font-display uppercase tracking-wider leading-none mb-3 md:mb-0 md:-mt-1">
                     {caravan.id === "xplora"
                       ? "OFF-ROAD"
-                      : caravan.category === "off-road"
-                        ? "OFF-GRID"
-                        : caravan.category === "family"
-                          ? "FAMILY"
-                          : "On-Road"}
+                      : caravan.id === "gravity"
+                        ? "SEMI OFF-GRID"
+                        : caravan.category === "off-road"
+                          ? "OFF-GRID"
+                          : caravan.category === "family"
+                            ? "FAMILY"
+                            : "On-Road"}
                   </span>
                   <div className="relative w-full max-w-xs h-16 md:h-20 lg:h-24 mt-0 md:-mt-1 mb-3 md:mb-0">
                     <Image

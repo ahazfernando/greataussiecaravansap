@@ -135,7 +135,11 @@ export function PremiumHeroCarousel({ models }: PremiumHeroCarouselProps) {
                 <img
                   src={prevImageSrc}
                   alt={prevModel.name}
-                  className="w-full h-full object-contain"
+                  className={
+                    prevModel.id === "tonka"
+                      ? "w-full h-full object-contain scale-[0.85]"
+                      : "w-full h-full object-contain"
+                  }
                 />
               </div>
             </motion.div>
@@ -180,18 +184,26 @@ export function PremiumHeroCarousel({ models }: PremiumHeroCarouselProps) {
                   {activeModel.tagline}
                 </motion.h2>
 
-                {/* Model Image */}
+                {/* Model Image — Tonka asset reads larger in-frame than other cutouts */}
                 <motion.div
                   key={`image-${activeModel.id}`}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15, duration: 0.4 }}
-                  className="relative w-full max-w-4xl xl:max-w-5xl h-[320px] md:h-[380px] lg:h-[450px] xl:h-[520px] mt-4 md:mt-6"
+                  className={
+                    activeModel.id === "tonka"
+                      ? "relative w-full max-w-3xl xl:max-w-4xl h-[280px] md:h-[320px] lg:h-[380px] xl:h-[440px] mt-4 md:mt-6"
+                      : "relative w-full max-w-4xl xl:max-w-5xl h-[320px] md:h-[380px] lg:h-[450px] xl:h-[520px] mt-4 md:mt-6"
+                  }
                 >
                   <img
                     src={heroImageSrc}
                     alt={activeModel.name}
-                    className="w-full h-full object-contain"
+                    className={
+                      activeModel.id === "tonka"
+                        ? "w-full h-full object-contain scale-[0.82] md:scale-[0.88]"
+                        : "w-full h-full object-contain"
+                    }
                   />
                 </motion.div>
               </motion.div>
@@ -214,7 +226,11 @@ export function PremiumHeroCarousel({ models }: PremiumHeroCarouselProps) {
                 <img
                   src={nextImageSrc}
                   alt={nextModel.name}
-                  className="w-full h-full object-contain"
+                  className={
+                    nextModel.id === "tonka"
+                      ? "w-full h-full object-contain scale-[0.85]"
+                      : "w-full h-full object-contain"
+                  }
                 />
               </div>
             </motion.div>

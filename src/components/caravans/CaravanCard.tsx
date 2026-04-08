@@ -31,7 +31,11 @@ export function CaravanCard({
   };
 
   const typeBadge =
-    id === "xplora" && type === "offroad" ? "Off-Road" : typeLabels[type];
+    id === "xplora" && type === "offroad"
+      ? "Off-Road"
+      : id === "gravity" && type === "offroad"
+        ? "Semi Off-Grid"
+        : typeLabels[type];
 
   return (
     <article

@@ -162,7 +162,7 @@ export default function FactoryTourPage() {
       id: "tonka",
       name: "Tonka",
       tagline: "Built Tough, Built Right",
-      heroImage: "/Tonka/TonkaImageV01.png",
+      heroImage: "/Tonka/TonkaImageV0111.png",
       category: "off-road",
     },
   ];

@@ -116,7 +116,7 @@ const navigation = [
           name: "Tonka",
           href: "/caravans/tonka",
           icon: Caravan,
-          image: "/Tonka/TonkaImageV01.png",
+          image: "/Tonka/TonkaImageV0111.png",
           description: "CARAVAN MODELS"
         },
         /* {
