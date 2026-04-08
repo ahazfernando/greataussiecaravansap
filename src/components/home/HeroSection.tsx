@@ -19,17 +19,19 @@ function HeroLogoLink({
   logo: (typeof HERO_MODEL_LOGOS)[number];
   imageClassName: string;
 }) {
+  // Tonka artwork sits high in the PNG canvas — nudge down so it matches 20URER / Gravity / Xplora optically
+  const tonkaAlign = logo.name === "Tonka" ? "translate-y-1 md:translate-y-1.5" : "";
   return (
     <Link
       href={logo.href}
-      className="inline-flex shrink-0 items-center justify-center opacity-90 drop-shadow-[0_2px_8px_rgba(0,0,0,.6)] transition hover:opacity-100"
+      className="inline-flex h-8 shrink-0 items-end justify-center opacity-90 drop-shadow-[0_2px_8px_rgba(0,0,0,.6)] transition hover:opacity-100"
     >
       <Image
         src={logo.src}
         alt={`${logo.name} model`}
         width={140}
         height={48}
-        className={imageClassName}
+        className={`${imageClassName} object-contain object-bottom ${tonkaAlign}`}
       />
     </Link>
   );
@@ -38,7 +40,7 @@ function HeroLogoLink({
 /** Scrolling strip — mobile / small screens only */
 function HeroLogoMarqueeMobile() {
   const row = (instance: "a" | "b") => (
-    <div className="flex shrink-0 items-center gap-10 pr-10">
+    <div className="flex shrink-0 items-end gap-10 pr-10">
       {HERO_MODEL_LOGOS.map((logo) => (
         <HeroLogoLink
           key={`${instance}-${logo.src}`}
@@ -60,24 +62,6 @@ function HeroLogoMarqueeMobile() {
         {row("a")}
         {row("b")}
       </div>
-    </div>
-  );
-}
-
-/** Static row — md and up (single line, compact) */
-function HeroLogosDesktop() {
-  return (
-    <div
-      className="mt-10 hidden flex-row flex-nowrap items-center gap-4 py-4 md:flex md:mt-14 md:gap-5 md:py-5 lg:gap-6"
-      aria-label="Caravan model range"
-    >
-      {HERO_MODEL_LOGOS.map((logo) => (
-        <HeroLogoLink
-          key={logo.src}
-          logo={logo}
-          imageClassName="h-6 w-auto max-h-6 max-w-[5.25rem] object-contain md:h-7 md:max-h-7 md:max-w-24 lg:h-8 lg:max-h-8 lg:max-w-28"
-        />
-      ))}
     </div>
   );
 }
@@ -144,7 +128,6 @@ export function HeroSection() {
           </div>
 
           <HeroLogoMarqueeMobile />
-          <HeroLogosDesktop />
         </div>
       </div>
 

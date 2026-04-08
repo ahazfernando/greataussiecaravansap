@@ -1707,6 +1707,12 @@ export default function ModelDetail() {
   const heroImageSrc =
     heroSidePanelGallery?.length ? heroSidePanelGallery[heroGalleryIndex] ?? baseHeroSrc : baseHeroSrc;
 
+  /** Tonka cutouts read smaller in the fixed hero frame — give them a bit more viewport height */
+  const heroImageViewportClass =
+    id === "tonka"
+      ? "h-[54vh] sm:h-[66vh] md:h-[80vh]"
+      : "h-[50vh] sm:h-[60vh] md:h-[75vh]";
+
   const specItems = [
     { icon: Sun, label: "Solar", value: caravan.highlights.solar },
     { icon: Battery, label: "Battery", value: caravan.highlights.battery },
@@ -1752,15 +1758,16 @@ export default function ModelDetail() {
               className={`relative ${showHeroSidePanel ? "flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-4 xl:gap-5" : ""}`}
             >
               <div className={`relative ${showHeroSidePanel ? "flex-1 min-w-0" : ""}`}>
-                <div className="relative z-10">
+                {/* Fixed viewport height so swapping gallery images does not resize the page */}
+                <div className={`relative z-10 flex w-full items-center justify-center ${heroImageViewportClass}`}>
                   <img
                     src={heroImageSrc}
                     alt={caravan.name}
-                    className="w-full h-auto max-h-[50vh] sm:max-h-[60vh] md:max-h-[75vh] object-contain mx-auto drop-shadow-2xl"
+                    className="h-full w-full object-contain object-center drop-shadow-2xl"
                     style={{ filter: "drop-shadow(0 40px 60px rgba(0,0,0,0.3))" }}
                   />
                 </div>
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-gradient-to-b from-black/30 via-black/20 to-transparent blur-xl" />
+                <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-gradient-to-b from-black/30 via-black/20 to-transparent blur-xl" />
               </div>
               {showHeroSidePanel && heroSidePanelGallery && (
                 <div
