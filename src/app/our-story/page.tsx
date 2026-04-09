@@ -298,8 +298,8 @@ export default function OurStoryPage() {
             </div>
             <div className="relative rounded-xl overflow-hidden shadow-2xl border border-gray-800/50 aspect-square">
               <Image
-                src="/widget/WidgetImages(D1V1C1).jpg"
-                alt="Great Aussie Caravans Community"
+                src="/aboutus/caravanfamily.png"
+                alt="Great Aussie Caravans family community"
                 fill
                 className="object-cover"
               />

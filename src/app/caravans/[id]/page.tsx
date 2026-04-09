@@ -2209,14 +2209,14 @@ export default function ModelDetail() {
                     ? "/caravninfo/chasis.jpg"
                     : activeTab === "build"
                       ? "/caravaninterior/EDITED-08080.jpg"
-                      : "/caravninfo/Trooper_Platinum_TRP199_LC8161_105-2048x1366.jpg"
+                      : "/aboutus/AssetImageD1.png"
                 }
                 alt={
                   activeTab === "chassis"
                     ? "Chassis and Suspension"
                     : activeTab === "build"
                       ? "Precision craftsmanship"
-                      : "Construction Methods"
+                      : "Advanced construction methods"
                 }
                 fill
                 className="object-cover"
