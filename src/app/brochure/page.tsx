@@ -25,13 +25,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import {
@@ -439,75 +432,54 @@ export default function BrochurePage() {
             </p>
           </motion.div>
 
-          {/* Models — horizontal carousel */}
-          <div className="relative max-w-7xl mx-auto px-10 sm:px-12 md:px-14">
-            <Carousel
-              opts={{
-                align: "start",
-                loop: true,
-                dragFree: false,
-              }}
-              className="w-full"
-            >
-              <CarouselContent className="-ml-3 md:-ml-4">
-                {models.map((model, index) => (
-                  <CarouselItem
-                    key={model.id}
-                    className="pl-3 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
-                  >
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.05 }}
-                      whileHover={{ y: -6, scale: 1.02 }}
-                      className="group cursor-pointer h-full"
-                      onClick={() => handleModelSelect(model)}
-                    >
-                      <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl overflow-hidden hover:border-accent/50 transition-all duration-300 hover:shadow-xl hover:shadow-accent/10 h-full flex flex-col">
-                        <div className="relative h-48 md:h-56 bg-gray-950 overflow-hidden shrink-0">
+          {/* Models — static grid (all cards visible, no carousel) */}
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
+              {models.map((model, index) => (
+                <motion.div
+                  key={model.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  className="group cursor-pointer h-full"
+                  onClick={() => handleModelSelect(model)}
+                >
+                  <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl overflow-hidden hover:border-accent/50 transition-all duration-300 hover:shadow-xl hover:shadow-accent/10 h-full flex flex-col">
+                    <div className="relative h-48 md:h-56 bg-gray-950 overflow-hidden shrink-0">
+                      <Image
+                        src={model.heroImage}
+                        alt={model.name}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <div className="relative h-12 w-full max-w-[200px]">
                           <Image
-                            src={model.heroImage}
-                            alt={model.name}
+                            src={getModelLogo(model.name)}
+                            alt={`${model.name} Logo`}
                             fill
-                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                            className="object-contain object-left"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                          <div className="absolute bottom-4 left-4 right-4">
-                            <div className="relative h-12 w-full max-w-[200px]">
-                              <Image
-                                src={getModelLogo(model.name)}
-                                alt={`${model.name} Logo`}
-                                fill
-                                className="object-contain object-left"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="p-6 flex flex-col flex-1">
-                          <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-accent transition-colors">
-                            {model.name}
-                          </h3>
-                          <p className="text-gray-300 mb-4 text-sm md:text-base flex-1">{model.tagline}</p>
-                          <div className="flex items-center gap-2 text-accent font-medium mt-auto">
-                            <span>Request Brochure</span>
-                            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                          </div>
                         </div>
                       </div>
-                    </motion.div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious
-                className="left-0 sm:left-1 top-[42%] -translate-y-1/2 z-20 h-10 w-10 rounded-full border-gray-600 bg-gray-900/95 text-white shadow-lg hover:bg-gray-800 hover:text-white disabled:opacity-40"
-                aria-label="Previous models"
-              />
-              <CarouselNext
-                className="right-0 sm:right-1 top-[42%] -translate-y-1/2 z-20 h-10 w-10 rounded-full border-gray-600 bg-gray-900/95 text-white shadow-lg hover:bg-gray-800 hover:text-white disabled:opacity-40"
-                aria-label="Next models"
-              />
-            </Carousel>
+                    </div>
+                    <div className="p-6 flex flex-col flex-1">
+                      <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-accent transition-colors">
+                        {model.name}
+                      </h3>
+                      <p className="text-gray-300 mb-4 text-sm md:text-base flex-1">{model.tagline}</p>
+                      <div className="flex items-center gap-2 text-accent font-medium mt-auto">
+                        <span>Request Brochure</span>
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
