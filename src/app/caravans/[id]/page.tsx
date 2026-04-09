@@ -2206,7 +2206,7 @@ export default function ModelDetail() {
               <Image
                 src={
                   activeTab === "chassis"
-                    ? "/caravninfo/chasis.jpg"
+                    ? "/aboutus/PC-IMAGE-105.JPG"
                     : activeTab === "build"
                       ? "/caravaninterior/EDITED-08080.jpg"
                       : "/aboutus/AssetImageD1.png"

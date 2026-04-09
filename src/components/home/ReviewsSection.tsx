@@ -11,32 +11,36 @@ const reviews = [
     name: "Michael Thompson",
     rating: 5,
     date: "November 2024",
-    content: "Absolutely thrilled with our Outback Explorer! We've taken it across the Nullarbor and through the Kimberley—handles everything we throw at it. The build quality is exceptional and the team at Great Aussie made the whole process seamless.",
-    caravan: "Outback Explorer 21",
+    content:
+      "Absolutely thrilled with our Xplora! We've taken it across the Nullarbor and through the Kimberley—handles everything we throw at it. The build quality is exceptional and the team at Great Aussie made the whole process seamless.",
+    caravan: "Xplora",
   },
   {
     id: "2",
     name: "Sarah & David Chen",
     rating: 5,
     date: "October 2024",
-    content: "As a young family, we needed something that would grow with us. The Family Cruiser has been perfect—spacious, comfortable, and the kids love the bunk setup. Best investment we've ever made for our family adventures.",
-    caravan: "Family Cruiser 23",
+    content:
+      "As a young family, we needed something that would grow with us. Our Gravity has been perfect—spacious, comfortable, and the kids love the layout. Best investment we've ever made for our family adventures.",
+    caravan: "Gravity",
   },
   {
     id: "3",
     name: "Robert Williams",
     rating: 5,
     date: "September 2024",
-    content: "After comparing dozens of caravans, we chose Great Aussie for their attention to detail and Australian build. Six months in and we couldn't be happier. The after-sales support has been outstanding too.",
-    caravan: "Coastal Tourer 19",
+    content:
+      "After comparing dozens of caravans, we chose Great Aussie for their attention to detail and Australian build. Six months in and we couldn't be happier. The after-sales support has been outstanding too.",
+    caravan: "20URER",
   },
   {
     id: "4",
     name: "Jennifer Masters",
     rating: 5,
     date: "August 2024",
-    content: "Retired and finally living the dream! Our Outback Explorer has taken us to places we never thought we'd see. Reliable, comfortable, and built like a tank. Highly recommend to any grey nomad looking for quality.",
-    caravan: "Outback Explorer 21",
+    content:
+      "Retired and finally living the dream! Our Tonka has taken us to places we never thought we'd see. Reliable, comfortable, and built like a tank. Highly recommend to any grey nomad looking for quality.",
+    caravan: "Tonka",
   },
 ];
 
