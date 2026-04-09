@@ -12,6 +12,8 @@ const HERO_MODEL_LOGOS = [
   { name: "Tonka", src: "/caravanmodels/tonkologo.png", href: "/caravans/tonka" },
 ] as const;
 
+const HERO_BACKGROUND_SRC = `/aboutus/${encodeURIComponent("GreatAussieCaravans_XPlora-36 (1).jpg")}`;
+
 function HeroLogoLink({
   logo,
   imageClassName,
@@ -72,7 +74,7 @@ export function HeroSection() {
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src="/aboutus/Gemini_Generated_Image_hzctfihzctfihzct.png"
+          src={HERO_BACKGROUND_SRC}
           alt="Great Aussie Caravans Hero"
           fill
           priority
