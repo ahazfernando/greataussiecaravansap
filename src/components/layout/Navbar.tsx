@@ -266,13 +266,13 @@ export function Navbar() {
 
           {/* Mobile menu button */}
           <div className="flex-shrink-0 lg:hidden flex items-center gap-1">
-            <a
-              href="tel:+61393088511"
+            <Link
+              href="/contact"
               className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full text-white/80 hover:text-accent hover:bg-gray-900 transition-colors flex-shrink-0"
-              aria-label="Call Us"
+              aria-label="Contact us"
             >
               <Phone className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-            </a>
+            </Link>
             <button
               type="button"
               className="inline-flex items-center justify-center rounded-md p-0.5 text-white hover:bg-gray-900 transition-colors flex-shrink-0"
@@ -753,15 +753,15 @@ export function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-3 xl:gap-x-4 flex-shrink-0">
-            <a
-              href="tel:+61393088511"
+            <Link
+              href="/contact"
               className="flex items-center justify-center w-10 h-10 rounded-full text-white/80 hover:text-accent hover:bg-gray-900 transition-colors"
-              aria-label="Call Us"
+              aria-label="Contact us"
             >
               <Phone className="h-5 w-5" />
-            </a>
+            </Link>
             <Button variant="accent" size="sm" className="text-black whitespace-nowrap" asChild>
-              <Link href="/contact">Find a Dealer</Link>
+              <Link href="/dealers">Find a Dealer</Link>
             </Button>
           </div>
         </div>
@@ -998,17 +998,17 @@ export function Navbar() {
                     ))}
                   </div>
                   <div className="py-6 px-4 sm:px-6 space-y-2 sm:space-y-3 border-t border-gray-800 flex-shrink-0 bg-black">
-                    <a
-                      href="tel:+61393088511"
+                    <Link
+                      href="/contact"
                       className="flex items-center justify-center w-full h-10 sm:h-12 rounded-lg text-white bg-gray-900 hover:bg-gray-800 transition-colors gap-2"
-                      aria-label="Call Us"
+                      aria-label="Contact us"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <Phone className="h-4 w-4 sm:h-5 sm:w-5" />
-                      <span className="text-xs sm:text-sm font-medium">Call Us</span>
-                    </a>
+                      <span className="text-xs sm:text-sm font-medium">Contact Us</span>
+                    </Link>
                     <Button variant="accent" className="w-full text-black h-10 sm:h-12 text-xs sm:text-sm" asChild>
-                      <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
+                      <Link href="/dealers" onClick={() => setMobileMenuOpen(false)}>
                         Find a Dealer
                       </Link>
                     </Button>

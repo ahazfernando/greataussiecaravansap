@@ -12,6 +12,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Newsletter } from "@/components/home/Newsletter";
 import { Footer } from "@/components/layout/Footer";
 import { InteriorComfortCarousel } from "@/components/caravans/InteriorComfortCarousel";
+import { ConstructionMethodsImageCarousel } from "@/components/caravans/ConstructionMethodsImageCarousel";
 // import { ReviewsSection } from "@/components/home/ReviewsSection";
 import Image from "next/image";
 import caravanInterior from "@/assets/caravan-interior.jpg";
@@ -2045,9 +2046,9 @@ export default function ModelDetail() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+            <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
               {/* Image Content — carousel from /public/caravaninterior */}
-              <div className="relative w-full min-w-0">
+              <div className="relative w-full min-w-0 mt-6 md:mt-14 lg:mt-16">
                 <InteriorComfortCarousel modelName={caravan.name} />
               </div>
               {/* Text Content */}
@@ -2202,26 +2203,26 @@ export default function ModelDetail() {
             </div>
 
             {/* Image Content */}
-            <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden">
-              <Image
-                src={
-                  activeTab === "chassis"
-                    ? "/aboutus/PC-IMAGE-105.JPG"
-                    : activeTab === "build"
-                      ? "/caravaninterior/EDITED-08080.jpg"
-                      : "/aboutus/AssetImageD1.png"
-                }
-                alt={
-                  activeTab === "chassis"
-                    ? "Chassis and Suspension"
-                    : activeTab === "build"
-                      ? "Precision craftsmanship"
-                      : "Advanced construction methods"
-                }
-                fill
-                className="object-cover"
-              />
-            </div>
+            {activeTab === "construction" ? (
+              <ConstructionMethodsImageCarousel />
+            ) : (
+              <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden">
+                <Image
+                  src={
+                    activeTab === "chassis"
+                      ? "/aboutus/PC-IMAGE-105.JPG"
+                      : "/caravaninterior/EDITED-08080.jpg"
+                  }
+                  alt={
+                    activeTab === "chassis"
+                      ? "Chassis and Suspension"
+                      : "Precision craftsmanship"
+                  }
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
           </motion.div>
         </div>
       </section>

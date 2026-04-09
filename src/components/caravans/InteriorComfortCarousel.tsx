@@ -5,9 +5,13 @@ import Image from "next/image";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 
+const INTERIOR_SECOND_SRC = `/caravaninterior/${encodeURIComponent(
+  "Screenshot 2026-04-09 at 6.08.14\u202fAM.png",
+)}`;
+
 const INTERIOR_GALLERY_IMAGES = [
   "/caravaninterior/EDITED-08044.jpg",
-  "/caravaninterior/EDITED-08078.jpg",
+  INTERIOR_SECOND_SRC,
   "/caravaninterior/EDITED-08080.jpg",
 ] as const;
 
@@ -64,7 +68,7 @@ export function InteriorComfortCarousel({ modelName }: { modelName: string }) {
                   src={src}
                   alt={`${modelName} interior view ${index + 1} of ${INTERIOR_GALLERY_IMAGES.length}`}
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority={index === 0}
                 />
