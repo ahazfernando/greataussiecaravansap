@@ -21,6 +21,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Users } from "lucide-react";
+import { AdminDataTableSkeleton } from "@/components/skeletons";
 
 function formatDate(v: AdminUserRecord["createdAt"]): string {
   if (!v?.toDate) return "—";
@@ -111,7 +112,7 @@ export default function AdminUsersPage() {
           </CardHeader>
           <CardContent>
             {loading ? (
-              <div className="py-12 text-center text-muted-foreground">Loading users…</div>
+              <AdminDataTableSkeleton columns={4} rows={6} />
             ) : rows.length === 0 ? (
               <div className="py-12 text-center text-muted-foreground">
                 No admin user records yet. New signups will appear here.

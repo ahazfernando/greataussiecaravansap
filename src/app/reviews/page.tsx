@@ -136,14 +136,14 @@ export default function ReviewsPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-4">
-                  <Skeleton className="h-5 w-20 bg-gray-800" />
-                  <Skeleton className="h-4 w-full bg-gray-800" />
-                  <Skeleton className="h-4 w-full bg-gray-800" />
-                  <Skeleton className="h-4 w-3/4 bg-gray-800" />
+                  <Skeleton className="h-5 w-20 bg-white/10" />
+                  <Skeleton className="h-4 w-full bg-white/10" />
+                  <Skeleton className="h-4 w-full bg-white/10" />
+                  <Skeleton className="h-4 w-3/4 bg-white/10" />
                   <div className="border-t border-gray-800 pt-4 space-y-2">
-                    <Skeleton className="h-4 w-32 bg-gray-800" />
-                    <Skeleton className="h-3 w-40 bg-gray-800" />
-                    <Skeleton className="h-3 w-24 bg-gray-800" />
+                    <Skeleton className="h-4 w-32 bg-white/10" />
+                    <Skeleton className="h-3 w-40 bg-white/10" />
+                    <Skeleton className="h-3 w-24 bg-white/10" />
                   </div>
                 </div>
               ))}

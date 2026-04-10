@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { resolveAdminAccessForSession } from "@/lib/admin-access";
+import { AdminAccessCheckingSkeleton } from "@/components/skeletons";
 
 export default function AdminPage() {
   const router = useRouter();
@@ -27,8 +28,8 @@ export default function AdminPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-muted-foreground">Redirecting...</div>
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <AdminAccessCheckingSkeleton />
     </div>
   );
 }

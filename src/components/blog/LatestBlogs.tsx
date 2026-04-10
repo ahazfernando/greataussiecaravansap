@@ -84,24 +84,24 @@ const LatestBlogs: React.FC = () => {
             <section className="pt-5 pb-8 md:pt-20 md:pb-12 bg-black">
                 <div className="container-wide">
                     <div className="flex flex-col items-center text-center mb-12">
-                        <Skeleton className="h-10 w-48 mb-4 bg-gray-800" />
-                        <Skeleton className="h-8 w-96 mb-4 bg-gray-800" />
-                        <Skeleton className="h-5 w-64 bg-gray-800" />
+                        <Skeleton className="h-10 w-48 mb-4 bg-white/10" />
+                        <Skeleton className="h-8 w-96 mb-4 bg-white/10" />
+                        <Skeleton className="h-5 w-64 bg-white/10" />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-6">
                         {[1, 2, 3].map((i) => (
                             <div key={i} className="bg-black rounded-2xl overflow-hidden flex flex-col">
-                                <Skeleton className="w-full aspect-[16/9] rounded-2xl bg-gray-800" />
+                                <Skeleton className="w-full aspect-[16/9] rounded-2xl bg-white/10" />
                                 <div className="pt-6 pr-6 pb-6 space-y-3">
-                                    <Skeleton className="h-4 w-24 bg-gray-800" />
-                                    <Skeleton className="h-6 w-full bg-gray-800" />
-                                    <Skeleton className="h-6 w-3/4 bg-gray-800" />
-                                    <Skeleton className="h-4 w-full bg-gray-800" />
-                                    <Skeleton className="h-4 w-full bg-gray-800" />
-                                    <Skeleton className="h-4 w-2/3 bg-gray-800" />
+                                    <Skeleton className="h-4 w-24 bg-white/10" />
+                                    <Skeleton className="h-6 w-full bg-white/10" />
+                                    <Skeleton className="h-6 w-3/4 bg-white/10" />
+                                    <Skeleton className="h-4 w-full bg-white/10" />
+                                    <Skeleton className="h-4 w-full bg-white/10" />
+                                    <Skeleton className="h-4 w-2/3 bg-white/10" />
                                     <div className="flex gap-2 mt-4">
-                                        <Skeleton className="h-6 w-16 rounded-md bg-gray-800" />
-                                        <Skeleton className="h-6 w-20 rounded-md bg-gray-800" />
+                                        <Skeleton className="h-6 w-16 rounded-md bg-white/10" />
+                                        <Skeleton className="h-6 w-20 rounded-md bg-white/10" />
                                     </div>
                                 </div>
                             </div>

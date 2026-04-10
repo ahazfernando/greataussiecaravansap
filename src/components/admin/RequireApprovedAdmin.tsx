@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { resolveAdminAccessForSession } from "@/lib/admin-access";
+import { AdminAccessCheckingSkeleton } from "@/components/skeletons";
 
 interface RequireApprovedAdminProps {
   children: ReactNode;
@@ -36,11 +37,7 @@ export function RequireApprovedAdmin({ children }: RequireApprovedAdminProps) {
   }, [router]);
 
   if (!ready) {
-    return (
-      <div className="flex min-h-[40vh] items-center justify-center text-muted-foreground">
-        Checking access…
-      </div>
-    );
+    return <AdminAccessCheckingSkeleton />;
   }
 
   return <>{children}</>;

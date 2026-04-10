@@ -51,7 +51,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ article, getValidImageUrl }) => {
         <div className="bg-black rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-lg hover:shadow-xl">
             <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden">
                 {imageLoading && (
-                    <Skeleton className="absolute inset-0 w-full h-full rounded-2xl bg-gray-800" />
+                    <Skeleton className="absolute inset-0 w-full h-full rounded-2xl bg-white/10" />
                 )}
                 <Link href={`/blog/${encodeURIComponent(article.slug)}`} className="block h-full">
                     <Image

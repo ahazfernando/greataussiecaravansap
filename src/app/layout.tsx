@@ -6,14 +6,21 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Providers } from "./providers";
 import "./globals.css";
 
+const siteUrl = "https://greataussiecaravans.com.au";
+const logoPath = "/logo/greataussielogo.png";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Great Aussie Caravans | Quality Australian-Built Caravans",
-  description: "Family-owned Australian caravan manufacturer. Premium off-grid, family, and touring caravans built for adventure. Over 25 years of quality craftsmanship.",
-  keywords: "caravans, Australian caravans, off-grid caravans, family caravans, touring caravans, caravan manufacturer, Melbourne caravans",
+  description:
+    "Family-owned Australian caravan manufacturer. Premium off-grid, family, and touring caravans built for adventure. Over 25 years of quality craftsmanship.",
+  keywords:
+    "caravans, Australian caravans, off-grid caravans, family caravans, touring caravans, caravan manufacturer, Melbourne caravans",
   authors: [{ name: "Great Aussie Caravans" }],
   icons: {
-    icon: "/logo/greataussielogo.png",
-    apple: "/logo/greataussielogo.png",
+    icon: logoPath,
+    shortcut: logoPath,
+    apple: logoPath,
   },
   viewport: {
     width: "device-width",
@@ -22,17 +29,32 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: "https://greataussiecaravans.com.au/",
+    locale: "en_AU",
+    url: siteUrl,
+    siteName: "Great Aussie Caravans",
     title: "Great Aussie Caravans | Quality Australian-Built Caravans",
-    description: "Family-owned Australian caravan manufacturer. Premium off-grid, family, and touring caravans built for adventure.",
-    images: ["https://greataussiecaravans.com.au/logo/greataussielogo.png"],
+    description:
+      "Family-owned Australian caravan manufacturer. Premium off-grid, family, and touring caravans built for adventure.",
+    images: [
+      {
+        url: logoPath,
+        alt: "Great Aussie Caravans logo",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     site: "@GreatAussieCaravans",
     title: "Great Aussie Caravans | Quality Australian-Built Caravans",
-    description: "Family-owned Australian caravan manufacturer. Premium off-grid, family, and touring caravans built for adventure.",
-    images: ["https://greataussiecaravans.com.au/logo/greataussielogo.png"],
+    description:
+      "Family-owned Australian caravan manufacturer. Premium off-grid, family, and touring caravans built for adventure.",
+    images: [
+      {
+        url: logoPath,
+        alt: "Great Aussie Caravans logo",
+      },
+    ],
   },
 };
 
@@ -44,9 +66,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <head>
-        <link rel="icon" type="image/png" href="/logo/greataussielogo.png" />
-        <link rel="apple-touch-icon" href="/logo/greataussielogo.png" />
-        <link rel="canonical" href="https://greataussiecaravans.com.au/" />
+        <link rel="icon" type="image/png" href={logoPath} />
+        <link rel="shortcut icon" type="image/png" href={logoPath} />
+        <link rel="apple-touch-icon" href={logoPath} />
+        <link rel="canonical" href={`${siteUrl}/`} />
       </head>
       <body>
         <Providers>

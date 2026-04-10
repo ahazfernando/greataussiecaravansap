@@ -23,6 +23,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { format } from "date-fns";
+import { AdminListPageSkeleton } from "@/components/skeletons";
 
 interface QuoteRequest {
   id: string;
@@ -170,10 +171,7 @@ export default function QuoteRequestsPage() {
   if (loading) {
     return (
       <AdminLayout>
-        <div className="space-y-6">
-          <h1 className="text-3xl font-bold text-foreground">Quote Requests</h1>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
+        <AdminListPageSkeleton />
       </AdminLayout>
     );
   }

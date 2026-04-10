@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Download, Calendar, Mail, Phone, Users } from "lucide-react";
 import Link from "next/link";
+import { AdminRegistrationsPageSkeleton } from "@/components/skeletons";
 
 interface EventRegistration {
     id: string;
@@ -141,9 +142,7 @@ export default function AdminRegistrationsPage() {
     if (loading) {
         return (
             <AdminLayout>
-                <div className="flex items-center justify-center h-64">
-                    <div className="text-muted-foreground">Loading registrations...</div>
-                </div>
+                <AdminRegistrationsPageSkeleton />
             </AdminLayout>
         );
     }

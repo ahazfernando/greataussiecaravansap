@@ -25,6 +25,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, CheckCircle2, Mail } from "lucide-react";
+import { AdminDataTableSkeleton } from "@/components/skeletons";
 
 export default function AdminWarrantyClaimsPage() {
     const [claims, setClaims] = useState<WarrantyClaim[]>([]);
@@ -127,7 +128,7 @@ export default function AdminWarrantyClaimsPage() {
                     </CardHeader>
                     <CardContent>
                         {loading ? (
-                            <div className="py-12 text-center text-muted-foreground">Loading claims...</div>
+                            <AdminDataTableSkeleton columns={6} rows={8} />
                         ) : claims.length === 0 ? (
                             <div className="py-12 text-center text-muted-foreground">No warranty claims found.</div>
                         ) : (

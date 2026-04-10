@@ -17,6 +17,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { AdminUserMenu } from "@/components/admin/AdminUserMenu";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
@@ -78,6 +79,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
+        <AdminUserMenu variant="sidebar" />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

@@ -1,5 +1,5 @@
 import { MarketingPageShellSkeleton } from "@/components/skeletons";
 
-export default function BlogLoading() {
+export default function RootLoading() {
   return <MarketingPageShellSkeleton />;
 }

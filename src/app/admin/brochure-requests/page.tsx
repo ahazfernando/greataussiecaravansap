@@ -24,6 +24,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { format } from "date-fns";
+import { AdminListPageSkeleton } from "@/components/skeletons";
 
 interface BrochureRequest {
   id: string;
@@ -145,10 +146,7 @@ export default function BrochureRequestsPage() {
   if (loading) {
     return (
       <AdminLayout>
-        <div className="space-y-6">
-          <h1 className="text-3xl font-bold text-foreground">Brochure Requests</h1>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
+        <AdminListPageSkeleton />
       </AdminLayout>
     );
   }
