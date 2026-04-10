@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { resolveAdminAccessForSession } from "@/lib/admin-access";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +24,17 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      const status = await resolveAdminAccessForSession(cred.user);
+      if (status !== "approved") {
+        toast({
+          title: "Access pending",
+          description:
+            "Your account is waiting for approval from an administrator.",
+        });
+        router.push("/admin/pending");
+        return;
+      }
       toast({
         title: "Success",
         description: "Logged in successfully",

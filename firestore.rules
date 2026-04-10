@@ -1,0 +1,93 @@
+rules_version = '2';
+
+// Replace Firebase "test mode" rules like:
+//   match /{document=**} { allow read, write: if request.time < timestamp.date(2026, 1, 16); }
+// Those expire after the date and block ALL access. Use this file instead.
+//
+// Deploy: firebase deploy --only firestore:rules
+// Console: Firebase → Firestore → Rules → replace all → Publish
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Dashboard access record (document id = Firebase Auth uid)
+    function isApprovedAdmin() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/adminUsers/$(request.auth.uid))
+        && get(/databases/$(database)/documents/adminUsers/$(request.auth.uid)).data.accessStatus == 'approved';
+    }
+
+    match /adminUsers/{userId} {
+      allow read: if isSignedIn() && (
+        request.auth.uid == userId || isApprovedAdmin()
+      );
+
+      // New signup: user creates their own row (pending, or approved if using bootstrap emails in app)
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.data.email is string
+        && request.resource.data.accessStatus in ['pending', 'approved'];
+
+      // Approve / reject others (only approved admins; cannot change your own row here)
+      allow update: if isApprovedAdmin()
+        && request.auth.uid != userId
+        && request.resource.data.accessStatus in ['approved', 'rejected', 'pending'];
+    }
+
+    // Public marketing content
+    match /blogs/{blogId} {
+      allow read: if true;
+      allow create, update, delete: if isApprovedAdmin();
+    }
+
+    match /events/{eventId} {
+      allow read: if true;
+      allow create, update, delete: if isApprovedAdmin();
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create, update, delete: if isApprovedAdmin();
+    }
+
+    // Site visitors submit; only approved admins read/manage
+    match /inquiries/{inquiryId} {
+      allow read: if isApprovedAdmin();
+      allow create: if true;
+      allow update, delete: if isApprovedAdmin();
+    }
+
+    match /quoteRequests/{requestId} {
+      allow read: if isApprovedAdmin();
+      allow create: if true;
+      allow update, delete: if isApprovedAdmin();
+    }
+
+    match /brochureRequests/{requestId} {
+      allow read: if isApprovedAdmin();
+      allow create: if true;
+      allow update, delete: if isApprovedAdmin();
+    }
+
+    match /warranty-claims/{claimId} {
+      allow read: if isApprovedAdmin();
+      allow create: if true;
+      allow update, delete: if isApprovedAdmin();
+    }
+
+    match /eventRegistrations/{registrationId} {
+      allow read: if isApprovedAdmin();
+      allow create: if true;
+      allow update, delete: if isApprovedAdmin();
+    }
+
+    // Deny anything not listed above
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

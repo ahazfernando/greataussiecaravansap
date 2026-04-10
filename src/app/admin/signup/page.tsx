@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, deleteUser } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { recordAdminSignup, resolveAdminAccessForSession } from "@/lib/admin-access";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,14 +44,32 @@ export default function AdminSignupPage() {
     setLoading(true);
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      try {
+        await recordAdminSignup(cred.user);
+      } catch (writeErr) {
+        try {
+          await deleteUser(cred.user);
+        } catch {
+          /* best-effort rollback */
+        }
+        throw writeErr;
+      }
+      const status = await resolveAdminAccessForSession(cred.user);
+      if (status === "approved") {
+        toast({
+          title: "Account ready",
+          description: "Your admin access is active.",
+        });
+        router.push("/admin/blogs");
+        return;
+      }
       toast({
-        title: "Success",
-        description: "Admin account created successfully! You can now login.",
+        title: "Request submitted",
+        description:
+          "Your account was created. An administrator must approve your access before you can use the dashboard.",
       });
-      setTimeout(() => {
-        router.push("/admin/login");
-      }, 1500);
+      router.push("/admin/pending");
     } catch (error: any) {
       let errorMessage = "Failed to create account";
       if (error.code === "auth/email-already-in-use") {
@@ -76,7 +95,7 @@ export default function AdminSignupPage() {
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-display">Create Admin Account</CardTitle>
           <CardDescription>
-            Create your admin account to access the dashboard
+            Register for admin access. An existing administrator must approve your account before you can use the dashboard.
           </CardDescription>
         </CardHeader>
         <CardContent>
