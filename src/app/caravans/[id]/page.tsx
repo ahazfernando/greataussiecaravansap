@@ -1774,7 +1774,7 @@ export default function ModelDetail() {
               </div>
               {showHeroSidePanel && heroSidePanelGallery && (
                 <div
-                  className="flex flex-row lg:flex-col gap-1.5 sm:gap-2 shrink-0 justify-center lg:justify-center w-[68px] sm:w-[76px] lg:w-20 xl:w-[5.25rem] overflow-x-auto lg:overflow-visible pb-1 lg:pb-0 px-1 lg:px-0 -mx-1 lg:mx-0"
+                  className="flex w-full min-w-0 flex-row justify-start gap-1.5 overflow-x-auto overscroll-x-contain pb-1 pl-0 pr-0 [-webkit-overflow-scrolling:touch] [scrollbar-gutter:stable] sm:gap-2 lg:w-20 lg:shrink-0 lg:flex-col lg:justify-center lg:overflow-visible lg:overflow-y-visible lg:pb-0 xl:w-[5.25rem]"
                   role="tablist"
                   aria-label={`${caravan.name} photo gallery`}
                 >

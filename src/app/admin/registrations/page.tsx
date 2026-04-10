@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { collection, getDocs, query, orderBy, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { AdminLayout } from "@/components/admin/AdminLayout";
@@ -16,6 +16,13 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { Search, Download, Calendar, Mail, Phone, Users } from "lucide-react";
 import Link from "next/link";
 import { AdminRegistrationsPageSkeleton } from "@/components/skeletons";
@@ -37,31 +44,46 @@ interface EventRegistration {
 
 export default function AdminRegistrationsPage() {
     const [registrations, setRegistrations] = useState<EventRegistration[]>([]);
-    const [filteredRegistrations, setFilteredRegistrations] = useState<EventRegistration[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [eventFilter, setEventFilter] = useState<string>("all");
+    const [statusFilter, setStatusFilter] = useState<string>("all");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchRegistrations();
     }, []);
 
-    useEffect(() => {
-        if (searchQuery.trim() === "") {
-            setFilteredRegistrations(registrations);
-        } else {
-            const query = searchQuery.toLowerCase();
-            setFilteredRegistrations(
-                registrations.filter(
-                    (reg) =>
-                        reg.firstName.toLowerCase().includes(query) ||
-                        reg.lastName.toLowerCase().includes(query) ||
-                        reg.email.toLowerCase().includes(query) ||
-                        reg.phone.toLowerCase().includes(query) ||
-                        reg.eventTitle.toLowerCase().includes(query)
-                )
+    const eventOptions = useMemo(() => {
+        const map = new Map<string, string>();
+        registrations.forEach((r) => {
+            if (r.eventId && !map.has(r.eventId)) {
+                map.set(r.eventId, r.eventTitle || r.eventId);
+            }
+        });
+        return Array.from(map.entries())
+            .map(([id, title]) => ({ id, title }))
+            .sort((a, b) => a.title.localeCompare(b.title));
+    }, [registrations]);
+
+    const statusOptions = useMemo(() => {
+        return Array.from(new Set(registrations.map((r) => r.status).filter(Boolean))).sort();
+    }, [registrations]);
+
+    const filteredRegistrations = useMemo(() => {
+        const q = searchQuery.trim().toLowerCase();
+        return registrations.filter((reg) => {
+            if (eventFilter !== "all" && reg.eventId !== eventFilter) return false;
+            if (statusFilter !== "all" && reg.status !== statusFilter) return false;
+            if (!q) return true;
+            return (
+                reg.firstName.toLowerCase().includes(q) ||
+                reg.lastName.toLowerCase().includes(q) ||
+                reg.email.toLowerCase().includes(q) ||
+                reg.phone.toLowerCase().includes(q) ||
+                reg.eventTitle.toLowerCase().includes(q)
             );
-        }
-    }, [searchQuery, registrations]);
+        });
+    }, [registrations, searchQuery, eventFilter, statusFilter]);
 
     const fetchRegistrations = async () => {
         try {
@@ -78,7 +100,6 @@ export default function AdminRegistrationsPage() {
             });
 
             setRegistrations(registrationsData);
-            setFilteredRegistrations(registrationsData);
         } catch (error) {
             console.error("Error fetching registrations:", error);
         } finally {
@@ -171,8 +192,8 @@ export default function AdminRegistrationsPage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="mb-4">
-                            <div className="relative">
+                        <div className="mb-4 flex flex-col lg:flex-row gap-4 flex-wrap lg:items-end">
+                            <div className="relative flex-1 min-w-[200px]">
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                                 <Input
                                     type="text"
@@ -182,11 +203,47 @@ export default function AdminRegistrationsPage() {
                                     className="pl-10"
                                 />
                             </div>
+                            <div className="flex flex-wrap gap-3">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm text-muted-foreground whitespace-nowrap">Event</span>
+                                    <Select value={eventFilter} onValueChange={setEventFilter}>
+                                        <SelectTrigger className="w-[min(100vw-2rem,240px)]">
+                                            <SelectValue placeholder="All events" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">All events</SelectItem>
+                                            {eventOptions.map((o) => (
+                                                <SelectItem key={o.id} value={o.id}>
+                                                    {o.title}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm text-muted-foreground whitespace-nowrap">Status</span>
+                                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                        <SelectTrigger className="w-[180px]">
+                                            <SelectValue placeholder="All statuses" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">All statuses</SelectItem>
+                                            {statusOptions.map((s) => (
+                                                <SelectItem key={s} value={s}>
+                                                    {s}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
                         </div>
 
                         {filteredRegistrations.length === 0 ? (
                             <div className="text-center py-12 text-muted-foreground">
-                                {searchQuery ? "No registrations found matching your search." : "No registrations yet."}
+                                {registrations.length === 0
+                                    ? "No registrations yet."
+                                    : "No registrations match your filters."}
                             </div>
                         ) : (
                             <div className="rounded-md border">

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { signOutAndGoToAdminLogin } from "@/lib/admin-logout";
 import { auth } from "@/lib/firebase";
 import { resolveAdminAccessForSession, type AdminAccessStatus } from "@/lib/admin-access";
 import { Button } from "@/components/ui/button";
@@ -38,9 +39,8 @@ export default function AdminPendingPage() {
     return () => unsub();
   }, [router]);
 
-  const handleSignOut = async () => {
-    await signOut(auth);
-    router.replace("/admin/login");
+  const handleSignOut = () => {
+    void signOutAndGoToAdminLogin();
   };
 
   if (loading || status === null) {

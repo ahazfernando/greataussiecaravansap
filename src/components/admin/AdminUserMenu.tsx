@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { signOutAndGoToAdminLogin } from "@/lib/admin-logout";
 import type { User } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -54,7 +54,6 @@ interface AdminUserMenuProps {
 }
 
 export function AdminUserMenu({ variant = "sidebar" }: AdminUserMenuProps) {
-  const router = useRouter();
   const [user, setUser] = React.useState<User | null>(null);
   const [ready, setReady] = React.useState(false);
 
@@ -66,14 +65,8 @@ export function AdminUserMenu({ variant = "sidebar" }: AdminUserMenuProps) {
     return () => unsub();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      router.push("/admin/login");
-      router.refresh();
-    } catch {
-      /* ignore */
-    }
+  const handleLogout = () => {
+    void signOutAndGoToAdminLogin();
   };
 
   if (!ready) {

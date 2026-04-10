@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { collection, getDocs, query, orderBy, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { AdminLayout } from "@/components/admin/AdminLayout";
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { 
   FileText, 
@@ -22,6 +23,7 @@ import {
   ChevronUp,
   Download,
   MessageSquare,
+  Search,
 } from "lucide-react";
 import { format } from "date-fns";
 import { AdminListPageSkeleton } from "@/components/skeletons";
@@ -48,6 +50,7 @@ export default function BrochureRequestsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [stateFilter, setStateFilter] = useState<string>("all");
   const [modelFilter, setModelFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -132,16 +135,38 @@ export default function BrochureRequestsPage() {
     }
   };
 
-  // Get unique states and models
-  const uniqueStates = Array.from(new Set(brochureRequests.map(req => req.state).filter(Boolean))).sort();
-  const uniqueModels = Array.from(new Set(brochureRequests.map(req => req.modelName).filter(Boolean))).sort();
+  const uniqueStates = useMemo(
+    () => Array.from(new Set(brochureRequests.map((req) => req.state).filter(Boolean))).sort(),
+    [brochureRequests]
+  );
+  const uniqueModels = useMemo(
+    () => Array.from(new Set(brochureRequests.map((req) => req.modelName).filter(Boolean))).sort(),
+    [brochureRequests]
+  );
 
-  const filteredRequests = brochureRequests.filter(req => {
-    const matchesStatus = statusFilter === "all" || req.status === statusFilter;
-    const matchesState = stateFilter === "all" || req.state === stateFilter;
-    const matchesModel = modelFilter === "all" || req.modelName === modelFilter;
-    return matchesStatus && matchesState && matchesModel;
-  });
+  const filteredRequests = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return brochureRequests.filter((req) => {
+      const matchesStatus = statusFilter === "all" || req.status === statusFilter;
+      const matchesState = stateFilter === "all" || req.state === stateFilter;
+      const matchesModel = modelFilter === "all" || req.modelName === modelFilter;
+      if (!(matchesStatus && matchesState && matchesModel)) return false;
+      if (!q) return true;
+      const blob = [
+        req.fullName,
+        req.email,
+        req.phone,
+        req.state,
+        req.postalCode,
+        req.modelName,
+        req.message,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return blob.includes(q);
+    });
+  }, [brochureRequests, statusFilter, stateFilter, modelFilter, searchQuery]);
 
   if (loading) {
     return (
@@ -213,6 +238,16 @@ export default function BrochureRequestsPage() {
             </Button>
           </div>
 
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search name, email, phone, model, message…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+
           {/* State and Model Filters */}
           <div className="flex gap-4 flex-wrap">
             <div className="flex items-center gap-2">
@@ -255,7 +290,11 @@ export default function BrochureRequestsPage() {
           <Card>
             <CardContent className="py-12 text-center">
               <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">No brochure requests found.</p>
+              <p className="text-muted-foreground">
+                {brochureRequests.length === 0
+                  ? "No brochure requests yet."
+                  : "No brochure requests match your filters."}
+              </p>
             </CardContent>
           </Card>
         ) : (

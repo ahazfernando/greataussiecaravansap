@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { collection, getDocs, doc, updateDoc, Timestamp, orderBy, query } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { WarrantyClaim } from "@/types/warranty";
@@ -23,16 +23,36 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, CheckCircle2, Mail } from "lucide-react";
 import { AdminDataTableSkeleton } from "@/components/skeletons";
+import { AU_STATE_OPTIONS } from "@/lib/admin-filter-options";
 
 export default function AdminWarrantyClaimsPage() {
     const [claims, setClaims] = useState<WarrantyClaim[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedClaim, setSelectedClaim] = useState<WarrantyClaim | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [stateFilter, setStateFilter] = useState<string>("all");
+    const [statusFilter, setStatusFilter] = useState<string>("all");
     const { toast } = useToast();
+
+    const filteredClaims = useMemo(() => {
+        return claims.filter((c) => {
+            const okStatus = statusFilter === "all" || c.status === statusFilter;
+            if (!okStatus) return false;
+            if (stateFilter === "all") return true;
+            if (stateFilter === "__none__") return !c.state?.trim();
+            return (c.state || "").trim() === stateFilter;
+        });
+    }, [claims, stateFilter, statusFilter]);
 
     useEffect(() => {
         fetchClaims();
@@ -123,14 +143,55 @@ export default function AdminWarrantyClaimsPage() {
                 </div>
 
                 <Card>
-                    <CardHeader>
-                        <CardTitle>Recent Submissions</CardTitle>
+                    <CardHeader className="space-y-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <CardTitle>Recent Submissions</CardTitle>
+                            {!loading && claims.length > 0 ? (
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm text-muted-foreground whitespace-nowrap">State</span>
+                                        <Select value={stateFilter} onValueChange={setStateFilter}>
+                                            <SelectTrigger className="w-[200px]">
+                                                <SelectValue placeholder="All states" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="all">All states</SelectItem>
+                                                <SelectItem value="__none__">No state</SelectItem>
+                                                {AU_STATE_OPTIONS.map((o) => (
+                                                    <SelectItem key={o.value} value={o.value}>
+                                                        {o.label}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm text-muted-foreground whitespace-nowrap">Status</span>
+                                        <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                            <SelectTrigger className="w-[180px]">
+                                                <SelectValue placeholder="All statuses" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="all">All statuses</SelectItem>
+                                                <SelectItem value="new">New</SelectItem>
+                                                <SelectItem value="read">Read</SelectItem>
+                                                <SelectItem value="processed">Processed</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+                            ) : null}
+                        </div>
                     </CardHeader>
                     <CardContent>
                         {loading ? (
-                            <AdminDataTableSkeleton columns={6} rows={8} />
+                            <AdminDataTableSkeleton columns={7} rows={8} />
                         ) : claims.length === 0 ? (
                             <div className="py-12 text-center text-muted-foreground">No warranty claims found.</div>
+                        ) : filteredClaims.length === 0 ? (
+                            <div className="py-12 text-center text-muted-foreground">
+                                No claims match the selected filters.
+                            </div>
                         ) : (
                             <Table>
                                 <TableHeader>
@@ -139,12 +200,13 @@ export default function AdminWarrantyClaimsPage() {
                                         <TableHead>Customer</TableHead>
                                         <TableHead>Chassis Number</TableHead>
                                         <TableHead>Dealer</TableHead>
+                                        <TableHead>State</TableHead>
                                         <TableHead>Status</TableHead>
                                         <TableHead className="text-right">Action</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {claims.map((claim) => (
+                                    {filteredClaims.map((claim) => (
                                         <TableRow key={claim.id}>
                                             <TableCell className="font-medium">
                                                 {claim.createdAt instanceof Timestamp
@@ -154,6 +216,7 @@ export default function AdminWarrantyClaimsPage() {
                                             <TableCell>{claim.firstName} {claim.lastName}</TableCell>
                                             <TableCell>{claim.chassisNumber}</TableCell>
                                             <TableCell>{claim.dealerName}</TableCell>
+                                            <TableCell className="whitespace-nowrap">{claim.state || "—"}</TableCell>
                                             <TableCell>{getStatusBadge(claim.status)}</TableCell>
                                             <TableCell className="text-right">
                                                 <Button variant="ghost" size="sm" onClick={() => handleViewClaim(claim)}>

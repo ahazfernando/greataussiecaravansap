@@ -8,7 +8,21 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import {
+  AU_STATE_OPTIONS,
+  INQUIRY_SUBJECT_OPTIONS,
+  formatInquirySubject,
+  inquiryMatchesStateFilter,
+  inquiryMatchesSubjectFilter,
+} from "@/lib/admin-filter-options";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -103,7 +117,14 @@ function InquiryDetailFields({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">{getStatusBadge(st)}</div>
-      <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="flex items-start gap-3 sm:col-span-2">
+          <MessageSquare className="h-5 w-5 text-accent mt-0.5 shrink-0" />
+          <div>
+            <p className="text-sm text-muted-foreground">Subject</p>
+            <p className="text-foreground font-medium">{formatInquirySubject(row.subject)}</p>
+          </div>
+        </div>
         <div className="flex items-start gap-3">
           <Mail className="h-5 w-5 text-accent mt-0.5 shrink-0" />
           <div className="min-w-0">
@@ -198,6 +219,8 @@ export default function AdminInquiriesPage() {
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [stateFilter, setStateFilter] = useState<string>("all");
+  const [subjectFilter, setSubjectFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
@@ -291,6 +314,8 @@ export default function AdminInquiriesPage() {
     return inquiries.filter((i) => {
       const okStatus = statusFilter === "all" || (i.status || "new") === statusFilter;
       if (!okStatus) return false;
+      if (!inquiryMatchesStateFilter(i.state, stateFilter)) return false;
+      if (!inquiryMatchesSubjectFilter(i.subject, subjectFilter)) return false;
       if (!q) return true;
       const blob = [i.name, i.email, i.phone, i.state, i.postalCode, i.subject, i.message]
         .filter(Boolean)
@@ -298,7 +323,7 @@ export default function AdminInquiriesPage() {
         .toLowerCase();
       return blob.includes(q);
     });
-  }, [inquiries, statusFilter, search]);
+  }, [inquiries, statusFilter, stateFilter, subjectFilter, search]);
 
   if (loading) {
     return (
@@ -335,6 +360,42 @@ export default function AdminInquiriesPage() {
               onChange={(e) => setSearch(e.target.value)}
               className="pl-9"
             />
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground whitespace-nowrap">State</span>
+              <Select value={stateFilter} onValueChange={setStateFilter}>
+                <SelectTrigger className="w-[min(100vw-2rem,200px)]">
+                  <SelectValue placeholder="All states" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All states</SelectItem>
+                  <SelectItem value="__none__">No state</SelectItem>
+                  {AU_STATE_OPTIONS.map((o) => (
+                    <SelectItem key={o.value} value={o.value}>
+                      {o.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground whitespace-nowrap">Type</span>
+              <Select value={subjectFilter} onValueChange={setSubjectFilter}>
+                <SelectTrigger className="w-[min(100vw-2rem,220px)]">
+                  <SelectValue placeholder="All types" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All enquiry types</SelectItem>
+                  <SelectItem value="__none__">No subject</SelectItem>
+                  {INQUIRY_SUBJECT_OPTIONS.map((o) => (
+                    <SelectItem key={o.value} value={o.value}>
+                      {o.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm text-muted-foreground mr-1">View:</span>
@@ -418,7 +479,9 @@ export default function AdminInquiriesPage() {
                             </a>
                           </TableCell>
                           <TableCell className="max-w-[200px] truncate">
-                            {row.subject || (
+                            {row.subject ? (
+                              formatInquirySubject(row.subject)
+                            ) : (
                               <span className="text-muted-foreground">No subject</span>
                             )}
                           </TableCell>
@@ -459,7 +522,7 @@ export default function AdminInquiriesPage() {
                         </div>
                         <CardDescription className="line-clamp-1">
                           <span className="text-foreground/90 font-medium">
-                            {row.subject || "No subject"}
+                            {formatInquirySubject(row.subject)}
                           </span>
                           {row.state ? ` · ${row.state}` : ""}
                           {row.postalCode ? ` ${row.postalCode}` : ""}
