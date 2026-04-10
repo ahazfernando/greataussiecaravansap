@@ -17,14 +17,27 @@ interface Dealer {
 interface DealerCardProps {
   dealer: Dealer;
   index?: number;
+  /**
+   * `slide` — contact page (from right). `rise` — dealers map (smooth fade up).
+   * `off` — no entrance animation. Default: `slide` when `index` is set, else `off`.
+   */
+  entryVariant?: "slide" | "rise" | "off";
 }
 
-export const DealerCard = ({ dealer, index }: DealerCardProps) => {
+export const DealerCard = ({ dealer, index, entryVariant }: DealerCardProps) => {
+  const resolved: "slide" | "rise" | "off" =
+    entryVariant ?? (index !== undefined ? "slide" : "off");
+  const animClass =
+    resolved === "slide"
+      ? "animate-slide-in-right"
+      : resolved === "rise"
+        ? "animate-rise-smooth"
+        : "";
+  const staggerMs = resolved !== "off" && index !== undefined ? index * 70 : 0;
   return (
     <div
-      className={`dealer-card group relative rounded-3xl p-[2px] overflow-hidden transition-all hover:scale-[1.02] ${index !== undefined ? "animate-slide-in-right" : ""
-        }`}
-      style={index !== undefined ? { animationDelay: `${index * 100}ms` } : {}}
+      className={`dealer-card group relative rounded-3xl p-[2px] overflow-hidden transition-all hover:scale-[1.02] ${animClass}`}
+      style={staggerMs > 0 ? { animationDelay: `${staggerMs}ms` } : undefined}
     >
       {/* Gradient Border */}
       <div className="absolute inset-0 bg-gradient-to-br from-accent/40 via-accent/20 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-300" />

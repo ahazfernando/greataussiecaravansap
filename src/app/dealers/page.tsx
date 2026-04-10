@@ -1,13 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Layout } from "@/components/layout";
 import { AustraliaMap } from "@/components/dealers/AustraliaMap";
-import { Button } from "@/components/ui/button";
-import { MapPin, Phone, Mail, Globe, Clock, Shield, Award, Users, Timer } from "lucide-react";
+import { Shield, Award, Users, Timer } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { NewZealandMap } from "@/components/dealers/NewZealandMap";
 import { DealerCard } from "@/components/dealers/DealerCard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+const NZ_REGIONS = new Set(["nz-north", "nz-south"]);
+
+function isNewZealandRegion(regionId: string | null): boolean {
+  return regionId != null && NZ_REGIONS.has(regionId);
+}
 
 // Region names mapping
 const regionNames: Record<string, string> = {
@@ -189,8 +195,31 @@ const dealers: Record<string, Array<{
 export default function DealersPage() {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [selectedDealerId, setSelectedDealerId] = useState<string | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
   const [displayDealers, setDisplayDealers] = useState<typeof dealers[string]>([]);
+  /** Mobile: show one country map at a time (Australia vs New Zealand). */
+  const [mobileCountryTab, setMobileCountryTab] = useState<"australia" | "newzealand">("australia");
+  const dealerResultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!selectedRegion || displayDealers.length === 0) return;
+    if (typeof window === "undefined" || !window.matchMedia("(max-width: 767px)").matches) return;
+    const t = window.setTimeout(() => {
+      dealerResultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+    return () => window.clearTimeout(t);
+  }, [selectedRegion, displayDealers.length]);
+
+  const clearMapSelection = () => {
+    setSelectedRegion(null);
+    setSelectedDealerId(null);
+    setDisplayDealers([]);
+  };
+
+  const handleMobileCountryChange = (value: string) => {
+    if (value !== "australia" && value !== "newzealand") return;
+    setMobileCountryTab(value);
+    clearMapSelection();
+  };
 
   const getDealersByRegion = (regionId: string) => {
     return dealers[regionId] || [];
@@ -203,13 +232,9 @@ export default function DealersPage() {
 
   const handleRegionClick = (regionId: string) => {
     if (regionId === selectedRegion) {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setSelectedRegion(null);
-        setSelectedDealerId(null);
-        setDisplayDealers([]);
-        setIsAnimating(false);
-      }, 300);
+      setSelectedRegion(null);
+      setSelectedDealerId(null);
+      setDisplayDealers([]);
     } else {
       setSelectedRegion(regionId);
       setSelectedDealerId(null);
@@ -232,7 +257,7 @@ export default function DealersPage() {
   return (
     <Layout>
       {/* Map and Dealers Section */}
-      <section className="section-padding bg-black min-h-screen">
+      <section className="section-padding bg-black min-h-0 md:min-h-screen">
         <div className="container-wide">
           {/* Header */}
           <div className="text-center mb-12">
@@ -242,8 +267,13 @@ export default function DealersPage() {
             <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
               Get Connected with our <span className="text-accent">authorized dealers</span>
             </h2>
-            <p className="text-white max-w-2xl mx-auto">
-              Click on a region to discover authorized caravan dealers across Australia and New Zealand.
+            <p className="text-white max-w-2xl mx-auto md:px-0">
+              <span className="md:hidden">
+                Choose <span className="text-accent">Australia</span> or <span className="text-accent">New Zealand</span>, then tap a state or region on the map to see dealers.
+              </span>
+              <span className="hidden md:inline">
+                Click on a region to discover authorized caravan dealers across Australia and New Zealand.
+              </span>
             </p>
           </div>
 
@@ -253,23 +283,72 @@ export default function DealersPage() {
             <div
               className={
                 selectedRegion && displayDealers.length > 0
-                  ? "col-span-12 lg:col-span-7 transition-all duration-500"
-                  : "col-span-12 lg:col-span-12 transition-all duration-500"
+                  ? "col-span-12 lg:col-span-7"
+                  : "col-span-12 lg:col-span-12"
               }
             >
+              {/* Mobile: one country per tab — tap a state/region, then scroll to dealers below */}
+              <div className="md:hidden">
+                <Tabs value={mobileCountryTab} onValueChange={handleMobileCountryChange} className="w-full">
+                  <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-xl border border-zinc-800 bg-zinc-900/90 p-1.5">
+                    <TabsTrigger
+                      value="australia"
+                      className="rounded-lg py-2.5 text-sm font-medium text-zinc-400 data-[state=active]:bg-accent/20 data-[state=active]:text-white data-[state=active]:shadow-none"
+                    >
+                      Australia
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="newzealand"
+                      className="rounded-lg py-2.5 text-sm font-medium text-zinc-400 data-[state=active]:bg-accent/20 data-[state=active]:text-white data-[state=active]:shadow-none"
+                    >
+                      New Zealand
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="australia" className="mt-4 outline-none">
+                    <div className="relative w-full max-w-4xl mx-auto">
+                      <div
+                        className={
+                          selectedRegion && !isNewZealandRegion(selectedRegion)
+                            ? "w-full aspect-square"
+                            : "w-full aspect-square mx-auto"
+                        }
+                      >
+                        <AustraliaMap
+                          selectedRegion={isNewZealandRegion(selectedRegion) ? null : selectedRegion}
+                          selectedDealerId={isNewZealandRegion(selectedRegion) ? null : selectedDealerId}
+                          onRegionClick={handleRegionClick}
+                          onDealerClick={handleDealerClick}
+                        />
+                      </div>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="newzealand" className="mt-4 outline-none">
+                    <div className="relative w-full max-w-4xl mx-auto">
+                      <div className="w-full max-h-[min(70vh,520px)] aspect-[3/4] mx-auto">
+                        <NewZealandMap
+                          selectedRegion={isNewZealandRegion(selectedRegion) ? selectedRegion : null}
+                          onRegionClick={handleRegionClick}
+                        />
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </div>
+
+              {/* Desktop & tablet: Australia + NZ inset (unchanged) */}
               <div
                 className={
                   selectedRegion
-                    ? "relative w-full max-w-4xl transition-all duration-500"
-                    : "relative w-full max-w-4xl mx-auto transition-all duration-500"
+                    ? "relative hidden w-full max-w-4xl md:block"
+                    : "relative hidden w-full max-w-4xl mx-auto md:block"
                 }
               >
                 {/* Australia Map */}
                 <div
                   className={
                     selectedRegion
-                      ? "w-full md:w-[70%] aspect-square transition-all duration-500"
-                      : "w-full md:w-[60%] aspect-square mx-auto transition-all duration-500"
+                      ? "w-full md:w-[70%] aspect-square"
+                      : "w-full md:w-[60%] aspect-square mx-auto"
                   }
                 >
                   <AustraliaMap
@@ -290,16 +369,14 @@ export default function DealersPage() {
               </div>
             </div>
 
-            {/* Dealers Cards - Slide in from right */}
+            {/* Dealers Cards */}
             {selectedRegion && displayDealers.length > 0 && (
               <div
-                className={
-                  isAnimating
-                    ? "col-span-12 lg:col-span-5 animate-slide-out-right"
-                    : "col-span-12 lg:col-span-5 animate-slide-in-right"
-                }
+                key={`${selectedRegion}-${selectedDealerId ?? "all"}`}
+                ref={dealerResultsRef}
+                className="col-span-12 lg:col-span-5 scroll-mt-24"
               >
-                <div className="mb-6">
+                <div className="mb-6 animate-rise-smooth">
                   <h2 className="text-2xl font-bold text-white">
                     Dealers in {regionNames[selectedRegion] || 'Selected Region'}
                   </h2>
@@ -310,7 +387,7 @@ export default function DealersPage() {
                 {displayDealers.length > 0 ? (
                   <div className="space-y-4 max-h-[500px] overflow-y-auto">
                     {displayDealers.map((dealer, index) => (
-                      <DealerCard key={dealer.id} dealer={dealer} index={index} />
+                      <DealerCard key={dealer.id} dealer={dealer} index={index} entryVariant="rise" />
                     ))}
                   </div>
                 ) : (
