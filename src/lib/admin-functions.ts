@@ -1,4 +1,4 @@
-import { collection, addDoc, updateDoc, deleteDoc, doc, Timestamp, getDocs } from "firebase/firestore";
+import { collection, addDoc, updateDoc, deleteDoc, doc, Timestamp, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "./firebase";
 import { Article } from "@/types/article";
 import { Review as ReviewType } from "@/types/review";
@@ -192,18 +192,22 @@ export const createInquiry = async (inquiryData: Omit<Inquiry, "id" | "createdAt
 };
 
 export const fetchAllInquiries = async (): Promise<Inquiry[]> => {
-  const querySnapshot = await getDocs(collection(db, 'inquiries'));
-  return querySnapshot.docs.map((doc) => {
-    const data = doc.data();
+  const q = query(collection(db, 'inquiries'), orderBy('createdAt', 'desc'));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((docSnap) => {
+    const data = docSnap.data();
     return {
-      id: doc.id,
+      id: docSnap.id,
       name: data.name || '',
       email: data.email || '',
       phone: data.phone || '',
+      state: data.state || '',
+      postalCode: data.postalCode || '',
       subject: data.subject || '',
       message: data.message || '',
       status: data.status || 'new',
       createdAt: data.createdAt,
+      lastUpdated: data.lastUpdated,
     } as Inquiry;
   });
 };
