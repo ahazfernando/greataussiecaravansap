@@ -114,17 +114,6 @@ export default function ContactPage() {
   }>> = {
     nsw: [
       {
-        id: "1",
-        name: "Sydney Caravan Centre",
-        address: "123 Main Street",
-        city: "Sydney",
-        state: "NSW",
-        phone: "(02) 9000 0000",
-        email: "sydney@gac.com.au",
-        website: "https://sydney.gac.com.au",
-        hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
-      },
-      {
         id: "2",
         name: "RV Central – Port Macquarie",
         address: "183 Hastings River Dr",

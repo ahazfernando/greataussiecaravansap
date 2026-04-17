@@ -120,7 +120,7 @@ const getCategoryName = (category: string, type: string, modelId?: string): stri
   return "Our Range";
 };
 
-/** First Performance Highlight metric: suspension copy by model (fallback: specs.suspension) */
+/** First Performance Highlight metric: fixed display copy per model (fallback: specs.suspension) */
 const getPerformanceHighlightsSuspension = (modelId: string, specs: Caravan["specs"]): string => {
   const byId: Record<string, string> = {
     "20urer": "Leaf Spring",
@@ -139,9 +139,10 @@ type PerformanceSecondMetric =
 const getPerformanceSecondMetric = (modelId: string, sleeps: number): PerformanceSecondMetric => {
   const custom: Record<string, { label: string; value: string }> = {
     tonka: { label: "Inverter", value: "5000 VA" },
-    "outback-explorer-21": { label: "Inverter", value: "3000 VA" },
+    "outback-explorer-21": { label: "Inverter", value: "2000 W" },
     gravity: { label: "Battery", value: "200 Ah" },
-    "20urer": { label: "Battery", value: "100 Ah" },
+    "20urer": { label: "Battery", value: "120 Ah" },
+    xplora: { label: "Inverter", value: "3000 VA" },
   };
   const entry = custom[modelId];
   if (entry) return { kind: "custom", ...entry };
@@ -729,10 +730,10 @@ const caravanData: Record<string, Caravan> = {
     heroImage: OURER_GALLERY[0],
     gallery: [...OURER_GALLERY],
     highlights: {
-      solar: "250W",
-      battery: "180Ah AGM",
-      water: "180L",
-      inverter: "2000W Pure Sine",
+      solar: "200W",
+      battery: "120Ah Lithium",
+      water: "190L",
+      inverter: "—",
       suspension: "Tandem Axle Leaf Springs",
     },
     shortDescription: "Premium caravan model with enhanced features and spacious interiors.",
@@ -932,9 +933,9 @@ const caravanData: Record<string, Caravan> = {
     gallery: [...GRAVITY_NEW_GALLERY],
     highlights: {
       solar: "400W",
-      battery: "200Ah Lithium",
+      battery: "200Ah Arizon Lithium",
       water: "190L",
-      inverter: "3000W Pure Sine",
+      inverter: "—",
       suspension: "Independent Coil Spring",
     },
     shortDescription: "Ultimate off-grid caravan built for the toughest Australian conditions.",
@@ -1138,10 +1139,10 @@ const caravanData: Record<string, Caravan> = {
     heroImage: XPLORE_NEW_GALLERY[0],
     gallery: [...XPLORE_NEW_GALLERY],
     highlights: {
-      solar: "350W",
-      battery: "250Ah Lithium",
-      water: "190L",
-      inverter: "2500W Pure Sine",
+      solar: "800W",
+      battery: "2×200 Ah Lithium",
+      water: "285L",
+      inverter: "3000 VA",
       suspension: "Independent coil spring",
     },
     shortDescription: "Adventure-ready caravan designed for exploration and discovery.",
@@ -1358,10 +1359,10 @@ const caravanData: Record<string, Caravan> = {
     heroImage: TONKA_GALLERY[0],
     gallery: [...TONKA_GALLERY],
     highlights: {
-      solar: "300W",
-      battery: "200Ah Lithium",
-      water: "180L",
-      inverter: "2000W Pure Sine",
+      solar: "1000W",
+      battery: "2×230 Ah Lithium",
+      water: "285L",
+      inverter: "5000 VA",
       suspension: "Independent Trailing Arm",
     },
     shortDescription: "Rugged off-grid caravan built to handle any adventure.",

@@ -43,17 +43,6 @@ const dealers: Record<string, Array<{
 }>> = {
   nsw: [
     {
-      id: "1",
-      name: "Sydney Caravan Centre",
-      address: "123 Main Street",
-      city: "Sydney",
-      state: "NSW",
-      phone: "(02) 9000 0000",
-      email: "sydney@gac.com.au",
-      website: "https://sydney.gac.com.au",
-      hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
-    },
-    {
       id: "2",
       name: "RV Central – Port Macquarie",
       address: "183 Hastings River Dr",
@@ -98,12 +87,12 @@ const dealers: Record<string, Array<{
       hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",
     },
     {
-      id: "nsw-6",
-      name: "RV Central – Morisset",
-      address: "57 Alliance Ave",
-      city: "Morisset",
+      id: "nsw-penrith",
+      name: "RV Central – Penrith",
+      address: "86 Mulgoa Rd",
+      city: "Penrith",
       state: "NSW",
-      phone: "02 4970 4131",
+      phone: "02 4721 2222",
       email: "sales@rvcentral.com.au",
       website: "https://www.rvcentral.com.au",
       hours: "Mon-Fri: 9am-5pm, Sat: 9am-3pm",

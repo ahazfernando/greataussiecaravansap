@@ -165,7 +165,7 @@ export default function CaravansPage() {
   return (
     <Layout>
       {/* Premium Hero Carousel */}
-      <PremiumHeroCarousel models={featuredModels.filter(model => model.name !== "Gravity" && model.name !== "Striker")} />
+      <PremiumHeroCarousel models={featuredModels.filter((model) => model.name !== "Striker")} />
 
       {/* Results */}
       {/* <section className="section-padding bg-gray-900">

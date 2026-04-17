@@ -27,13 +27,12 @@ const regionMapping: Record<string, string> = {
 // Dealer-specific pin positions (for regions with multiple dealers)
 // Based on actual geographic locations of cities in NSW
 const dealerPinPositions: Array<{ x: number; y: number; dealerId: string; regionId: string }> = [
-  // NSW dealers - 5 pins distributed across the state
-  { x: 295, y: 165, dealerId: '1', regionId: 'nsw' },       // Sydney (coast, mid-state)
-  { x: 275, y: 140, dealerId: '2', regionId: 'nsw' },       // Newcastle (coast, north) Complete
+  // NSW dealers — pins distributed across the state
+  { x: 275, y: 140, dealerId: '2', regionId: 'nsw' },       // Port Macquarie area (north coast)
   { x: 255, y: 190, dealerId: 'nsw-3', regionId: 'nsw' },   // Wollongong (coast, south)Complete
   { x: 275, y: 130, dealerId: 'nsw-4', regionId: 'nsw' },   // Coffs Harbour (north coast)
-  { x: 260, y: 175, dealerId: 'nsw-5', regionId: 'nsw' },   // Wagga Wagga (inland, southwest)
-  { x: 268, y: 158, dealerId: 'nsw-6', regionId: 'nsw' },   // Albury (border, near VIC)
+  { x: 260, y: 175, dealerId: 'nsw-5', regionId: 'nsw' },   // Morisset / Lake Macquarie area
+  { x: 262, y: 162, dealerId: 'nsw-penrith', regionId: 'nsw' }, // Penrith (western Sydney)
 
   // Single dealers for other regions
   { x: 30, y: 160, dealerId: '5', regionId: 'wa' },

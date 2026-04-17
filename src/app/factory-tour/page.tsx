@@ -567,7 +567,7 @@ export default function FactoryTourPage() {
 
       {/* Discover Our Models - Premium Hero Carousel */}
       <section className="relative bg-black">
-        <PremiumHeroCarousel models={featuredModels.filter(model => model.name !== "Gravity" && model.name !== "Striker")} />
+        <PremiumHeroCarousel models={featuredModels.filter((model) => model.name !== "Striker")} />
       </section>
 
       {/* Final CTA Section */}

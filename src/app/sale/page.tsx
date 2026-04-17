@@ -346,7 +346,7 @@ export default function SalePage() {
       <section className="relative bg-black">
         <PremiumHeroCarousel
           models={featuredModels.filter(
-            (model) => model.name !== "Gravity" && model.name !== "Striker"
+            (model) => model.name !== "Striker"
           )}
         />
       </section>
