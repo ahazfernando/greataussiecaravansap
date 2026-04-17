@@ -1975,7 +1975,7 @@ export default function ModelDetail() {
                   className="border-white text-white hover:bg-white hover:text-black"
                   asChild
                 >
-                  <a href="#specifications">View all technical details</a>
+                  <a href="/contact">View all technical details</a>
                 </Button>
               </motion.div>
             </div>
@@ -2481,85 +2481,7 @@ export default function ModelDetail() {
         </div>
       </section>
 
-      {/* Specifications Section */}
-      <section id="specifications" className="bg-black py-10 md:py-14">
-        <div className="container-wide">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-8"
-          >
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">
-              Specifications
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-gray-900 rounded-xl p-6 border border-gray-800"
-            >
-              <h3 className="font-semibold text-white mb-4">Dimensions & Weights</h3>
-              <dl className="space-y-3">
-                <div className="flex justify-between py-2 border-b border-gray-800">
-                  <dt className="text-gray-400">Length</dt>
-                  <dd className="font-medium text-white">{caravan.specs.length}</dd>
-                </div>
-                <div className="flex justify-between py-2 border-b border-gray-800">
-                  <dt className="text-gray-400">Width</dt>
-                  <dd className="font-medium text-white">{caravan.specs.width}</dd>
-                </div>
-                <div className="flex justify-between py-2 border-b border-gray-800">
-                  <dt className="text-gray-400">Height</dt>
-                  <dd className="font-medium text-white">{caravan.specs.height}</dd>
-                </div>
-                <div className="flex justify-between py-2 border-b border-gray-800">
-                  <dt className="text-gray-400">Tare Weight</dt>
-                  <dd className="font-medium text-white">{caravan.specs.tare}</dd>
-                </div>
-                <div className="flex justify-between py-2 border-b border-gray-800">
-                  <dt className="text-gray-400">ATM</dt>
-                  <dd className="font-medium text-white">{caravan.specs.atm}</dd>
-                </div>
-                <div className="flex justify-between py-2">
-                  <dt className="text-gray-400">Sleeps</dt>
-                  <dd className="font-medium text-white">{caravan.specs.sleeps}</dd>
-                </div>
-              </dl>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-gray-900 rounded-xl p-6 border border-gray-800"
-            >
-              <h3 className="font-semibold text-white mb-4">Chassis & Running Gear</h3>
-              <dl className="space-y-3">
-                <div className="flex justify-between py-2 border-b border-gray-800">
-                  <dt className="text-gray-400">Chassis</dt>
-                  <dd className="font-medium text-white text-right max-w-[60%]">{caravan.specs.chassis}</dd>
-                </div>
-                <div className="flex justify-between py-2 border-b border-gray-800">
-                  <dt className="text-gray-400">Suspension</dt>
-                  <dd className="font-medium text-white text-right max-w-[60%]">{caravan.specs.suspension}</dd>
-                </div>
-                <div className="flex justify-between py-2 border-b border-gray-800">
-                  <dt className="text-gray-400">Brakes</dt>
-                  <dd className="font-medium text-white text-right max-w-[60%]">{caravan.specs.brakes}</dd>
-                </div>
-                <div className="flex justify-between py-2">
-                  <dt className="text-gray-400">Wheels</dt>
-                  <dd className="font-medium text-white text-right max-w-[60%]">{caravan.specs.wheels}</dd>
-                </div>
-              </dl>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      {/* Specifications (Dimensions & Weights / Chassis & Running Gear): removed from all model pages — restore via git history if needed */}
 
       {/* Reviews Section */}
       {/* <ReviewsSection /> */}

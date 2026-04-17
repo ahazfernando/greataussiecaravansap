@@ -28,6 +28,9 @@ import {
   Truck,
 } from "lucide-react";
 
+/** Set to `true` to restore the full FAQs page (hero, categories, accordion, CTA). */
+const FAQ_PAGE_ENABLED = false;
+
 const faqCategories = [
   {
     id: "general",
@@ -157,6 +160,22 @@ const faqCategories = [
 export default function FAQsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  if (!FAQ_PAGE_ENABLED) {
+    return (
+      <Layout>
+        <section className="min-h-[60vh] flex flex-col items-center justify-center bg-black px-4 py-20">
+          <p className="text-gray-400 text-center max-w-md text-lg">
+            This page is temporarily unavailable. For help, please{" "}
+            <Link href="/contact" className="text-accent underline underline-offset-4 hover:text-accent/90">
+              contact us
+            </Link>
+            .
+          </p>
+        </section>
+      </Layout>
+    );
+  }
 
   // Filter FAQs based on search query
   const filteredCategories = faqCategories.map((category) => ({
