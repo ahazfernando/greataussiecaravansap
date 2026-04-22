@@ -184,7 +184,7 @@ export function PremiumHeroCarousel({ models }: PremiumHeroCarouselProps) {
                   {activeModel.tagline}
                 </motion.h2>
 
-                {/* Model Image — Tonka asset reads larger in-frame than other cutouts */}
+                {/* Model Image */}
                 <motion.div
                   key={`image-${activeModel.id}`}
                   initial={{ opacity: 0, y: 30 }}
@@ -192,7 +192,7 @@ export function PremiumHeroCarousel({ models }: PremiumHeroCarouselProps) {
                   transition={{ delay: 0.15, duration: 0.4 }}
                   className={
                     activeModel.id === "tonka"
-                      ? "relative w-full max-w-3xl xl:max-w-4xl h-[280px] md:h-[320px] lg:h-[380px] xl:h-[440px] mt-4 md:mt-6"
+                      ? "relative w-full max-w-4xl xl:max-w-5xl h-[320px] md:h-[380px] lg:h-[450px] xl:h-[520px] mt-4 md:mt-6"
                       : "relative w-full max-w-4xl xl:max-w-5xl h-[320px] md:h-[380px] lg:h-[450px] xl:h-[520px] mt-4 md:mt-6"
                   }
                 >
@@ -201,7 +201,7 @@ export function PremiumHeroCarousel({ models }: PremiumHeroCarouselProps) {
                     alt={activeModel.name}
                     className={
                       activeModel.id === "tonka"
-                        ? "w-full h-full object-contain scale-[0.82] md:scale-[0.88]"
+                        ? "w-full h-full object-contain scale-[0.95] md:scale-100"
                         : "w-full h-full object-contain"
                     }
                   />

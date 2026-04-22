@@ -223,7 +223,7 @@ export default function AdminInquiriesPage() {
   const [subjectFilter, setSubjectFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+  const [viewMode, setViewMode] = useState<"cards" | "table">("table");
   const [tableDetail, setTableDetail] = useState<Inquiry | null>(null);
 
   const load = useCallback(async () => {
@@ -463,7 +463,7 @@ export default function AdminInquiriesPage() {
                       <TableHead className="min-w-[120px]">Subject</TableHead>
                       <TableHead className="min-w-[100px]">Location</TableHead>
                       <TableHead className="min-w-[140px] whitespace-nowrap">Received</TableHead>
-                      <TableHead className="text-right w-[100px]">Actions</TableHead>
+                      <TableHead className="text-right w-[180px]">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -492,9 +492,19 @@ export default function AdminInquiriesPage() {
                             {formatDateShort(row.createdAt)}
                           </TableCell>
                           <TableCell className="text-right">
-                            <Button size="sm" variant="outline" onClick={() => setTableDetail(row)}>
-                              View
-                            </Button>
+                            <div className="inline-flex items-center gap-2">
+                              <Button size="sm" variant="outline" onClick={() => setTableDetail(row)}>
+                                View
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-destructive hover:text-destructive"
+                                onClick={() => requestDelete(row.id)}
+                              >
+                                Delete
+                              </Button>
+                            </div>
                           </TableCell>
                         </TableRow>
                       );

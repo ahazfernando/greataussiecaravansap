@@ -149,6 +149,392 @@ const getPerformanceSecondMetric = (modelId: string, sleeps: number): Performanc
   return { kind: "sleeps", sleeps };
 };
 
+type InteriorSectionCopy = {
+  title: string;
+  subtitle: string;
+  paragraphs: string[];
+};
+
+const getBalancedInteriorParagraphs = (paragraphs: string[]): [string, string] => {
+  const sentenceList = paragraphs
+    .join(" ")
+    .split(/(?<=[.!?])\s+/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean);
+
+  if (sentenceList.length < 2) {
+    const single = paragraphs.join(" ").trim();
+    return [single, single];
+  }
+
+  const totalLength = sentenceList.reduce((sum, sentence) => sum + sentence.length, 0);
+  const targetLength = totalLength / 2;
+
+  let runningLength = 0;
+  let splitIndex = 1;
+
+  for (let i = 0; i < sentenceList.length; i++) {
+    runningLength += sentenceList[i].length;
+    splitIndex = i + 1;
+    if (runningLength >= targetLength) {
+      break;
+    }
+  }
+
+  // Prevent very uneven splits near extremes.
+  splitIndex = Math.max(1, Math.min(sentenceList.length - 1, splitIndex));
+
+  const first = sentenceList.slice(0, splitIndex).join(" ").trim();
+  const second = sentenceList.slice(splitIndex).join(" ").trim();
+
+  return [first, second];
+};
+
+const interiorSectionCopyByModel: Record<string, InteriorSectionCopy> = {
+  "outback-explorer-21": {
+    title: "Off-Grid Comfort",
+    subtitle: "FOR REMOTE ADVENTURES",
+    paragraphs: [
+      "Engineered for off-grid travel, the Outback Explorer 21 combines durable construction with dependable comfort in remote conditions.",
+      "Its independent trailing arm suspension, 300W solar system, 200Ah lithium battery, and 2000W pure sine inverter support extended stays beyond powered sites.",
+      "Inside, practical inclusions like a queen island bed, reverse cycle air conditioning, diesel heating, and a full kitchen create a comfortable base after long days off the beaten track.",
+    ],
+  },
+  "family-cruiser-23": {
+    title: "Family Touring Comfort",
+    subtitle: "FOR LONGER HOLIDAYS",
+    paragraphs: [
+      "Designed for families, the Family Cruiser 23 delivers spacious layouts and everyday practicality for long road trips.",
+      "Features like double bunks, club lounge seating, a 220L fridge/freezer, and a full kitchen make mealtimes and downtime easy for everyone.",
+      "With 200W solar, 200L water capacity, external storage, and a 5m roll-out awning, it is set up for comfortable park stays and flexible family travel.",
+    ],
+  },
+  "coastal-tourer-19": {
+    title: "Lightweight Touring Ease",
+    subtitle: "FOR COASTAL GETAWAYS",
+    paragraphs: [
+      "The Coastal Tourer 19 is built for easy towing and relaxed weekends, with a compact footprint that is simple to tow and park.",
+      "Its practical setup includes a queen bed, wet bath, 150L fridge, roof-mounted air conditioning, and a dinette that converts when needed.",
+      "With 160W solar, 120Ah AGM battery, roll-out awning, and external shower, it offers the essentials for comfortable short escapes without added complexity.",
+    ],
+  },
+  striker: {
+    title: "Hybrid Touring Comfort",
+    subtitle: "FOR VERSATILE TRAVEL",
+    paragraphs: [
+      "As a hybrid-ready model, the Striker balances off-road capability with premium comfort for mixed touring routes.",
+      "Core inclusions such as 300W solar, 200Ah lithium battery, 2000W inverter, and robust exterior protection support confident travel across varied conditions.",
+      "Inside, a queen island bed, full ensuite, reverse cycle air conditioning, diesel heater, and full kitchen deliver reliable comfort wherever the journey leads.",
+    ],
+  },
+  "20urer": {
+    title: "On-Road Touring Comfort",
+    subtitle: "& JOURNEY BENEFITS",
+    paragraphs: [
+      "As an on-road caravan, the 2ourer is built for smooth towing, improved fuel efficiency, and easy handling on sealed roads. Its lighter, road-focused design makes long-distance travel more comfortable and less demanding on your tow vehicle.",
+      "Key essentials like 200W solar power with a lithium battery, reverse cycle air-conditioning, large fridge/freezer, and comfortable pillow-top mattress ensure you travel with convenience and comfort.The practical interior layout, combined with features like a roll-out awning and external setup options, makes it ideal for relaxed stopovers allowing you to enjoy your journey without the complexity of an off-road van.",
+    ],
+  },
+  gravity: {
+    title: "Semi Off-Grid Comfort",
+    subtitle: "WITH PREMIUM CONTROL",
+    paragraphs: [
+      "Built for demanding off-grid touring, Gravity combines rugged hardware with premium interior comfort for extended travel.",
+      "A 400W solar setup, 200Ah lithium battery, independent coil spring suspension, and durable chassis package support confident performance in challenging terrain.",
+      "Comfort features including a pillow-top mattress, double glazed windows, quality cabinetry, reverse cycle air conditioning, and a 216L fridge help make longer trips easier and more enjoyable.",
+    ],
+  },
+  xplora: {
+    title: "Expedition Comfort",
+    subtitle: "WITHOUT COMPROMISE",
+    paragraphs: [
+      "Xplora is engineered for serious off-road exploration, combining strong protective build elements with practical liveability.",
+      "Its high-capacity setup of 800W solar, dual 200Ah lithium batteries, 3000VA inverter, dust reduction system, and independent suspension supports extended remote travel.",
+      "Inside, premium finishes, pillow-top bedding, double glazed windows, and well-planned storage and charging points keep every leg of the journey comfortable and connected.",
+    ],
+  },
+  tonka: {
+    title: "Extreme Off-Grid Comfort",
+    subtitle: "BUILT TO GO FURTHER",
+    paragraphs: [
+      "Tonka is purpose-built for harsh Australian conditions, pairing heavy-duty engineering with premium touring comfort.",
+      "A 1000W solar system, dual 230Ah lithium batteries, 5000VA inverter, Cruisemaster ATX suspension, and ventilated disc brakes provide serious off-grid confidence.",
+      "Interior and lifestyle inclusions like a pillow-top mattress, reverse cycle air conditioning, 274L fridge, external kitchen setup, and large water capacity help you stay comfortable on longer remote adventures.",
+    ],
+  },
+  paragon: {
+    title: "Motorhome Luxury Comfort",
+    subtitle: "FOR EXTENDED TOURING",
+    paragraphs: [
+      "Paragon brings motorhome-style luxury to long-distance travel with spacious layouts and premium appointments throughout.",
+      "Its 400W solar, 300Ah lithium battery, 3000W inverter, and large water capacity support longer stays with greater independence.",
+      "With features such as a queen bed, full kitchen, 250L fridge/freezer, separate shower and toilet, and ducted air conditioning, it delivers home-like comfort on the road.",
+    ],
+  },
+};
+
+const exteriorSectionParagraphsByModel: Record<string, string[]> = {
+  "outback-explorer-21": [
+    "The Outback Explorer 21 is built for rugged touring with practical exterior inclusions designed for remote conditions. Recovery points, roof racks, jerry can holders, and a 4m roll-out awning give you the flexibility to camp confidently away from main routes.",
+    "Everyday usability is covered with LED exterior lighting, external speakers, gas bayonet access, and a full external shower. Combined with a heavy-duty galvanised foundation and all-terrain-ready stance, it is equipped for dependable off-grid travel.",
+  ],
+  "family-cruiser-23": [
+    "The Family Cruiser 23 exterior is designed around family-friendly touring and easy setup at each stop. Full annexe walls, a 5m roll-out awning, entertainment hatch, and large external storage help create a practical outdoor living zone.",
+    "Feature inclusions like bike-rack compatibility, external BBQ point, shower access, and LED awning lighting make daily travel smoother for longer holidays. Its layout supports comfort, convenience, and flexibility for family adventures.",
+  ],
+  "coastal-tourer-19": [
+    "The Coastal Tourer 19 keeps things simple with a lightweight, compact exterior built for easy towing and relaxed escapes. Its clean setup includes a 3m roll-out awning, outdoor speakers, and practical gas bottle storage for short-stay convenience.",
+    "Exterior essentials such as LED lighting and an external shower make day-to-day travel easy while keeping overall complexity low. It is a streamlined on-road package for couples wanting comfort without extra bulk.",
+  ],
+  striker: [
+    "The Striker combines hybrid versatility with durable exterior protection for touring across mixed conditions. Its 4m roll-out awning, roof racks, jerry can holders, and front and rear recovery points support confident setup beyond standard caravan parks.",
+    "Feature inclusions like full external shower access, external speakers, LED exterior lighting, and gas bayonet connection improve usability at camp. The result is a practical, adventure-ready exterior that balances toughness with convenience.",
+  ],
+  "20urer": [
+    "The 2ourer exterior focuses on on-road practicality, efficient towing, and straightforward touring comfort. Lightweight construction elements, roll-out awning, checker plate protection, and tunnel boot storage provide a clean setup for regular highway travel.",
+    "Useful inclusions such as external power outlets, external TV bracket, gas bayonet, charging Anderson plug, and picnic table options make stopovers quick and easy. It is designed to keep touring simple, comfortable, and hassle-free.",
+  ],
+  gravity: [
+    "Gravity features a semi off-grid exterior package engineered for stronger protection and reliable performance in tougher terrain. Exterior highlights include extra-high checker plate protection, one-piece fibreglass roof, full tunnel boot storage, and an integrated external setup zone.",
+    "Inclusions like external power and TV points, gas bayonet access, external grab lighting, and premium picnic table features improve day-to-day campsite usability. It is built to handle demanding routes while staying practical and comfortable.",
+  ],
+  xplora: [
+    "Xplora is built for serious exploration with exterior systems focused on durability, dust control, and remote usability. Key inclusions include a one-piece roof and floor strategy, extra-high protective panels, and a dedicated dust reduction system for harsh travel environments.",
+    "Its touring-ready setup also includes a roll-out awning, full tunnel boot, entertainment hatch with external power, external table and pantry options, and charging Anderson connection while driving. This creates an exterior package tailored for long-range off-road touring.",
+  ],
+  tonka: [
+    "Tonka delivers a heavy-duty exterior package for extreme off-grid conditions, combining protection, storage, and functional outdoor living. Raptor-coated lower panels, one-piece fibreglass roofing, full tunnel boot storage, and an external kitchen and pantry zone support remote travel confidence.",
+    "Feature inclusions such as entertainment hatch power points, gas bayonet connection, integrated generator compartment, and LED-assisted external access points make setup efficient in any environment. It is purpose-built for hard use without sacrificing campsite practicality.",
+  ],
+  paragon: [
+    "Paragon presents a premium motorhome exterior designed for longer stays with comfort-first usability. A 5m roll-out awning, large external storage, roof rack capability, and integrated LED exterior lighting create a practical and refined touring presence.",
+    "Convenience features including full external shower with hot water, external speakers with Bluetooth, BBQ point, and gas bayonet support seamless day-to-day outdoor living. The exterior is built to complement extended travel with maximum comfort and function.",
+  ],
+};
+
+const exteriorSectionHeadingByModel: Record<string, { title: string; subtitle: string }> = {
+  "outback-explorer-21": { title: "RUGGED EXTERIOR", subtitle: "BUILT FOR OFF-GRID TRAVEL" },
+  "family-cruiser-23": { title: "FAMILY-FRIENDLY EXTERIOR", subtitle: "SET UP FOR EASY HOLIDAYS" },
+  "coastal-tourer-19": { title: "LIGHTWEIGHT EXTERIOR", subtitle: "READY FOR COASTAL TOURING" },
+  striker: { title: "HYBRID EXTERIOR", subtitle: "BUILT FOR VERSATILE ADVENTURES" },
+  "20urer": { title: "ON-ROAD EXTERIOR", subtitle: "DESIGNED FOR EASY TOURING" },
+  gravity: { title: "SEMI OFF-GRID EXTERIOR", subtitle: "MADE FOR TOUGHER TERRAIN" },
+  xplora: { title: "EXPEDITION EXTERIOR", subtitle: "ENGINEERED FOR REMOTE EXPLORATION" },
+  tonka: { title: "HEAVY-DUTY EXTERIOR", subtitle: "BUILT TO GO FURTHER" },
+  paragon: { title: "PREMIUM MOTORHOME EXTERIOR", subtitle: "CREATED FOR LONG-STAY COMFORT" },
+};
+
+type TechnicalTabKey = "chassis" | "build" | "construction";
+type TechnicalTabCopy = { title: string; subtitle: string; paragraph: string };
+
+const technicalTabCopyByModel: Record<string, Record<TechnicalTabKey, TechnicalTabCopy>> = {
+  "outback-explorer-21": {
+    chassis: {
+      title: "OFF-GRID CHASSIS",
+      subtitle: "AND SUSPENSION CONFIDENCE",
+      paragraph:
+        "The Outback Explorer 21 uses a heavy-duty galvanised chassis with independent trailing arm suspension, all-terrain wheels, and electric braking to deliver confidence on remote routes, while recovery-focused exterior inclusions support safer travel in rough conditions.",
+    },
+    build: {
+      title: "DURABLE BUILD",
+      subtitle: "FOR REMOTE TRAVEL",
+      paragraph:
+        "With practical off-grid inclusions such as full exterior protection elements, robust storage options, and hard-wearing interior systems, this model is built for long-term reliability and comfort in demanding Australian touring conditions.",
+    },
+    construction: {
+      title: "PROVEN CONSTRUCTION",
+      subtitle: "FOR TOUGH CONDITIONS",
+      paragraph:
+        "Its construction package combines lightweight strength and weather-resistant materials with engineering designed for vibration, heat, and distance, helping maintain durability and comfort through extended off-grid use.",
+    },
+  },
+  "family-cruiser-23": {
+    chassis: {
+      title: "STABLE FAMILY TOURING",
+      subtitle: "CHASSIS AND SUSPENSION",
+      paragraph:
+        "The Family Cruiser 23 pairs a galvanised steel platform with tandem leaf spring suspension and electric braking to deliver stable towing, while its family-sized footprint and practical running gear support dependable long-distance travel.",
+    },
+    build: {
+      title: "SMART FAMILY BUILD",
+      subtitle: "WITH EVERYDAY PRACTICALITY",
+      paragraph:
+        "From bunk-capable layouts and larger cold storage to outdoor living features like annexe compatibility and external setup points, this build is engineered for everyday comfort and easier family logistics on extended trips.",
+    },
+    construction: {
+      title: "TOURING CONSTRUCTION",
+      subtitle: "DESIGNED FOR LONG HOLIDAYS",
+      paragraph:
+        "Its construction approach balances strength, livability, and weight efficiency to support frequent touring, giving families a durable structure that remains practical, comfortable, and easy to maintain over time.",
+    },
+  },
+  "coastal-tourer-19": {
+    chassis: {
+      title: "LIGHTWEIGHT CHASSIS",
+      subtitle: "FOR EASY HANDLING",
+      paragraph:
+        "The Coastal Tourer 19 uses a lightweight galvanised chassis with independent single-axle suspension and electric brakes to keep towing simple, stable, and efficient for couples touring sealed roads and coastal routes.",
+    },
+    build: {
+      title: "COMPACT BUILD",
+      subtitle: "WITHOUT COMPROMISE",
+      paragraph:
+        "Its compact build combines practical interior essentials, manageable storage, and straightforward external inclusions to deliver comfortable touring without the added complexity of heavier off-road focused vans.",
+    },
+    construction: {
+      title: "EFFICIENT CONSTRUCTION",
+      subtitle: "FOR RELAXED TOURING",
+      paragraph:
+        "With a construction focus on weight efficiency and day-to-day durability, this model offers a reliable structure that supports easy towing, low-fuss setup, and comfortable use for frequent short escapes.",
+    },
+  },
+  striker: {
+    chassis: {
+      title: "HYBRID CHASSIS",
+      subtitle: "READY FOR VARIED TERRAIN",
+      paragraph:
+        "Striker combines a robust galvanised platform with independent trailing arm suspension and all-terrain-capable running gear to support mixed-condition travel, giving you better control and confidence beyond standard on-road routes.",
+    },
+    build: {
+      title: "VERSATILE BUILD",
+      subtitle: "FOR ADVENTURE TOURING",
+      paragraph:
+        "Its hybrid-focused build brings together practical external gear, off-grid power hardware, and comfortable interior appointments, creating a flexible touring package that performs both at parks and in remote stopovers.",
+    },
+    construction: {
+      title: "RUGGED CONSTRUCTION",
+      subtitle: "WITH TOURING COMFORT",
+      paragraph:
+        "This construction strategy emphasizes strength and durability while maintaining livability, helping Striker handle rougher travel conditions without sacrificing the interior comfort expected for longer journeys.",
+    },
+  },
+  "20urer": {
+    chassis: {
+      title: "ON-ROAD CHASSIS",
+      subtitle: "FOR SMOOTH TOURING",
+      paragraph:
+        "The 2ourer uses a road-focused tandem leaf spring setup and practical touring chassis package designed for predictable towing, stable highway handling, and efficient long-distance travel with reduced tow-vehicle strain.",
+    },
+    build: {
+      title: "PRACTICAL BUILD",
+      subtitle: "FOR EVERYDAY COMFORT",
+      paragraph:
+        "Its build combines lightweight-friendly materials, functional storage, and proven touring inclusions such as external power access, awning-side usability, and comfort-led internal systems for relaxed on-road trips.",
+    },
+    construction: {
+      title: "ROAD-TOURING CONSTRUCTION",
+      subtitle: "MADE FOR EFFICIENCY",
+      paragraph:
+        "Built around a durable but road-efficient construction philosophy, the 2ourer focuses on dependable structure, simpler setup, and easy maintenance to support frequent travel across sealed Australian roads.",
+    },
+  },
+  gravity: {
+    chassis: {
+      title: "SEMI OFF-GRID CHASSIS",
+      subtitle: "FOR TOUGHER CONDITIONS",
+      paragraph:
+        "Gravity features independent coil spring suspension, load-ready underpinnings, and protection-oriented running gear that provide improved control and confidence when towing through uneven terrain and remote touring environments.",
+    },
+    build: {
+      title: "HEAVY-DUTY BUILD",
+      subtitle: "WITH PRACTICAL LUXURY",
+      paragraph:
+        "Its build package combines stronger external protection, off-grid electrical capability, and premium interior finishes, delivering a well-rounded van that handles demanding routes while maintaining everyday comfort.",
+    },
+    construction: {
+      title: "ADVANCED CONSTRUCTION",
+      subtitle: "FOR EXTENDED OFF-GRID USE",
+      paragraph:
+        "Gravity is engineered with durable construction materials and precision assembly methods to maximize structural integrity, helping it absorb rougher travel demands while preserving long-term reliability and livability.",
+    },
+  },
+  xplora: {
+    chassis: {
+      title: "EXPEDITION CHASSIS",
+      subtitle: "FOR REMOTE CONFIDENCE",
+      paragraph:
+        "Xplora pairs independent coil spring suspension and off-road-ready running gear with a protective underbody and robust chassis package, providing the stability and control needed for serious remote exploration.",
+    },
+    build: {
+      title: "EXPLORATION BUILD",
+      subtitle: "WITH OFF-GRID CAPABILITY",
+      paragraph:
+        "The build integrates dust reduction, high-capacity electrical systems, and practical exterior living features with premium internal appointments, creating a complete package tailored to long-range off-road touring.",
+    },
+    construction: {
+      title: "REMOTE-READY CONSTRUCTION",
+      subtitle: "ENGINEERED TO LAST",
+      paragraph:
+        "Its construction approach focuses on strength, sealing performance, and long-term durability across changing conditions, supporting extended travel in harsh environments without compromising interior usability.",
+    },
+  },
+  tonka: {
+    chassis: {
+      title: "EXTREME-DUTY CHASSIS",
+      subtitle: "AND SUSPENSION CONTROL",
+      paragraph:
+        "Tonka combines a raptor-coated Truss chassis, Cruisemaster ATX suspension with advanced air control, and ventilated disc brakes to deliver high-load stability and superior towing control in aggressive off-road terrain.",
+    },
+    build: {
+      title: "TOUGH-BUILT PACKAGE",
+      subtitle: "FOR SERIOUS ADVENTURES",
+      paragraph:
+        "Its heavy-duty build blends reinforced exterior protection, high-capacity off-grid systems, and premium interior inclusions, giving you a robust touring platform that remains comfortable on extended remote missions.",
+    },
+    construction: {
+      title: "HIGH-STRENGTH CONSTRUCTION",
+      subtitle: "FOR HARSH CONDITIONS",
+      paragraph:
+        "Tonka is engineered with durability-first construction techniques and hard-wearing materials to handle vibration, impact, and sustained remote use, while maintaining long-term structural confidence and liveability.",
+    },
+  },
+  paragon: {
+    chassis: {
+      title: "MOTORHOME CHASSIS",
+      subtitle: "WITH COMFORTED CONTROL",
+      paragraph:
+        "Paragon uses a heavy-duty motorhome platform with air suspension and hydraulic disc braking to improve ride quality, stability, and driver confidence across long-distance touring routes.",
+    },
+    build: {
+      title: "LUXURY BUILD",
+      subtitle: "FOR EXTENDED TRAVEL",
+      paragraph:
+        "Its build is centered on premium comfort with larger living zones, high-capacity systems, and practical exterior amenities, creating a refined touring environment designed for longer stays on the road.",
+    },
+    construction: {
+      title: "PREMIUM CONSTRUCTION",
+      subtitle: "FOR LONG-TERM RELIABILITY",
+      paragraph:
+        "Paragon’s construction balances structural strength and luxury fit-out quality to support sustained travel, delivering durability, comfort, and a high-end motorhome experience across extended journeys.",
+    },
+  },
+};
+
+const getTechnicalParagraphWithFeatureDetails = (
+  caravan: Caravan,
+  tab: TechnicalTabKey,
+  baseParagraph: string
+): string => {
+  const pickTop = (items: string[] | undefined, count: number) =>
+    (items ?? []).filter(Boolean).slice(0, count);
+
+  const chassisItems = pickTop(caravan.features.chassis, 3).join(", ");
+  const buildItems = pickTop(caravan.features.internal ?? caravan.features.interior, 3).join(", ");
+  const constructionItems = pickTop(caravan.features.external ?? caravan.features.exterior, 3).join(", ");
+
+  if (tab === "chassis" && chassisItems) {
+    return `${baseParagraph} Key highlights include ${chassisItems.toLowerCase()}.`;
+  }
+  if (tab === "build" && buildItems) {
+    return `${baseParagraph} Build-focused inclusions include ${buildItems.toLowerCase()}.`;
+  }
+  if (tab === "construction" && constructionItems) {
+    return `${baseParagraph} Construction and exterior execution is further supported by ${constructionItems.toLowerCase()}.`;
+  }
+
+  return baseParagraph;
+};
+
 // Count Animation Component
 function AnimatedCount({ value, suffix = "", duration = 2, delay = 0 }: { value: string | number; suffix?: string; duration?: number; delay?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -1732,12 +2118,13 @@ export default function ModelDetail() {
 
       {/* Hero Section with Split Background */}
       <section ref={heroRef} className="relative min-h-screen overflow-hidden pt-[73px]">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 right-0 h-[65%] bg-gradient-to-b from-gray-800 via-gray-900 to-black" />
-          <div className="absolute bottom-0 left-0 right-0 h-[45%] bg-black">
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent z-10" />
-          </div>
-        </div>
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, #1f2937 0%, #111827 30%, #080b12 58%, #030303 78%, #000000 100%)",
+          }}
+        />
 
         {/* Watermark */}
         <motion.div
@@ -2018,15 +2405,22 @@ export default function ModelDetail() {
                   EXTERIOR
                 </Badge>
                 <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                  LUXURY MEETS <span className="text-accent">ADVENTURE ON THE GO</span>
+                  {(exteriorSectionHeadingByModel[caravan.id]?.title ?? "LUXURY MEETS").toUpperCase()}{" "}
+                  <span className="text-accent">
+                    {(exteriorSectionHeadingByModel[caravan.id]?.subtitle ?? "ADVENTURE ON THE GO").toUpperCase()}
+                  </span>
                   <br />
                 </h2>
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-                  The {caravan.name} combines premium craftsmanship with rugged capability. Built with a full AL+ aluminium frame, fibreglass walls, and high-grade insulation, it's engineered to conquer Australia's most challenging terrains while maintaining its sophisticated aesthetic.
-                </p>
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-                  Premium features come standard, including Front and Rear Styling Packs, Stealth Solar Bracket, and German marine-grade composite panels. Available in smooth or checkerplate finishes with a range of colours to match your adventurous spirit.
-                </p>
+                {getBalancedInteriorParagraphs(
+                  exteriorSectionParagraphsByModel[caravan.id] ?? [
+                    `The ${caravan.name} combines premium craftsmanship with rugged capability. Built with a full AL+ aluminium frame, fibreglass walls, and high-grade insulation, it's engineered to conquer Australia's most challenging terrains while maintaining its sophisticated aesthetic.`,
+                    "Premium features come standard, including Front and Rear Styling Packs, Stealth Solar Bracket, and German marine-grade composite panels. Available in smooth or checkerplate finishes with a range of colours to match your adventurous spirit.",
+                  ]
+                ).map((paragraph) => (
+                  <p key={paragraph} className="text-gray-300 text-base md:text-lg leading-relaxed">
+                    {paragraph}
+                  </p>
+                ))}
               </div>
               {/* Image Content */}
               <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden order-1 md:order-2">
@@ -2057,17 +2451,40 @@ export default function ModelDetail() {
                 <Badge className="bg-accent/20 text-accent border-accent/30 mb-4">
                   INTERIOR
                 </Badge>
-                <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                  REFINED COMFORT
-                  <br />
-                  <span className="text-accent">ON EVERY JOURNEY</span>
-                </h2>
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-                  Step inside the {caravan.name} and discover a world where luxury meets adventure. Choose from expansive club lounges, dinettes, or straight lounges, each finished with premium leather upholstery and thoughtful design.
-                </p>
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-                  The kitchen delivers culinary excellence on the road with Thinscape benchtops, ambient lighting, and premium appliances. Abundant storage, diesel heating, and oversized ensuites ensure every moment is one of refined comfort.
-                </p>
+                {interiorSectionCopyByModel[caravan.id] ? (
+                  <>
+                    <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight uppercase">
+                      {interiorSectionCopyByModel[caravan.id].title.toUpperCase()}
+                      <br />
+                      <span className="text-accent">{interiorSectionCopyByModel[caravan.id].subtitle.toUpperCase()}</span>
+                    </h2>
+                    {(caravan.id === "20urer"
+                      ? [
+                        interiorSectionCopyByModel[caravan.id].paragraphs[0],
+                        interiorSectionCopyByModel[caravan.id].paragraphs.slice(1).join(" "),
+                      ]
+                      : getBalancedInteriorParagraphs(interiorSectionCopyByModel[caravan.id].paragraphs)
+                    ).map((paragraph) => (
+                      <p key={paragraph} className="text-gray-300 text-base md:text-lg leading-relaxed">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+                      REFINED COMFORT
+                      <br />
+                      <span className="text-accent">ON EVERY JOURNEY</span>
+                    </h2>
+                    <p className="text-gray-300 text-base md:text-lg leading-relaxed">
+                      Step inside the {caravan.name} and discover a world where luxury meets adventure. Choose from expansive club lounges, dinettes, or straight lounges, each finished with premium leather upholstery and thoughtful design.
+                    </p>
+                    <p className="text-gray-300 text-base md:text-lg leading-relaxed">
+                      The kitchen delivers culinary excellence on the road with Thinscape benchtops, ambient lighting, and premium appliances. Abundant storage, diesel heating, and oversized ensuites ensure every moment is one of refined comfort.
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
@@ -2141,66 +2558,73 @@ export default function ModelDetail() {
           >
             {/* Text Content */}
             <div className="space-y-6">
-              {activeTab === "chassis" && (
-                <>
-                  <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                    ENGINEERED FOR <span className="text-accent">UNQUESTIONABLE CONFIDENCE</span>
-                  </h2>
-                  <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-                    The {caravan.name}'s galvanised X-Guard chassis is paired with Cruisemaster ATX air suspension and the Body Control System (BCS) for automated balance and ride control. BOS stabiliser legs and jockey wheel give unmatched stability when stationary, while 17" Dirty Life wheels fitted with Cooper Rugged Trek tyres deliver traction and presence across any surface.
-                  </p>
-                </>
-              )}
-              {activeTab === "build" && (
-                <>
-                  <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                    PRECISION <span className="text-accent">CRAFTSMANSHIP</span>
-                  </h2>
-                  <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-                    Every {caravan.name} is built with meticulous attention to detail, using premium materials and time-tested construction techniques. Our expert craftsmen combine traditional skills with modern technology to create caravans that are engineered to last.
-                  </p>
-                </>
-              )}
-              {activeTab === "construction" && (
-                <>
-                  <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                    ADVANCED <span className="text-accent">CONSTRUCTION METHODS</span>
-                  </h2>
-                  <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-6">
-                    Our construction methods use advanced materials and precision engineering to create lightweight, incredibly strong structures. The {caravan.name} features state-of-the-art construction ensuring superior durability and structural integrity.
-                  </p>
-                  {/* Construction Technology Logos */}
-                  <div className="flex items-center gap-6 md:gap-8 mt-6">
-                    <Link href="/construction/timber-tech" className="flex-shrink-0 h-8 md:h-10 w-24 md:w-32 cursor-pointer flex items-center justify-center">
-                      <Image
-                        src="/constructiontypes/timbertechl.png"
-                        alt="TimberTech"
-                        width={120}
-                        height={60}
-                        className="h-full w-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
-                      />
-                    </Link>
-                    <Link href="/construction/ally-tech" className="flex-shrink-0 h-8 md:h-10 w-24 md:w-32 cursor-pointer flex items-center justify-center">
-                      <Image
-                        src="/constructiontypes/allytechl.png"
-                        alt="AllyTech"
-                        width={120}
-                        height={60}
-                        className="h-full w-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
-                      />
-                    </Link>
-                    <Link href="/construction/fiber-tech" className="flex-shrink-0 h-8 md:h-10 w-24 md:w-32 cursor-pointer flex items-center justify-center">
-                      <Image
-                        src="/constructiontypes/fibertechl.png"
-                        alt="FiberTech"
-                        width={120}
-                        height={60}
-                        className="h-full w-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
-                      />
-                    </Link>
-                  </div>
-                </>
-              )}
+              {(() => {
+                const defaultCopy: Record<TechnicalTabKey, TechnicalTabCopy> = {
+                  chassis: {
+                    title: "ENGINEERED FOR",
+                    subtitle: "UNQUESTIONABLE CONFIDENCE",
+                    paragraph:
+                      `The ${caravan.name} combines a strong chassis platform with tuned suspension and braking systems to deliver confident handling, stable towing, and dependable control across varied touring conditions.`,
+                  },
+                  build: {
+                    title: "PRECISION",
+                    subtitle: "CRAFTSMANSHIP",
+                    paragraph:
+                      `Every ${caravan.name} is built with practical touring durability in mind, combining premium materials, thoughtful layout execution, and proven inclusions that support long-term comfort and reliability.`,
+                  },
+                  construction: {
+                    title: "ADVANCED",
+                    subtitle: "CONSTRUCTION METHODS",
+                    paragraph:
+                      `The ${caravan.name} uses construction methods focused on strength-to-weight efficiency and structural integrity, delivering a durable platform that performs reliably through extended travel.`,
+                  },
+                };
+
+                const tabKey = activeTab as TechnicalTabKey;
+                const modelCopy = technicalTabCopyByModel[caravan.id]?.[tabKey] ?? defaultCopy[tabKey];
+
+                return (
+                  <>
+                    <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+                      {modelCopy.title} <span className="text-accent">{modelCopy.subtitle}</span>
+                    </h2>
+                    <p className={`text-gray-300 text-base md:text-lg leading-relaxed ${activeTab === "construction" ? "mb-6" : ""}`}>
+                      {getTechnicalParagraphWithFeatureDetails(caravan, tabKey, modelCopy.paragraph)}
+                    </p>
+                    {activeTab === "construction" && (
+                      <div className="flex items-center gap-6 md:gap-8 mt-6">
+                        <Link href="/construction/timber-tech" className="flex-shrink-0 h-8 md:h-10 w-24 md:w-32 cursor-pointer flex items-center justify-center">
+                          <Image
+                            src="/constructiontypes/timbertechl.png"
+                            alt="TimberTech"
+                            width={120}
+                            height={60}
+                            className="h-full w-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                          />
+                        </Link>
+                        <Link href="/construction/ally-tech" className="flex-shrink-0 h-8 md:h-10 w-24 md:w-32 cursor-pointer flex items-center justify-center">
+                          <Image
+                            src="/constructiontypes/allytechl.png"
+                            alt="AllyTech"
+                            width={120}
+                            height={60}
+                            className="h-full w-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                          />
+                        </Link>
+                        <Link href="/construction/fiber-tech" className="flex-shrink-0 h-8 md:h-10 w-24 md:w-32 cursor-pointer flex items-center justify-center">
+                          <Image
+                            src="/constructiontypes/fibertechl.png"
+                            alt="FiberTech"
+                            width={120}
+                            height={60}
+                            className="h-full w-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
+                          />
+                        </Link>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
 
             {/* Image Content */}

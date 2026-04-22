@@ -7,6 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
@@ -45,11 +52,20 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.subject) {
+      toast({
+        title: "Missing subject",
+        description: "Please select a subject before sending your message.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      // Save inquiry to Firebase
-      await addDoc(collection(db, 'inquiries'), {
+      const inquiryPayload = {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
@@ -57,10 +73,39 @@ export default function ContactPage() {
         postalCode: formData.postalCode,
         subject: formData.subject,
         message: formData.message,
+      };
+
+      // Save inquiry to Firebase
+      await addDoc(collection(db, 'inquiries'), {
+        ...inquiryPayload,
         status: 'new',
         createdAt: Timestamp.now(),
         lastUpdated: Timestamp.now(),
       });
+
+      // Sync inquiry to Google Sheet via server API
+      const googleSyncResponse = await fetch('/api/contact-inquiry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(inquiryPayload),
+      });
+
+      if (!googleSyncResponse.ok) {
+        let errorMessage = 'Google Sheet sync failed';
+        try {
+          const errorJson = await googleSyncResponse.json();
+          if (errorJson?.details) {
+            errorMessage = `Google Sheet sync failed: ${errorJson.details}`;
+          } else if (errorJson?.error) {
+            errorMessage = `Google Sheet sync failed: ${errorJson.error}`;
+          }
+        } catch {
+          // Keep default fallback message if response isn't JSON
+        }
+        throw new Error(errorMessage);
+      }
 
       setIsSubmitting(false);
       setIsSubmitted(true);
@@ -82,7 +127,7 @@ export default function ContactPage() {
       setIsSubmitting(false);
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again.",
+        description: error?.message || "Failed to send message. Please try again.",
         variant: "destructive",
       });
     }
@@ -416,17 +461,33 @@ export default function ContactPage() {
               </h2>
               <div className="bg-gray-900 border border-gray-800 rounded-xl p-8 shadow-lg flex-1 flex flex-col">
                 {isSubmitted ? (
-                  <div className="text-center py-12">
-                    <CheckCircle className="h-16 w-16 text-accent mx-auto mb-4" />
-                    <h3 className="font-display text-xl font-bold text-white mb-2">
-                      Thank You!
-                    </h3>
-                    <p className="text-gray-300 mb-6">
-                      Your message has been sent successfully. We'll get back to you within 24 hours.
-                    </p>
-                    <Button variant="outline" className="border-gray-800 text-white hover:bg-gray-800" onClick={() => setIsSubmitted(false)}>
-                      Send Another Message
-                    </Button>
+                  <div className="py-6 sm:py-10">
+                    <div className="mx-auto max-w-xl rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#0f1d3e] via-[#0c1630] to-[#0a1226] p-6 sm:p-8 text-center shadow-[0_20px_60px_-30px_rgba(251,191,36,0.35)]">
+                      <img
+                        src="/logo/greataussielogo.png"
+                        alt="Great Aussie Caravans"
+                        className="h-10 sm:h-12 w-auto mx-auto mb-6"
+                      />
+                      <div className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-accent/30 bg-accent/10 mb-4">
+                        <CheckCircle className="h-9 w-9 text-accent" />
+                      </div>
+                      <h3 className="font-display text-2xl font-bold text-white mb-2">
+                        Thank You!
+                      </h3>
+                      <p className="text-gray-200 mb-1">
+                        Your message has been sent successfully.
+                      </p>
+                      <p className="text-gray-300 mb-7 text-sm sm:text-base">
+                        Our team will get back to you within 24 hours.
+                      </p>
+                      <Button
+                        variant="outline"
+                        className="border-amber-500/30 bg-black/20 text-white hover:bg-amber-500/10 hover:border-amber-500/50"
+                        onClick={() => setIsSubmitted(false)}
+                      >
+                        Send Another Message
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
@@ -473,23 +534,27 @@ export default function ContactPage() {
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="state" className="text-white">State</Label>
-                        <select
-                          id="state"
-                          name="state"
+                        <Select
                           value={formData.state}
-                          onChange={handleChange}
-                          className="w-full h-11 px-3 rounded-lg border border-gray-800 bg-gray-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+                          onValueChange={(value) => setFormData((prev) => ({ ...prev, state: value }))}
                         >
-                          <option value="">Select a state...</option>
-                          <option value="NSW">New South Wales</option>
-                          <option value="VIC">Victoria</option>
-                          <option value="QLD">Queensland</option>
-                          <option value="WA">Western Australia</option>
-                          <option value="SA">South Australia</option>
-                          <option value="TAS">Tasmania</option>
-                          <option value="NT">Northern Territory</option>
-                          <option value="ACT">Australian Capital Territory</option>
-                        </select>
+                          <SelectTrigger
+                            id="state"
+                            className="w-full h-11 border-gray-800 bg-gray-900 text-white focus:ring-accent focus:border-accent"
+                          >
+                            <SelectValue placeholder="Select a state..." />
+                          </SelectTrigger>
+                          <SelectContent className="border-gray-800 bg-gray-900 text-white">
+                            <SelectItem value="NSW">New South Wales</SelectItem>
+                            <SelectItem value="VIC">Victoria</SelectItem>
+                            <SelectItem value="QLD">Queensland</SelectItem>
+                            <SelectItem value="WA">Western Australia</SelectItem>
+                            <SelectItem value="SA">South Australia</SelectItem>
+                            <SelectItem value="TAS">Tasmania</SelectItem>
+                            <SelectItem value="NT">Northern Territory</SelectItem>
+                            <SelectItem value="ACT">Australian Capital Territory</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
 
@@ -509,22 +574,26 @@ export default function ContactPage() {
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="subject" className="text-white">Subject *</Label>
-                        <select
-                          id="subject"
-                          name="subject"
+                        <Select
                           value={formData.subject}
-                          onChange={handleChange}
-                          required
-                          className="w-full h-11 px-3 rounded-lg border border-gray-800 bg-gray-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+                          onValueChange={(value) => setFormData((prev) => ({ ...prev, subject: value }))}
                         >
-                          <option value="">Select a subject...</option>
-                          <option value="quote">Request a Quote</option>
-                          <option value="inspection">Book an Inspection</option>
-                          <option value="factory-tour">Request a Factory Tour</option>
-                          <option value="general">General Enquiry</option>
-                          <option value="service">Service & Parts</option>
-                          <option value="other">Other</option>
-                        </select>
+                          <SelectTrigger
+                            id="subject"
+                            aria-required="true"
+                            className="w-full h-11 border-gray-800 bg-gray-900 text-white focus:ring-accent focus:border-accent"
+                          >
+                            <SelectValue placeholder="Select a subject..." />
+                          </SelectTrigger>
+                          <SelectContent className="border-gray-800 bg-gray-900 text-white">
+                            <SelectItem value="quote">Request a Quote</SelectItem>
+                            <SelectItem value="inspection">Book an Inspection</SelectItem>
+                            <SelectItem value="factory-tour">Request a Factory Tour</SelectItem>
+                            <SelectItem value="general">General Enquiry</SelectItem>
+                            <SelectItem value="service">Service & Parts</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
 
@@ -546,7 +615,7 @@ export default function ContactPage() {
                       type="submit"
                       variant="accent"
                       size="lg"
-                      className="w-full"
+                      className="w-full text-[#3D2100] hover:text-[#3D2100]"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
@@ -556,7 +625,7 @@ export default function ContactPage() {
                         </>
                       ) : (
                         <>
-                          <Send className="h-4 w-4 mr-2" />
+                          <Send className="h-4 w-4 mr-2 text-[#3D2100]" />
                           Send Message
                         </>
                       )}
