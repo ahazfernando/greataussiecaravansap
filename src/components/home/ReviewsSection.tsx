@@ -10,7 +10,7 @@ const reviews = [
     id: "1",
     name: "Michael Thompson",
     rating: 5,
-    date: "November 2024",
+    date: "February 2026",
     content:
       "Absolutely thrilled with our Xplora! We've taken it across the Nullarbor and through the Kimberley—handles everything we throw at it. The build quality is exceptional and the team at Great Aussie made the whole process seamless.",
     caravan: "Xplora",
@@ -19,7 +19,7 @@ const reviews = [
     id: "2",
     name: "Sarah & David Chen",
     rating: 5,
-    date: "October 2024",
+    date: "October 2025",
     content:
       "As a young family, we needed something that would grow with us. Our Gravity has been perfect—spacious, comfortable, and the kids love the layout. Best investment we've ever made for our family adventures.",
     caravan: "Gravity",
@@ -28,7 +28,7 @@ const reviews = [
     id: "3",
     name: "Robert Williams",
     rating: 5,
-    date: "September 2024",
+    date: "July 2025",
     content:
       "After comparing dozens of caravans, we chose Great Aussie for their attention to detail and Australian build. Six months in and we couldn't be happier. The after-sales support has been outstanding too.",
     caravan: "20URER",
