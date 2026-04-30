@@ -462,7 +462,7 @@ export default function ContactPage() {
               <div className="bg-gray-900 border border-gray-800 rounded-xl p-8 shadow-lg flex-1 flex flex-col">
                 {isSubmitted ? (
                   <div className="py-6 sm:py-10">
-                    <div className="mx-auto max-w-xl rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#0f1d3e] via-[#0c1630] to-[#0a1226] p-6 sm:p-8 text-center shadow-[0_20px_60px_-30px_rgba(251,191,36,0.35)]">
+                    <div className="mx-auto max-w-xl rounded-2xl border border-amber-500/25 bg-black p-6 sm:p-8 text-center shadow-[0_20px_60px_-30px_rgba(251,191,36,0.35)]">
                       <img
                         src="/logo/greataussielogo.png"
                         alt="Great Aussie Caravans"

@@ -141,6 +141,7 @@ const navigation = [
         // { name: "What's best for me", href: "/whats-best-for-me", icon: HelpCircle, description: "Find your perfect match" },
         { name: "Get a Quote", href: "/get-quote", icon: FileText, description: "Request pricing information" },
         { name: "Request a Brochure", href: "/brochure", icon: Download, description: "Download our catalog" },
+        { name: "GreatAussie May Madness", href: "/sale", icon: ImageIcon, image: "/offerlogo/MayMadnessLogo.png", description: "Limited-time offers" },
         // { name: "Sale", href: "/sale", icon: Tag, description: "Special offers & deals" },
       ],
       services: [],
@@ -173,6 +174,7 @@ const navigation = [
         // { name: "Great Aussie Lifestyle", href: "/lifestyle", icon: Sparkles, description: "The caravan lifestyle" },
         { name: "Blog", href: "/blog", icon: BookOpen, description: "Latest insights & tips" },
         { name: "Factory Tour", href: "/factory-tour", icon: Building2, description: "Visit our facility" },
+        { name: "GreatAussie May Madness", href: "/sale", icon: ImageIcon, image: "/offerlogo/MayMadnessLogo.png", description: "Limited-time offers" },
         // { name: "Careers", href: "/careers", icon: Briefcase, description: "Join our team" },
         // { name: "Owners Club", href: "/owners-club", icon: UsersRound, description: "Connect with owners" },
       ],
@@ -610,12 +612,13 @@ export function Navbar() {
                         ) : (
                           // Regular layout for other menus
                           <div className="container-wide">
-                            <div className="grid grid-cols-3 gap-0">
+                            <div className={cn("grid gap-0", item.name === "Explore" ? "grid-cols-1" : "grid-cols-3")}>
                               {/* Left & Middle Columns - Menu Items */}
-                              <div className="col-span-2 p-4">
+                              <div className={cn("p-4", item.name === "Explore" ? "col-span-1" : "col-span-2")}>
                                 <div className="grid grid-cols-2 gap-2">
                                   {item.submenu.categories.map((category) => {
                                     const Icon = category.icon;
+                                    const isMayMadnessPromo = category.image === "/offerlogo/MayMadnessLogo.png";
                                     return (
                                       <Link
                                         key={category.name}
@@ -623,14 +626,14 @@ export function Navbar() {
                                         className="group flex items-center gap-3 p-3 rounded-lg hover:bg-gray-900 transition-all duration-200 border border-transparent hover:border-accent/20"
                                         onClick={() => setOpenDropdown(null)}
                                       >
-                                        <div className={`flex-shrink-0 flex items-center justify-center transition-colors ${category.image ? (category.name === 'TimberTech' ? 'w-20 h-20 mr-3' : 'w-16 h-16 mr-3') : 'w-10 h-10 rounded-lg bg-accent/20 group-hover:bg-accent/30'}`}>
+                                        <div className={`flex-shrink-0 flex items-center justify-center transition-colors ${category.image ? (isMayMadnessPromo ? 'w-10 h-10' : (category.name === 'TimberTech' ? 'w-20 h-20 mr-3' : 'w-16 h-16 mr-3')) : 'w-10 h-10 rounded-lg bg-accent/20 group-hover:bg-accent/30'}`}>
                                           {category.image ? (
                                             <Image
                                               src={category.image}
                                               alt={category.name}
-                                              width={category.name === 'TimberTech' ? 80 : 64}
-                                              height={category.name === 'TimberTech' ? 80 : 64}
-                                              className="w-full h-full object-contain object-center"
+                                              width={isMayMadnessPromo ? 40 : (category.name === 'TimberTech' ? 80 : 64)}
+                                              height={isMayMadnessPromo ? 40 : (category.name === 'TimberTech' ? 80 : 64)}
+                                              className={isMayMadnessPromo ? "object-contain object-center w-10 h-10" : "w-full h-full object-contain object-center"}
                                             />
                                           ) : (
                                             <Icon className="h-5 w-5 text-accent" />
@@ -710,26 +713,28 @@ export function Navbar() {
                               </div>
 
                               {/* Right Column - Description */}
-                              <div className="col-span-1 bg-gray-900 p-4 border-l border-gray-800">
-                                <div className="h-full flex flex-col justify-between">
-                                  <div>
-                                    <h3 className="font-bold text-base text-white mb-3">
-                                      {item.name}
-                                    </h3>
-                                    <p className="text-sm text-gray-400 leading-relaxed">
-                                      {item.submenu.description}
-                                    </p>
+                              {item.name !== "Explore" && (
+                                <div className="col-span-1 bg-gray-900 p-4 border-l border-gray-800">
+                                  <div className="h-full flex flex-col justify-between">
+                                    <div>
+                                      <h3 className="font-bold text-base text-white mb-3">
+                                        {item.name}
+                                      </h3>
+                                      <p className="text-sm text-gray-400 leading-relaxed">
+                                        {item.submenu.description}
+                                      </p>
+                                    </div>
+                                    <Link
+                                      href={item.href}
+                                      className="inline-flex items-center gap-2 mt-6 text-sm font-medium text-accent hover:text-accent/80 transition-colors group"
+                                      onClick={() => setOpenDropdown(null)}
+                                    >
+                                      View All
+                                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                    </Link>
                                   </div>
-                                  <Link
-                                    href={item.href}
-                                    className="inline-flex items-center gap-2 mt-6 text-sm font-medium text-accent hover:text-accent/80 transition-colors group"
-                                    onClick={() => setOpenDropdown(null)}
-                                  >
-                                    View All
-                                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                                  </Link>
                                 </div>
-                              </div>
+                              )}
                             </div>
                           </div>
                         )}
