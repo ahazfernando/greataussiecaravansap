@@ -73,6 +73,12 @@ service cloud.firestore {
       allow update, delete: if isApprovedAdmin();
     }
 
+    match /mayMadnessRequests/{requestId} {
+      allow read: if isApprovedAdmin();
+      allow create: if true;
+      allow update, delete: if isApprovedAdmin();
+    }
+
     match /warranty-claims/{claimId} {
       allow read: if isApprovedAdmin();
       allow create: if true;

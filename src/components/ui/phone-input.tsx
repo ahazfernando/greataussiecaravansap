@@ -32,7 +32,7 @@ type PhoneInputProps = Omit<
 const PhoneInput = React.forwardRef<
     React.ElementRef<typeof RPNInput.default>,
     PhoneInputProps
->(({ className, onChange, ...props }, ref) => {
+>(({ className, onChange, value, ...props }, ref) => {
     return (
         <RPNInput.default
             ref={ref}
@@ -40,6 +40,7 @@ const PhoneInput = React.forwardRef<
             flagComponent={FlagComponent}
             countrySelectComponent={CountrySelect}
             inputComponent={InputComponent}
+            value={(value ?? "") as RPNInput.Value}
             /**
              * Handles the onChange event.
              *
@@ -56,9 +57,10 @@ const PhoneInput = React.forwardRef<
 PhoneInput.displayName = "PhoneInput";
 
 const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
-    ({ className, ...props }, ref) => (
+    ({ className, value, ...props }, ref) => (
         <Input
             className={cn("h-11 rounded-e-lg rounded-s-none border-l-0 bg-gray-900 border-gray-800 text-white", className)}
+            value={value ?? ""}
             {...props}
             ref={ref}
         />

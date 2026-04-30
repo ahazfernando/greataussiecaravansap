@@ -29,6 +29,7 @@ const AU_STATES = [
 type MayMadnessFormData = {
   firstName: string;
   lastName: string;
+  email: string;
   phoneNumber: string;
   postcode: string;
   state: string;
@@ -38,6 +39,7 @@ type MayMadnessFormData = {
 const initialFormData: MayMadnessFormData = {
   firstName: "",
   lastName: "",
+  email: "",
   phoneNumber: "",
   postcode: "",
   state: "",
@@ -82,7 +84,15 @@ export default function SalePage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (!formData.firstName || !formData.lastName || !formData.phoneNumber || !formData.postcode || !formData.state || !formData.model) {
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.phoneNumber ||
+      !formData.postcode ||
+      !formData.state ||
+      !formData.model
+    ) {
       toast({
         title: "Missing Information",
         description: "Please complete all required fields.",
@@ -96,6 +106,7 @@ export default function SalePage() {
       await addDoc(collection(db, "mayMadnessRequests"), {
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
+        email: formData.email.trim(),
         phoneNumber: formData.phoneNumber.trim(),
         postcode: formData.postcode.trim(),
         state: formData.state,
@@ -231,7 +242,7 @@ export default function SalePage() {
       <section id="may-madness-form" className="relative overflow-hidden bg-black py-16 md:py-20">
         <div className="absolute inset-0">
           <Image
-            src="/offerlogo/GreatAussieCaravans.png"
+            src="/Xplora/GreatAussieDealerLightMode.jpeg"
             alt="Great Aussie Caravans May Madness background"
             fill
             className="object-cover object-center opacity-30"
@@ -312,6 +323,21 @@ export default function SalePage() {
                         value={formData.lastName}
                         onChange={onInputChange}
                         required
+                        className="border-gray-800 bg-black/50 text-white"
+                      />
+                    </div>
+                    <div className="space-y-2 sm:col-span-2">
+                      <Label htmlFor="email" className="text-white">
+                        Email <span className="text-accent">*</span>
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={onInputChange}
+                        required
+                        placeholder="your@email.com"
                         className="border-gray-800 bg-black/50 text-white"
                       />
                     </div>
