@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { cn } from "@/lib/utils";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 const MODELS = ["20URER", "Gravity", "Xplora", "Tonka"] as const;
@@ -48,20 +49,25 @@ const initialFormData: MayMadnessFormData = {
 
 const CARAVAN_SHOW_CARDS = [
   {
-    title: "Exciting Show\nPacks for Adventures",
+    title: "Exciting Show Packs for Adventure",
     description:
-      "Premium inclusions built to make every trip feel like a true caravan showcase, with extra comfort.",
-    image: "/offerlogo/GreatAussie3DModel.png",
+      "Amazing free giveaways for your caravan, just like when you buy at a caravan show.",
+    image: "/offerlogo/showpack.png",
+    imageFit: "cover" as const,
   },
   {
-    title: "Free and Quick\nSuspension Upgrades",
-    description: "Get smoother touring and better off-road confidence with upgraded suspension value.",
-    image: "/offerlogo/gac.png",
+    title: "Free Cruisemaster Air Suspension Upgrade",
+    description:
+      "Free Cruisemaster XT air suspension upgrades on all Gravity and Xplora models.",
+    image: "/offerlogo/air-bag-1.jpg",
+    imageFit: "cover" as const,
   },
   {
-    title: "Reliable\nAllytech Upgrades",
-    description: "Unlock practical Allytech enhancements designed for durability, comfort, and performance.",
-    image: "/offerlogo/make_the_caravan_in_the_202604302158%201.png",
+    title: "AllyTech Upgrade",
+    description:
+      "Upgrade your van to Allytech for another $7,000 AUD from timber.",
+    image: "/constructiontypes/allytechl.png",
+    imageFit: "contain" as const,
   },
 ] as const;
 
@@ -214,17 +220,36 @@ export default function SalePage() {
               {CARAVAN_SHOW_CARDS.map((card) => (
                 <article
                   key={card.title}
-                  className="group relative min-h-[430px] overflow-hidden rounded-[30px] border border-white/20 bg-gradient-to-b from-[#1f2028] via-[#181a24] to-[#13141c] shadow-[0_20px_45px_rgba(0,0,0,0.45)]"
+                  className="group relative min-h-[460px] overflow-hidden rounded-[30px] border border-white/20 bg-gradient-to-b from-[#1f2028] via-[#181a24] to-[#13141c] shadow-[0_20px_45px_rgba(0,0,0,0.45)] md:min-h-[500px]"
                 >
-                  <div className="pointer-events-none absolute inset-x-0 top-0 h-[72%]">
+                  <div
+                    className={cn(
+                      "pointer-events-none absolute inset-x-0 top-0 h-[74%] overflow-hidden",
+                      card.imageFit === "contain" ? "bg-[#161720]" : "bg-[#1a1b22]"
+                    )}
+                  >
                     <Image
                       src={card.image}
                       alt={card.title}
                       fill
-                      className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className={cn(
+                        "transition-transform duration-500 group-hover:scale-[1.03]",
+                        card.imageFit === "contain"
+                          ? "object-contain object-center p-6 sm:p-10"
+                          : "object-cover object-center"
+                      )}
+                    />
+                    <div
+                      className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-[#13141c] via-[#13141c]/90 via-25% to-transparent"
+                      aria-hidden
+                    />
+                    <div
+                      className="absolute inset-x-0 bottom-0 h-[35%] bg-gradient-to-t from-[#181a24] to-transparent opacity-80"
+                      aria-hidden
                     />
                   </div>
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[#13141c]/40 to-[#13141c]" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-55% to-[#13141c]" />
 
                   <div className="absolute inset-x-0 bottom-0 z-10 px-6 pb-7 pt-20">
                     <h3 className="font-display whitespace-pre-line text-2xl font-bold leading-tight text-white md:text-[30px]">
