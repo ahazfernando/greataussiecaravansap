@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Award, Users, Wrench, Heart, Caravan, Star, Calendar } from "lucide-react";
 import LiquidEther from "@/components/ui/LiquidEther";
+import { AdventureHeroSection } from "@/components/about/AdventureHeroSection";
 
 const values = [
   {
@@ -229,22 +230,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Mission */}
-      <section className="py-8 md:py-12 lg:py-16 bg-black">
-        <div className="container-wide">
-          <div className="max-w-3xl mx-auto text-center">
-            <span className="text-white font-medium text-sm uppercase tracking-wide mb-4 block border-2 border-accent/30 rounded-[24px] px-4 py-2 inline-block bg-accent/10 backdrop-blur-sm">
-              Our Mission
-            </span>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-6">
-              Building Dreams, One Caravan at a Time
-            </h2>
-            <p className="text-lg text-gray-300 mb-8">
-              Great Aussie was founded by a group of passionate adventurers who believed in the magic of creating homes-on-wheels for fellow wanderers seeking to embrace the nomadic lifestyle. Their journey began with the humble yet sturdy Caravans, designed to be the perfect companions for the road less traveled. From the very first Caravan that rolled out of their workshop, it was evident that they were onto something special.
-            </p>
-          </div>
-        </div>
-      </section>
+      <AdventureHeroSection />
 
       {/* Values */}
       <section className="py-12 md:py-16 bg-black">
