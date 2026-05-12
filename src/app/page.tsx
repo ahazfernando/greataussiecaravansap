@@ -16,9 +16,9 @@ export default function HomePage() {
       <HeroSection />
       {/* <TrustBadges /> */}
       {/* <FeaturedCaravans /> */}
-      <DealerCTA />
       <WhyChooseUs />
       <BuiltToLastSection />
+      <DealerCTA />
       <HomeMetrics />
       <ReviewsSection />
     </Layout>

@@ -43,21 +43,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-
-// Function to get model logo based on model name
-const getModelLogo = (modelName: string): string => {
-  const logoMap: Record<string, string> = {
-    "Striker": "/caravanmodels/strikerlogo.png",
-    // "20URER LITE": "/caravanmodels/euorerlitelogo.png",
-    "20URER": "/caravanmodels/eourerlogo.png",
-    "Gravity": "/caravanmodels/gravitylogo.png",
-    "Xplora": "/caravanmodels/xploralogo.png",
-    "Tonka": "/caravanmodels/tonkologo.png",
-    "Paragon": "/caravanlogos/litelogo.png", // Default logo for Paragon if no specific logo exists
-  };
-
-  return logoMap[modelName] || "/caravanlogos/litelogo.png";
-};
+import { modelCategories } from "@/components/navigation/modelCategories";
+import { ModelsMegaMenu } from "@/components/navigation/ModelsMegaMenu";
 
 const navigation = [
   {
@@ -75,58 +62,7 @@ const navigation = [
     href: "/caravans",
     hasSubmenu: true,
     submenu: {
-      categories: [
-        /* {
-          name: "Striker",
-          href: "/caravans/striker",
-          icon: Caravan,
-          image: "/caravan/CaravanImage(D1V1C1).webp",
-          description: "HYBRID MODELS"
-        }, */
-        // 20URER LITE model commented out
-        // {
-        //   name: "20URER LITE",
-        //   href: "/caravans/20urer-lite",
-        //   icon: Caravan,
-        //   image: "/caravan/CaravanImage(D1V1C2).png",
-        //   description: "CARAVAN MODELS"
-        // },
-        {
-          name: "20URER",
-          href: "/caravans/20urer",
-          icon: Caravan,
-          image: "/2ourerModel/2ourerImageV01.png",
-          description: "CARAVAN MODELS"
-        },
-        {
-          name: "Gravity",
-          href: "/caravans/gravity",
-          icon: Caravan,
-          image: "/Gravity/GravityImageV01.png",
-          description: "CARAVAN MODELS"
-        },
-        {
-          name: "Xplora",
-          href: "/caravans/xplora",
-          icon: Caravan,
-          image: "/Xplora/XploraImageV01.png",
-          description: "CARAVAN MODELS"
-        },
-        {
-          name: "Tonka",
-          href: "/caravans/tonka",
-          icon: Caravan,
-          image: "/Tonka/TonkaImageV0111.png",
-          description: "CARAVAN MODELS"
-        },
-        /* {
-          name: "Paragon",
-          href: "/caravans/paragon",
-          icon: Caravan,
-          image: "/caravan/CaravanImage(D1V1C2).png",
-          description: "MOTORHOME MODELS"
-        }, */
-      ],
+      categories: modelCategories,
       services: [],
       description: "Explore our complete range of caravans, hybrid models, and motorhomes. Each model is designed for Australian adventures with quality craftsmanship and reliability.",
     },
@@ -223,10 +159,6 @@ function getSubmenuFeaturedWidget(
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [hoveredModelCategory, setHoveredModelCategory] = useState<string | null>(null);
-  const [selectedModel, setSelectedModel] = useState<{ name: string; href: string; image: string } | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [hoveredModel, setHoveredModel] = useState<{ name: string; href: string; image: string } | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const [mounted, setMounted] = useState(false);
   const [openMobileAccordion, setOpenMobileAccordion] = useState<string | null>(null);
@@ -298,47 +230,12 @@ export function Navbar() {
                   }
 
                   setOpenDropdown(item.name);
-                  if (item.name === "Our Models") {
-                    // Initialize with first category and first model
-                    type CategoryType = typeof item.submenu.categories[number];
-                    const grouped: Record<string, CategoryType[]> = {};
-                    item.submenu.categories.forEach((category) => {
-                      const categoryType = category.description;
-                      if (!grouped[categoryType]) {
-                        grouped[categoryType] = [];
-                      }
-                      grouped[categoryType].push(category);
-                    });
-                    const firstCategory = Object.keys(grouped)[0];
-                    if (firstCategory && grouped[firstCategory] && grouped[firstCategory][0]) {
-                      setActiveCategory(firstCategory);
-                      setHoveredModelCategory(firstCategory);
-                      const firstModel = grouped[firstCategory][0];
-                      const modelImage = 'image' in firstModel ? firstModel.image : "/caravan/CaravanImage(D1V1C1).webp";
-                      setHoveredModel({
-                        name: firstModel.name,
-                        href: firstModel.href,
-                        image: modelImage
-                      });
-                      setSelectedModel({
-                        name: firstModel.name,
-                        href: firstModel.href,
-                        image: modelImage
-                      });
-                    }
-                  }
                 };
 
                 const handleMouseLeave = () => {
                   // Add a delay before closing to allow moving to submenu
                   const timeout = setTimeout(() => {
                     setOpenDropdown(null);
-                    if (item.name === "Our Models") {
-                      setActiveCategory(null);
-                      setHoveredModelCategory(null);
-                      setSelectedModel(null);
-                      setHoveredModel(null);
-                    }
                   }, 150);
                   setHoverTimeout(timeout);
                 };
@@ -354,12 +251,6 @@ export function Navbar() {
                 const handleDropdownMouseLeave = () => {
                   // Close dropdown when leaving it
                   setOpenDropdown(null);
-                  if (item.name === "Our Models") {
-                    setActiveCategory(null);
-                    setHoveredModelCategory(null);
-                    setSelectedModel(null);
-                    setHoveredModel(null);
-                  }
                 };
 
                 return (
@@ -391,224 +282,7 @@ export function Navbar() {
                         onMouseLeave={handleDropdownMouseLeave}
                       >
                         {item.name === "Our Models" ? (
-                          // Three-column mega menu layout for Our Models
-                          (() => {
-                            type CategoryType = typeof item.submenu.categories[number];
-                            const grouped: Record<string, CategoryType[]> = {};
-                            item.submenu.categories.forEach((category) => {
-                              const categoryType = category.description;
-                              if (!grouped[categoryType]) {
-                                grouped[categoryType] = [];
-                              }
-                              grouped[categoryType].push(category);
-                            });
-
-                            const categories = Object.keys(grouped);
-                            const currentCategory = activeCategory || hoveredModelCategory || categories[0];
-                            const activeModels = grouped[currentCategory] || [];
-                            const displayModel = hoveredModel || selectedModel || (activeModels[0] ? {
-                              name: activeModels[0].name,
-                              href: activeModels[0].href,
-                              image: ('image' in activeModels[0] ? activeModels[0].image : "/caravan/CaravanImage(D1V1C1).webp")
-                            } : null);
-
-                            const handleCategoryHover = (categoryName: string, models: CategoryType[]) => {
-                              setActiveCategory(categoryName);
-                              setHoveredModelCategory(categoryName);
-                              if (models[0]) {
-                                const firstModel = models[0];
-                                const modelImage = 'image' in firstModel ? firstModel.image : "/caravan/CaravanImage(D1V1C1).webp";
-                                setHoveredModel({
-                                  name: firstModel.name,
-                                  href: firstModel.href,
-                                  image: modelImage
-                                });
-                                setSelectedModel({
-                                  name: firstModel.name,
-                                  href: firstModel.href,
-                                  image: modelImage
-                                });
-                              }
-                            };
-
-                            return (
-                              <div className="grid grid-cols-12 gap-0 h-[calc(100vh-64px)]">
-                                {/* Empty column for alignment with logo */}
-                                <div className="col-span-1"></div>
-
-                                {/* Column 1: Categories */}
-                                <div className="col-span-2 border-r border-gray-800/30 pl-8 pr-8 py-6 bg-black">
-                                  <h3 className="text-xs uppercase tracking-[0.2em] text-gray-500 mb-6 pl-0">
-                                    OUR MODELS
-                                  </h3>
-                                  <div className="space-y-1">
-                                    {categories.map((categoryType) => (
-                                      <button
-                                        key={categoryType}
-                                        onMouseEnter={() => handleCategoryHover(categoryType, grouped[categoryType] || [])}
-                                        className={cn(
-                                          "flex items-center justify-between w-full pl-3 pr-3 py-3 text-left transition-all duration-200 group rounded-sm",
-                                          currentCategory === categoryType
-                                            ? "bg-yellow-400/10 text-white"
-                                            : "text-white/70 hover:text-white hover:bg-yellow-400/10"
-                                        )}
-                                      >
-                                        <span className="font-medium text-sm">{categoryType}</span>
-                                        <ChevronRight className={cn(
-                                          "w-4 h-4 transition-colors",
-                                          currentCategory === categoryType
-                                            ? "text-yellow-400"
-                                            : "text-white/70 group-hover:text-yellow-400"
-                                        )} />
-                                      </button>
-                                    ))}
-                                  </div>
-
-                                  {/* Quick Links */}
-                                  <div className="mt-8 pt-6 border-t border-gray-800/30">
-                                    <Link href="/about" className="block text-sm text-gray-400 hover:text-yellow-400 transition-colors py-2" onClick={() => setOpenDropdown(null)}>
-                                      About Us
-                                    </Link>
-                                    <Link href="/dealers" className="block text-sm text-gray-400 hover:text-yellow-400 transition-colors py-2" onClick={() => setOpenDropdown(null)}>
-                                      Find a Dealer
-                                    </Link>
-                                    <Link href="/our-story" className="block text-sm text-gray-400 hover:text-yellow-400 transition-colors py-2" onClick={() => setOpenDropdown(null)}>
-                                      Our Story
-                                    </Link>
-                                  </div>
-                                </div>
-
-                                {/* Column 2: Models List */}
-                                <div className="col-span-3 px-8 py-6 border-r border-gray-800/30 overflow-y-auto bg-black">
-                                  <AnimatePresence mode="wait">
-                                    {currentCategory && (
-                                      <motion.div
-                                        key={currentCategory}
-                                        initial={{ opacity: 0, x: 10 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        exit={{ opacity: 0, x: -10 }}
-                                        transition={{ duration: 0.2 }}
-                                      >
-                                        <div className="flex items-center gap-2 mb-6">
-                                          <h3 className="text-xs uppercase tracking-[0.2em] text-gray-500">
-                                            {currentCategory.replace(" MODELS", "")}
-                                          </h3>
-                                        </div>
-
-                                        <div className="space-y-0">
-                                          {activeModels.map((model) => {
-                                            const modelImage = 'image' in model ? model.image : "/caravan/CaravanImage(D1V1C1).webp";
-                                            return (
-                                              <Link
-                                                key={model.name}
-                                                href={model.href}
-                                                onMouseEnter={() => {
-                                                  setHoveredModel({
-                                                    name: model.name,
-                                                    href: model.href,
-                                                    image: modelImage
-                                                  });
-                                                  setSelectedModel({
-                                                    name: model.name,
-                                                    href: model.href,
-                                                    image: modelImage
-                                                  });
-                                                }}
-                                                onClick={() => setOpenDropdown(null)}
-                                                className={cn(
-                                                  "block py-3 border-l-2 pl-4 transition-all duration-200",
-                                                  hoveredModel?.name === model.name
-                                                    ? "border-yellow-400 text-white"
-                                                    : "border-transparent text-white/60 hover:text-white hover:border-yellow-400/50"
-                                                )}
-                                              >
-                                                <span className="font-medium text-sm">{model.name}</span>
-                                              </Link>
-                                            );
-                                          })}
-                                        </div>
-
-                                        {currentCategory !== "HYBRID MODELS" && currentCategory !== "MOTORHOME MODELS" && (
-                                          <Link
-                                            href="/caravans"
-                                            className="inline-flex items-center gap-2 mt-8 text-sm text-yellow-400 hover:text-yellow-300 transition-colors group"
-                                            onClick={() => setOpenDropdown(null)}
-                                          >
-                                            View All {currentCategory}
-                                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                          </Link>
-                                        )}
-                                      </motion.div>
-                                    )}
-                                  </AnimatePresence>
-                                </div>
-
-                                {/* Column 3: Featured Model Preview */}
-                                <div className="col-span-6 pl-8 py-6 pr-8 bg-gray-950">
-                                  <AnimatePresence mode="wait">
-                                    {displayModel && (
-                                      <motion.div
-                                        key={displayModel.name}
-                                        initial={{ opacity: 0, scale: 0.98 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0, scale: 0.98 }}
-                                        transition={{ duration: 0.3 }}
-                                        className="h-full flex flex-col relative"
-                                      >
-                                        {/* Product Logo */}
-                                        <div className="absolute top-0 left-0 z-20 mb-4">
-                                          <Image
-                                            src={getModelLogo(displayModel.name)}
-                                            alt={`${displayModel.name} Logo`}
-                                            width={200}
-                                            height={100}
-                                            className="object-contain"
-                                          />
-                                        </div>
-
-                                        {/* Model Image */}
-                                        <div className="relative flex-[0.85] rounded-lg overflow-hidden bg-gray-900/30 mb-6 min-h-[350px] max-h-[450px] mr-8">
-                                          <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent z-10" />
-                                          <Image
-                                            src={displayModel.image}
-                                            alt={displayModel.name}
-                                            fill
-                                            className="object-contain"
-                                          />
-                                        </div>
-
-                                        {/* Model Details and CTA Buttons */}
-                                        <div className="flex items-center justify-between gap-4 pb-6 mt-8">
-                                          <div className="flex flex-col">
-                                            <p className="text-xs uppercase tracking-[0.15em] text-yellow-400 mb-1">
-                                              Great Aussie
-                                            </p>
-                                            <h2 className="text-3xl font-bold text-white">
-                                              {displayModel.name}
-                                            </h2>
-                                          </div>
-                                          <div className="flex items-center gap-4 mr-16">
-                                            <Button variant="accent" size="sm" className="w-auto px-6 py-2 h-9 text-black" asChild>
-                                              <Link href={displayModel.href} onClick={() => setOpenDropdown(null)}>
-                                                Discover More
-                                              </Link>
-                                            </Button>
-                                            <Link
-                                              href="/brochure"
-                                              className="inline-flex items-center justify-center px-6 py-2 h-9 text-sm font-medium text-white/70 border border-white/20 rounded-md hover:text-yellow-400 hover:border-yellow-400/50 transition-all duration-200"
-                                              onClick={() => setOpenDropdown(null)}
-                                            >
-                                              Enquire
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </motion.div>
-                                    )}
-                                  </AnimatePresence>
-                                </div>
-                              </div>
-                            );
-                          })()
+                          <ModelsMegaMenu onClose={() => setOpenDropdown(null)} />
                         ) : (
                           // Regular layout for other menus
                           <div className="container-wide">
