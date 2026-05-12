@@ -131,8 +131,8 @@ export function InteriorComfortCarousel({
               ) : null}
               {highlights?.length ? (
                 <ul className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3 md:mt-5">
-                  {highlights.map(({ icon: Icon, label }) => (
-                    <li key={label} className="flex items-center justify-end gap-2.5 text-right">
+                  {highlights.map(({ icon: Icon, label }, index) => (
+                    <li key={`${label}-${index}`} className="flex items-center justify-end gap-2.5 text-right">
                       <span className="text-sm leading-snug text-white/90 sm:text-base">{label}</span>
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/35 bg-white/5 backdrop-blur-[2px]">
                         <Icon className="h-4 w-4 text-white" strokeWidth={1.5} />

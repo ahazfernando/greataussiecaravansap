@@ -45,7 +45,7 @@ export function ProductDiscoveryHero({
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
             {specs.map((spec, index) => (
               <div
-                key={spec.label}
+                key={`${spec.label}-${index}`}
                 className={`min-w-[12rem] px-5 py-4 sm:min-w-0 sm:px-6 md:px-8 md:py-5 lg:px-10 ${
                   index < specs.length - 1 ? "border-b border-white/10 xl:border-b-0 xl:border-r" : ""
                 } ${index % 2 === 0 ? "sm:border-r sm:border-white/10 xl:border-r" : "sm:border-r-0"} ${

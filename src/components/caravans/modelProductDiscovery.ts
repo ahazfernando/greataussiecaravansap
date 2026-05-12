@@ -24,8 +24,6 @@ export function getProductDiscoveryFourthSpec(
   const customByModel: Record<string, { label: string; value: string }> = {
     tonka: { label: "Inverter", value: "5000 VA" },
     "outback-explorer-21": { label: "Inverter", value: "2000 W" },
-    gravity: { label: "Battery", value: "200 Ah" },
-    "20urer": { label: "Battery", value: "120 Ah" },
     xplora: { label: "Inverter", value: "3000 VA" },
   };
 
