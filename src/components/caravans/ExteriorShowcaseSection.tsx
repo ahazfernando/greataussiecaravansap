@@ -53,9 +53,9 @@ export function ExteriorShowcaseSection({
   const [firstParagraph, secondParagraph] = getBalancedParagraphs(paragraphs);
 
   return (
-    <section className="bg-black py-16 md:py-20">
+    <section className="bg-black">
       <div className="container-wide">
-        <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mb-20 min-h-[420px] w-screen overflow-hidden md:mb-32 md:min-h-[560px]">
+        <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] min-h-[420px] w-screen overflow-hidden md:min-h-[560px]">
           <Image
             src={backgroundSrc}
             alt={`${modelName} exterior background`}

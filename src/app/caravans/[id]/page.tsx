@@ -13,6 +13,11 @@ import { Newsletter } from "@/components/home/Newsletter";
 import { Footer } from "@/components/layout/Footer";
 import { InteriorComfortCarousel } from "@/components/caravans/InteriorComfortCarousel";
 import { ExteriorShowcaseSection } from "@/components/caravans/ExteriorShowcaseSection";
+import { ProductDiscoveryHero } from "@/components/caravans/ProductDiscoveryHero";
+import {
+  getProductDiscoveryFourthSpec,
+  modelProductDiscoveryImagesById,
+} from "@/components/caravans/modelProductDiscovery";
 import { ConstructionMethodsImageCarousel } from "@/components/caravans/ConstructionMethodsImageCarousel";
 import { ModelShowcaseHero } from "@/components/caravans/ModelShowcaseHero";
 import { modelShowcaseImagesById } from "@/components/caravans/modelShowcaseImages";
@@ -2115,14 +2120,13 @@ export default function ModelDetail() {
   ];
 
   const interiorCopy = interiorSectionCopyByModel[caravan.id];
-  const interiorHeading = interiorCopy
-    ? `${interiorCopy.title.toUpperCase()} ${interiorCopy.subtitle.toUpperCase()}`
-    : "REFINED COMFORT ON EVERY JOURNEY";
+  const interiorHeading = "Interior";
   const interiorDescription = interiorCopy
-    ? (caravan.id === "20urer"
-        ? [interiorCopy.paragraphs[0], interiorCopy.paragraphs.slice(1).join(" ")].join(" ")
-        : getBalancedInteriorParagraphs(interiorCopy.paragraphs).join(" "))
-    : `Step inside the ${caravan.name} and discover a world where luxury meets adventure. Choose from expansive club lounges, dinettes, or straight lounges, each finished with premium leather upholstery and thoughtful design. Abundant storage, diesel heating, and oversized ensuites ensure every moment is one of refined comfort.`;
+    ? interiorCopy.paragraphs
+    : [
+        `Step inside the ${caravan.name} and discover a world where luxury meets adventure. Choose from expansive club lounges, dinettes, or straight lounges, each finished with premium leather upholstery and thoughtful design.`,
+        "Abundant storage, diesel heating, and oversized ensuites ensure every moment is one of refined comfort.",
+      ];
 
   const exteriorHeading = exteriorSectionHeadingByModel[caravan.id] ?? {
     title: "LUXURY MEETS",
@@ -2133,6 +2137,8 @@ export default function ModelDetail() {
       `The ${caravan.name} combines premium craftsmanship with rugged capability. Built with a full AL+ aluminium frame, fibreglass walls, and high-grade insulation, it's engineered to conquer Australia's most challenging terrains while maintaining its sophisticated aesthetic.`,
       "Premium features come standard, including Front and Rear Styling Packs, Stealth Solar Bracket, and German marine-grade composite panels. Available in smooth or checkerplate finishes with a range of colours to match your adventurous spirit.",
     ];
+  const productDiscoveryImage = modelProductDiscoveryImagesById[caravan.id];
+  const productDiscoveryFourthSpec = getProductDiscoveryFourthSpec(caravan.id, caravan.highlights);
 
   return (
     <div className="min-h-screen bg-black">
@@ -2275,140 +2281,34 @@ export default function ModelDetail() {
 
       </section>
 
-      {/* Key Specifications Section - Porsche Style */}
-      <section className="relative z-30 bg-black py-10 md:py-14">
-        <div className="container-wide">
-          {/* Header with Badge and Description */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-10 md:mb-12"
-          >
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-              Performance <span className="text-accent">Highlights</span>
-            </h2>
-            <p className="text-white text-lg whitespace-nowrap">
-              Discover the essential specifications that make this model perfect for your adventure.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center">
-            {/* Metrics on the left */}
-            <div className="lg:col-span-2 space-y-6 md:space-y-8 text-center lg:text-left">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1, duration: 0.5 }}
-              >
-                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-display font-bold text-white mb-1 leading-[1.15] max-w-xl mx-auto lg:mx-0">
-                  {getPerformanceHighlightsSuspension(caravan.id, caravan.specs)}
-                </p>
-                <p className="text-sm md:text-base text-gray-300 font-normal">
-                  Suspension
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-              >
-                {(() => {
-                  const second = getPerformanceSecondMetric(caravan.id, caravan.specs.sleeps);
-                  if (second.kind === "custom") {
-                    return (
-                      <>
-                        <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-1 leading-tight">
-                          {second.value}
-                        </p>
-                        <p className="text-sm md:text-base text-gray-300 font-normal">{second.label}</p>
-                      </>
-                    );
-                  }
-                  return (
-                    <>
-                      <p className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-1">
-                        <AnimatedCount
-                          value={second.sleeps.toString()}
-                          suffix="people"
-                          duration={2}
-                          delay={0.2}
-                        />
-                      </p>
-                      <p className="text-sm md:text-base text-gray-300 font-normal">Sleeps</p>
-                    </>
-                  );
-                })()}
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-              >
-                <p className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-1">
-                  <AnimatedCount value={caravan.highlights.water} duration={2} delay={0.3} />
-                </p>
-                <p className="text-sm md:text-base text-gray-300 font-normal">
-                  Water Capacity
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-              >
-                <p className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-1">
-                  <AnimatedCount value={caravan.highlights.solar} duration={2} delay={0.4} />
-                </p>
-                <p className="text-sm md:text-base text-gray-300 font-normal">
-                  Solar Power
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-                className="pt-4 flex justify-center lg:justify-start"
-              >
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-white text-white hover:bg-white hover:text-black"
-                  asChild
-                >
-                  <a href="/contact">View all technical details</a>
-                </Button>
-              </motion.div>
-            </div>
-
-            {/* Model Image on the right */}
+      {productDiscoveryImage ? (
+        <ProductDiscoveryHero
+          modelName={caravan.name}
+          backgroundSrc={productDiscoveryImage}
+          solar={caravan.highlights.solar}
+          battery={caravan.highlights.battery}
+          water={caravan.highlights.water}
+          fourthSpec={productDiscoveryFourthSpec}
+        />
+      ) : (
+        <section className="relative z-30 bg-black py-10 md:py-14">
+          <motion.div className="container-wide">
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="lg:col-span-3 flex items-center justify-center"
+              className="text-center mb-10 md:mb-12"
             >
-              <div className="relative w-full max-w-4xl aspect-square">
-                <img
-                  src={heroImageSrc}
-                  alt={caravan.name}
-                  className="w-full h-full object-contain"
-                />
-              </div>
+              <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                Performance <span className="text-accent">Highlights</span>
+              </h2>
+              <p className="text-white text-lg whitespace-nowrap">
+                Discover the essential specifications that make this model perfect for your adventure.
+              </p>
             </motion.div>
-          </div>
-        </div>
-      </section>
+          </motion.div>
+        </section>
+      )}
 
       <ExteriorShowcaseSection
         modelName={caravan.name}
@@ -2432,6 +2332,14 @@ export default function ModelDetail() {
           />
         </motion.div>
       </section>
+
+      {modelShowcaseImagesById[id]?.length ? (
+        <ModelShowcaseHero
+          modelName={caravan.name}
+          showcaseImages={modelShowcaseImagesById[id]}
+          description={caravan.shortDescription}
+        />
+      ) : null}
 
       {/* Technical Details Tabbed Section */}
       <section className="bg-black py-10 md:py-14">
@@ -2846,14 +2754,6 @@ export default function ModelDetail() {
           })()}
         </div>
       </section>
-
-      {modelShowcaseImagesById[id]?.length ? (
-        <ModelShowcaseHero
-          modelName={caravan.name}
-          showcaseImages={modelShowcaseImagesById[id]}
-          description={caravan.shortDescription}
-        />
-      ) : null}
 
       {/* Specifications (Dimensions & Weights / Chassis & Running Gear): removed from all model pages — restore via git history if needed */}
 

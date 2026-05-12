@@ -25,7 +25,7 @@ export function InteriorComfortCarousel({
 }: {
   modelName: string;
   heading: string;
-  description: string;
+  description: string | string[];
 }) {
   const [api, setApi] = useState<CarouselApi>();
   const [selected, setSelected] = useState(0);
@@ -58,6 +58,7 @@ export function InteriorComfortCarousel({
   const scrollTo = useCallback((index: number) => api?.scrollTo(index), [api]);
   const scrollPrev = useCallback(() => api?.scrollPrev(), [api]);
   const scrollNext = useCallback(() => api?.scrollNext(), [api]);
+  const descriptionBlocks = Array.isArray(description) ? description : [description];
 
   return (
     <div className="relative w-full overflow-hidden bg-black">
@@ -109,9 +110,16 @@ export function InteriorComfortCarousel({
           <h3 className="font-display text-3xl font-bold uppercase leading-tight text-white md:text-4xl lg:text-5xl">
             {heading}
           </h3>
-          <p className="mt-4 text-sm leading-relaxed text-white/95 sm:text-base md:mt-5 md:text-lg lg:text-xl">
-            {description}
-          </p>
+          <div className="mt-4 space-y-3 text-right md:mt-5 md:space-y-4">
+            {descriptionBlocks.map((block) => (
+              <p
+                key={block}
+                className="text-sm leading-relaxed text-white/95 sm:text-base md:text-lg lg:text-xl"
+              >
+                {block}
+              </p>
+            ))}
+          </div>
 
           <div
             className="mt-8 flex flex-wrap items-center justify-end gap-2 md:mt-10"
