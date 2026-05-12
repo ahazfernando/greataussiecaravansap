@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 
@@ -18,14 +18,23 @@ const INTERIOR_GALLERY_IMAGES = [
 
 const AUTOPLAY_MS = 4000;
 
+export type InteriorComfortHighlight = {
+  icon: LucideIcon;
+  label: string;
+};
+
 export function InteriorComfortCarousel({
   modelName,
   heading,
   description,
+  summary,
+  highlights,
 }: {
   modelName: string;
   heading: string;
-  description: string | string[];
+  description?: string | string[];
+  summary?: string;
+  highlights?: InteriorComfortHighlight[];
 }) {
   const [api, setApi] = useState<CarouselApi>();
   const [selected, setSelected] = useState(0);
@@ -58,7 +67,12 @@ export function InteriorComfortCarousel({
   const scrollTo = useCallback((index: number) => api?.scrollTo(index), [api]);
   const scrollPrev = useCallback(() => api?.scrollPrev(), [api]);
   const scrollNext = useCallback(() => api?.scrollNext(), [api]);
-  const descriptionBlocks = Array.isArray(description) ? description : [description];
+  const descriptionBlocks = description
+    ? Array.isArray(description)
+      ? description
+      : [description]
+    : [];
+  const showHighlights = Boolean(summary || highlights?.length);
 
   return (
     <div className="relative w-full overflow-hidden bg-black">
@@ -110,16 +124,36 @@ export function InteriorComfortCarousel({
           <h3 className="font-display text-3xl font-bold uppercase leading-tight text-white md:text-4xl lg:text-5xl">
             {heading}
           </h3>
-          <div className="mt-4 space-y-3 text-right md:mt-5 md:space-y-4">
-            {descriptionBlocks.map((block) => (
-              <p
-                key={block}
-                className="text-sm leading-relaxed text-white/95 sm:text-base md:text-lg lg:text-xl"
-              >
-                {block}
-              </p>
-            ))}
-          </div>
+          {showHighlights ? (
+            <div className="mt-4 w-full md:mt-5">
+              {summary ? (
+                <p className="text-sm leading-relaxed text-white/90 sm:text-base md:text-lg">{summary}</p>
+              ) : null}
+              {highlights?.length ? (
+                <ul className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3 md:mt-5">
+                  {highlights.map(({ icon: Icon, label }) => (
+                    <li key={label} className="flex items-center justify-end gap-2.5 text-right">
+                      <span className="text-sm leading-snug text-white/90 sm:text-base">{label}</span>
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/35 bg-white/5 backdrop-blur-[2px]">
+                        <Icon className="h-4 w-4 text-white" strokeWidth={1.5} />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : (
+            <div className="mt-4 space-y-3 text-right md:mt-5 md:space-y-4">
+              {descriptionBlocks.map((block) => (
+                <p
+                  key={block}
+                  className="text-sm leading-relaxed text-white/95 sm:text-base md:text-lg lg:text-xl"
+                >
+                  {block}
+                </p>
+              ))}
+            </div>
+          )}
 
           <div
             className="mt-8 flex flex-wrap items-center justify-end gap-2 md:mt-10"

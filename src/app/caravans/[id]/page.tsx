@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
-import { Sun, Battery, Droplets, Zap, Truck, Check, ArrowLeft, Shield, Clock, Weight, Wind, Home, Building2, Sofa, ChevronRight, ChefHat, Settings } from "lucide-react";
+import { Sun, Battery, Droplets, Zap, Truck, Check, ArrowLeft, Shield, Clock, Weight, Wind, Home, Building2, Sofa, ChevronRight, ChefHat, Settings, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/layout/Navbar";
@@ -160,7 +160,11 @@ const getPerformanceSecondMetric = (modelId: string, sleeps: number): Performanc
 type InteriorSectionCopy = {
   title: string;
   subtitle: string;
-  paragraphs: string[];
+  summary: string;
+  highlights: Array<{
+    icon: LucideIcon;
+    label: string;
+  }>;
 };
 
 const getBalancedInteriorParagraphs = (paragraphs: string[]): [string, string] => {
@@ -202,81 +206,118 @@ const interiorSectionCopyByModel: Record<string, InteriorSectionCopy> = {
   "outback-explorer-21": {
     title: "Off-Grid Comfort",
     subtitle: "FOR REMOTE ADVENTURES",
-    paragraphs: [
-      "Engineered for off-grid travel, the Outback Explorer 21 combines durable construction with dependable comfort in remote conditions.",
-      "Its independent trailing arm suspension, 300W solar system, 200Ah lithium battery, and 2000W pure sine inverter support extended stays beyond powered sites.",
-      "Inside, practical inclusions like a queen island bed, reverse cycle air conditioning, diesel heating, and a full kitchen create a comfortable base after long days off the beaten track.",
+    summary: "Engineered for off-grid travel with dependable comfort in remote conditions.",
+    highlights: [
+      { icon: Sun, label: "300W solar" },
+      { icon: Battery, label: "200Ah lithium battery" },
+      { icon: Zap, label: "2000W inverter" },
+      { icon: Home, label: "Queen island bed" },
+      { icon: Wind, label: "Diesel heating" },
+      { icon: ChefHat, label: "Full kitchen" },
     ],
   },
   "family-cruiser-23": {
     title: "Family Touring Comfort",
     subtitle: "FOR LONGER HOLIDAYS",
-    paragraphs: [
-      "Designed for families, the Family Cruiser 23 delivers spacious layouts and everyday practicality for long road trips.",
-      "Features like double bunks, club lounge seating, a 220L fridge/freezer, and a full kitchen make mealtimes and downtime easy for everyone.",
-      "With 200W solar, 200L water capacity, external storage, and a 5m roll-out awning, it is set up for comfortable park stays and flexible family travel.",
+    summary: "Spacious layouts and everyday practicality for long family road trips.",
+    highlights: [
+      { icon: Sofa, label: "Double bunk layout" },
+      { icon: ChefHat, label: "220L fridge/freezer" },
+      { icon: Building2, label: "Full kitchen" },
+      { icon: Sun, label: "200W solar" },
+      { icon: Droplets, label: "200L water capacity" },
+      { icon: Settings, label: "5m roll-out awning" },
     ],
   },
   "coastal-tourer-19": {
     title: "Lightweight Touring Ease",
     subtitle: "FOR COASTAL GETAWAYS",
-    paragraphs: [
-      "The Coastal Tourer 19 is built for easy towing and relaxed weekends, with a compact footprint that is simple to tow and park.",
-      "Its practical setup includes a queen bed, wet bath, 150L fridge, roof-mounted air conditioning, and a dinette that converts when needed.",
-      "With 160W solar, 120Ah AGM battery, roll-out awning, and external shower, it offers the essentials for comfortable short escapes without added complexity.",
+    summary: "Easy towing and relaxed weekends with a compact footprint.",
+    highlights: [
+      { icon: Weight, label: "Light, easy towing" },
+      { icon: Home, label: "Queen bed and wet bath" },
+      { icon: ChefHat, label: "150L fridge" },
+      { icon: Wind, label: "Roof-mounted A/C" },
+      { icon: Sun, label: "160W solar" },
+      { icon: Settings, label: "Roll-out awning" },
     ],
   },
   striker: {
     title: "Hybrid Touring Comfort",
     subtitle: "FOR VERSATILE TRAVEL",
-    paragraphs: [
-      "As a hybrid-ready model, the Striker balances off-road capability with premium comfort for mixed touring routes.",
-      "Core inclusions such as 300W solar, 200Ah lithium battery, 2000W inverter, and robust exterior protection support confident travel across varied conditions.",
-      "Inside, a queen island bed, full ensuite, reverse cycle air conditioning, diesel heater, and full kitchen deliver reliable comfort wherever the journey leads.",
+    summary: "Hybrid capability with premium comfort for mixed touring routes.",
+    highlights: [
+      { icon: Sun, label: "300W solar" },
+      { icon: Battery, label: "200Ah lithium battery" },
+      { icon: Shield, label: "Exterior protection" },
+      { icon: Home, label: "Queen island bed" },
+      { icon: Wind, label: "Reverse cycle A/C" },
+      { icon: ChefHat, label: "Full kitchen" },
     ],
   },
   "20urer": {
     title: "On-Road Touring Comfort",
     subtitle: "& JOURNEY BENEFITS",
-    paragraphs: [
-      "As an on-road caravan, the 2ourer is built for smooth towing, improved fuel efficiency, and easy handling on sealed roads. Its lighter, road-focused design makes long-distance travel more comfortable and less demanding on your tow vehicle.",
-      "Key essentials like 200W solar power with a lithium battery, reverse cycle air-conditioning, large fridge/freezer, and comfortable pillow-top mattress ensure you travel with convenience and comfort.The practical interior layout, combined with features like a roll-out awning and external setup options, makes it ideal for relaxed stopovers allowing you to enjoy your journey without the complexity of an off-road van.",
+    summary: "Smooth on-road towing with efficient, comfortable touring.",
+    highlights: [
+      { icon: Weight, label: "Road-focused efficiency" },
+      { icon: Sun, label: "200W solar and lithium" },
+      { icon: Wind, label: "Reverse cycle A/C" },
+      { icon: ChefHat, label: "Large fridge/freezer" },
+      { icon: Sofa, label: "Pillow-top mattress" },
+      { icon: Settings, label: "Roll-out awning" },
     ],
   },
   gravity: {
     title: "Semi Off-Grid Comfort",
     subtitle: "WITH PREMIUM CONTROL",
-    paragraphs: [
-      "Built for demanding off-grid touring, Gravity combines rugged hardware with premium interior comfort for extended travel.",
-      "A 400W solar setup, 200Ah lithium battery, independent coil spring suspension, and durable chassis package support confident performance in challenging terrain.",
-      "Comfort features including a pillow-top mattress, double glazed windows, quality cabinetry, reverse cycle air conditioning, and a 216L fridge help make longer trips easier and more enjoyable.",
+    summary: "Rugged off-grid touring with premium interior comfort.",
+    highlights: [
+      { icon: Sun, label: "400W solar" },
+      { icon: Battery, label: "200Ah lithium battery" },
+      { icon: Truck, label: "Independent suspension" },
+      { icon: Sofa, label: "Pillow-top mattress" },
+      { icon: Wind, label: "Reverse cycle A/C" },
+      { icon: ChefHat, label: "216L fridge" },
     ],
   },
   xplora: {
     title: "Expedition Comfort",
     subtitle: "WITHOUT COMPROMISE",
-    paragraphs: [
-      "Xplora is engineered for serious off-road exploration, combining strong protective build elements with practical liveability.",
-      "Its high-capacity setup of 800W solar, dual 200Ah lithium batteries, 3000VA inverter, dust reduction system, and independent suspension supports extended remote travel.",
-      "Inside, premium finishes, pillow-top bedding, double glazed windows, and well-planned storage and charging points keep every leg of the journey comfortable and connected.",
+    summary: "Serious off-road exploration with practical liveability.",
+    highlights: [
+      { icon: Sun, label: "800W solar" },
+      { icon: Battery, label: "Dual 200Ah lithium" },
+      { icon: Zap, label: "3000VA inverter" },
+      { icon: Truck, label: "Independent suspension" },
+      { icon: Sofa, label: "Pillow-top bedding" },
+      { icon: Wind, label: "Double glazed windows" },
     ],
   },
   tonka: {
     title: "Extreme Off-Grid Comfort",
     subtitle: "BUILT TO GO FURTHER",
-    paragraphs: [
-      "Tonka is purpose-built for harsh Australian conditions, pairing heavy-duty engineering with premium touring comfort.",
-      "A 1000W solar system, dual 230Ah lithium batteries, 5000VA inverter, Cruisemaster ATX suspension, and ventilated disc brakes provide serious off-grid confidence.",
-      "Interior and lifestyle inclusions like a pillow-top mattress, reverse cycle air conditioning, 274L fridge, external kitchen setup, and large water capacity help you stay comfortable on longer remote adventures.",
+    summary: "Heavy-duty engineering with premium touring comfort for harsh Australian conditions.",
+    highlights: [
+      { icon: Sun, label: "1000W solar" },
+      { icon: Battery, label: "Dual 230Ah lithium" },
+      { icon: Zap, label: "5000VA inverter" },
+      { icon: Truck, label: "Cruisemaster ATX suspension" },
+      { icon: Wind, label: "Reverse cycle A/C" },
+      { icon: ChefHat, label: "274L fridge" },
     ],
   },
   paragon: {
     title: "Motorhome Luxury Comfort",
     subtitle: "FOR EXTENDED TOURING",
-    paragraphs: [
-      "Paragon brings motorhome-style luxury to long-distance travel with spacious layouts and premium appointments throughout.",
-      "Its 400W solar, 300Ah lithium battery, 3000W inverter, and large water capacity support longer stays with greater independence.",
-      "With features such as a queen bed, full kitchen, 250L fridge/freezer, separate shower and toilet, and ducted air conditioning, it delivers home-like comfort on the road.",
+    summary: "Motorhome-style luxury for extended touring.",
+    highlights: [
+      { icon: Sun, label: "400W solar" },
+      { icon: Battery, label: "300Ah lithium battery" },
+      { icon: Droplets, label: "Large water capacity" },
+      { icon: Home, label: "Queen bed and ensuite" },
+      { icon: ChefHat, label: "250L fridge/freezer" },
+      { icon: Wind, label: "Ducted air conditioning" },
     ],
   },
 };
@@ -2121,12 +2162,10 @@ export default function ModelDetail() {
 
   const interiorCopy = interiorSectionCopyByModel[caravan.id];
   const interiorHeading = "Interior";
-  const interiorDescription = interiorCopy
-    ? interiorCopy.paragraphs
-    : [
-        `Step inside the ${caravan.name} and discover a world where luxury meets adventure. Choose from expansive club lounges, dinettes, or straight lounges, each finished with premium leather upholstery and thoughtful design.`,
-        "Abundant storage, diesel heating, and oversized ensuites ensure every moment is one of refined comfort.",
-      ];
+  const fallbackInteriorDescription = [
+    `Step inside the ${caravan.name} and discover a world where luxury meets adventure. Choose from expansive club lounges, dinettes, or straight lounges, each finished with premium leather upholstery and thoughtful design.`,
+    "Abundant storage, diesel heating, and oversized ensuites ensure every moment is one of refined comfort.",
+  ];
 
   const exteriorHeading = exteriorSectionHeadingByModel[caravan.id] ?? {
     title: "LUXURY MEETS",
@@ -2328,7 +2367,9 @@ export default function ModelDetail() {
           <InteriorComfortCarousel
             modelName={caravan.name}
             heading={interiorHeading}
-            description={interiorDescription}
+            summary={interiorCopy?.summary}
+            highlights={interiorCopy?.highlights}
+            description={interiorCopy ? undefined : fallbackInteriorDescription}
           />
         </motion.div>
       </section>
