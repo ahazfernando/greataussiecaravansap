@@ -12,6 +12,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Newsletter } from "@/components/home/Newsletter";
 import { Footer } from "@/components/layout/Footer";
 import { InteriorComfortCarousel } from "@/components/caravans/InteriorComfortCarousel";
+import { ExteriorShowcaseSection } from "@/components/caravans/ExteriorShowcaseSection";
 import { ConstructionMethodsImageCarousel } from "@/components/caravans/ConstructionMethodsImageCarousel";
 import { ModelShowcaseHero } from "@/components/caravans/ModelShowcaseHero";
 import { modelShowcaseImagesById } from "@/components/caravans/modelShowcaseImages";
@@ -2123,6 +2124,16 @@ export default function ModelDetail() {
         : getBalancedInteriorParagraphs(interiorCopy.paragraphs).join(" "))
     : `Step inside the ${caravan.name} and discover a world where luxury meets adventure. Choose from expansive club lounges, dinettes, or straight lounges, each finished with premium leather upholstery and thoughtful design. Abundant storage, diesel heating, and oversized ensuites ensure every moment is one of refined comfort.`;
 
+  const exteriorHeading = exteriorSectionHeadingByModel[caravan.id] ?? {
+    title: "LUXURY MEETS",
+    subtitle: "ADVENTURE ON THE GO",
+  };
+  const exteriorParagraphs =
+    exteriorSectionParagraphsByModel[caravan.id] ?? [
+      `The ${caravan.name} combines premium craftsmanship with rugged capability. Built with a full AL+ aluminium frame, fibreglass walls, and high-grade insulation, it's engineered to conquer Australia's most challenging terrains while maintaining its sophisticated aesthetic.`,
+      "Premium features come standard, including Front and Rear Styling Packs, Stealth Solar Bracket, and German marine-grade composite panels. Available in smooth or checkerplate finishes with a range of colours to match your adventurous spirit.",
+    ];
+
   return (
     <div className="min-h-screen bg-black">
       {/* Navigation Bar */}
@@ -2399,68 +2410,27 @@ export default function ModelDetail() {
         </div>
       </section>
 
-      {/* Interior & Exterior Section */}
-      <section className="bg-black py-16 md:py-20">
-        <div className="container-wide">
-          {/* Exterior Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mb-20 md:mb-32"
-          >
-            <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
-              {/* Text Content */}
-              <div className="space-y-6 order-2 md:order-1">
-                <Badge className="bg-accent/20 text-accent border-accent/30 mb-4">
-                  EXTERIOR
-                </Badge>
-                <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                  {(exteriorSectionHeadingByModel[caravan.id]?.title ?? "LUXURY MEETS").toUpperCase()}{" "}
-                  <span className="text-accent">
-                    {(exteriorSectionHeadingByModel[caravan.id]?.subtitle ?? "ADVENTURE ON THE GO").toUpperCase()}
-                  </span>
-                  <br />
-                </h2>
-                {getBalancedInteriorParagraphs(
-                  exteriorSectionParagraphsByModel[caravan.id] ?? [
-                    `The ${caravan.name} combines premium craftsmanship with rugged capability. Built with a full AL+ aluminium frame, fibreglass walls, and high-grade insulation, it's engineered to conquer Australia's most challenging terrains while maintaining its sophisticated aesthetic.`,
-                    "Premium features come standard, including Front and Rear Styling Packs, Stealth Solar Bracket, and German marine-grade composite panels. Available in smooth or checkerplate finishes with a range of colours to match your adventurous spirit.",
-                  ]
-                ).map((paragraph) => (
-                  <p key={paragraph} className="text-gray-300 text-base md:text-lg leading-relaxed">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-              {/* Image Content */}
-              <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden order-1 md:order-2">
-                <Image
-                  src="/home/HomeHeader(D1V1C2).jpg"
-                  alt={`${caravan.name} Exterior`}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </motion.div>
+      <ExteriorShowcaseSection
+        modelName={caravan.name}
+        title={exteriorHeading.title}
+        subtitle={exteriorHeading.subtitle}
+        paragraphs={exteriorParagraphs}
+      />
 
-          {/* Interior Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen"
-          >
-            <InteriorComfortCarousel
-              modelName={caravan.name}
-              heading={interiorHeading}
-              description={interiorDescription}
-            />
-          </motion.div>
-        </div>
+      <section className="bg-black">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen"
+        >
+          <InteriorComfortCarousel
+            modelName={caravan.name}
+            heading={interiorHeading}
+            description={interiorDescription}
+          />
+        </motion.div>
       </section>
 
       {/* Technical Details Tabbed Section */}
