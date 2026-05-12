@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Star, FileText, Mail, Calendar, UserCheck, Receipt, BookOpen, Shield, Users, Flame } from "lucide-react";
+import { LayoutDashboard, Star, FileText, Mail, Calendar, UserCheck, Receipt, BookOpen, Shield, Users, Flame, Newspaper } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -27,6 +27,7 @@ const navItems = [
   { icon: UserCheck, label: "Event Registrations", href: "/admin/registrations" },
   { icon: Star, label: "Reviews", href: "/admin/reviews" },
   { icon: Mail, label: "Inquiries", href: "/admin/inquiries" },
+  { icon: Newspaper, label: "Newsletter", href: "/admin/newsletter-subscriptions" },
   { icon: Receipt, label: "Quote Requests", href: "/admin/quote-requests" },
   { icon: BookOpen, label: "Brochure Requests", href: "/admin/brochure-requests" },
   { icon: Flame, label: "May Madness Requests", href: "/admin/may-madness-requests" },

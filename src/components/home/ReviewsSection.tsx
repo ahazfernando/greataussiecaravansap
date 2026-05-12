@@ -1,175 +1,205 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { ReviewCard } from "@/components/reviews/ReviewCard";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 
 const reviews = [
   {
-    id: "1",
-    name: "Michael Thompson",
-    rating: 5,
-    date: "February 2026",
-    content:
-      "Absolutely thrilled with our Xplora! We've taken it across the Nullarbor and through the Kimberley—handles everything we throw at it. The build quality is exceptional and the team at Great Aussie made the whole process seamless.",
+    id: 1,
+    text: "We were nervous buying our first family caravan, but the team walked us through layouts, payload, and tow limits.",
+    name: "Michael Harris",
+    time: "February 2026",
     caravan: "Xplora",
   },
   {
-    id: "2",
-    name: "Sarah & David Chen",
-    rating: 5,
-    date: "October 2025",
-    content:
-      "As a young family, we needed something that would grow with us. Our Gravity has been perfect—spacious, comfortable, and the kids love the layout. Best investment we've ever made for our family adventures.",
-    caravan: "Gravity",
+    id: 2,
+    text: "Great range of off-road caravans and no sales pressure. They helped us compare options clearly and delivered exactly what we were promised.",
+    name: "James Carter",
+    time: "January 2026",
+    caravan: "Territory",
   },
   {
-    id: "3",
-    name: "Robert Williams",
-    rating: 5,
-    date: "July 2025",
-    content:
-      "After comparing dozens of caravans, we chose Great Aussie for their attention to detail and Australian build. Six months in and we couldn't be happier. The after-sales support has been outstanding too.",
-    caravan: "20URER",
+    id: 3,
+    text: "From financing questions to handover day, everything was easy. We hit the road the same weekend and the setup advice saved us hours.",
+    name: "Sarah Collins",
+    time: "December 2025",
+    caravan: "Xplora",
   },
   {
-    id: "4",
-    name: "Jennifer Masters",
-    rating: 5,
-    date: "August 2024",
-    content:
-      "Retired and finally living the dream! Our Tonka has taken us to places we never thought we'd see. Reliable, comfortable, and built like a tank. Highly recommend to any grey nomad looking for quality.",
-    caravan: "Tonka",
+    id: 4,
+    text: "We upgraded to a larger caravan and traded in our old van. The valuation was fair, communication was clear, and delivery was right on schedule.",
+    name: "Olivia Bennett",
+    time: "November 2025",
+    caravan: "Royal",
+  },
+  {
+    id: 5,
+    text: "After months of comparing brands, this was the best value by far. Build quality feels solid and after-sales support has been excellent.",
+    name: "Daniel Foster",
+    time: "October 2025",
+    caravan: "Territory",
+  },
+  {
+    id: 6,
+    text: "We wanted a van for long regional trips and they matched us with the right model straight away. Honest advice and a stress-free process.",
+    name: "Emily Wright",
+    time: "September 2025",
+    caravan: "Xplorer",
   },
 ];
 
+const CARD_WIDTH_WITH_GAP = 380;
+
 export function ReviewsSection() {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [itemsPerView, setItemsPerView] = useState(1);
+  const [maxIndex, setMaxIndex] = useState(0);
 
   useEffect(() => {
-    const updateItemsPerView = () => {
-      if (window.innerWidth >= 1024) {
-        setItemsPerView(3);
-      } else if (window.innerWidth >= 768) {
-        setItemsPerView(2);
-      } else {
-        setItemsPerView(1);
-      }
+    const updateBounds = () => {
+      if (!scrollRef.current) return;
+      const visibleCards = Math.max(
+        1,
+        Math.floor(scrollRef.current.clientWidth / CARD_WIDTH_WITH_GAP)
+      );
+      const nextMaxIndex = Math.max(0, reviews.length - visibleCards);
+      setMaxIndex(nextMaxIndex);
+      setCurrentIndex((prev) => Math.min(prev, nextMaxIndex));
     };
 
-    updateItemsPerView();
-    window.addEventListener("resize", updateItemsPerView);
-    return () => window.removeEventListener("resize", updateItemsPerView);
+    updateBounds();
+    window.addEventListener("resize", updateBounds);
+    return () => window.removeEventListener("resize", updateBounds);
   }, []);
 
-  const maxIndex = Math.max(0, reviews.length - itemsPerView);
-
-  // Reset currentIndex if it's out of bounds when itemsPerView changes
-  useEffect(() => {
-    if (currentIndex > maxIndex) {
-      setCurrentIndex(0);
-    }
-  }, [maxIndex, currentIndex]);
-
-  useEffect(() => {
-    if (!isAutoPlaying) return;
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isAutoPlaying, maxIndex]);
-
-  const goToPrev = () => {
-    setIsAutoPlaying(false);
-    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
+  const scroll = (dir: "left" | "right") => {
+    if (maxIndex <= 0) return;
+    setCurrentIndex((prev) => {
+      if (dir === "left") return prev <= 0 ? maxIndex : prev - 1;
+      return prev >= maxIndex ? 0 : prev + 1;
+    });
   };
 
-  const goToNext = () => {
-    setIsAutoPlaying(false);
-    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
-  };
-
-  // Calculate average rating
-  const avgRating = (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1);
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollTo({
+      left: currentIndex * CARD_WIDTH_WITH_GAP,
+      behavior: "smooth",
+    });
+  }, [currentIndex]);
 
   return (
-    <section className="py-12 bg-black overflow-hidden">
-      <div className="container-wide">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-accent font-medium text-sm tracking-wide uppercase mb-4 block border-2 border-accent/30 rounded-[24px] px-4 py-2 inline-block bg-accent/10 backdrop-blur-sm">
-            Customer Reviews
-          </span>
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
-            What Our Customers Say
+    <section className="bg-black py-20">
+      <motion.div className="mx-auto max-w-7xl px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: "some" }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
+        >
+          <h2 className="text-3xl font-bold tracking-tight text-white md:text-4xl">
+            Real stories from caravan owners across Australia.
           </h2>
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="h-5 w-5 text-accent fill-accent" />
-              ))}
-            </div>
-            <span className="font-semibold text-white">{avgRating}</span>
-            <span className="text-gray-400">({reviews.length} reviews)</span>
-          </div>
-        </div>
+          <motion.div className="mt-4 flex flex-wrap items-center justify-center gap-5 text-sm text-slate-400">
+            <span className="font-semibold text-white">4.2/5</span>
+            <span className="flex items-center gap-2 font-medium text-slate-200">
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              Trusted by Caravan Buyers Across Australia
+            </span>
+            <span>Based on 5,210 reviews</span>
+          </motion.div>
+        </motion.div>
 
-        {/* Carousel */}
-        <div className="relative -mx-4 md:-mx-6 lg:mx-0">
-          <div className="overflow-hidden w-full">
-            <div
-              className="flex transition-transform duration-500 ease-out md:gap-6 lg:gap-6"
-              style={{ transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)` }}
-            >
-              {reviews.map((review) => (
-                <div
-                  key={review.id}
-                  className="flex-shrink-0 w-full px-4 md:w-[calc((100%-1.5rem)/2)] md:px-0 lg:w-[calc((100%-3rem)/3)]"
-                >
-                  <ReviewCard {...review} />
-                </div>
-              ))}
-            </div>
-          </div>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: "some" }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="mt-14 grid gap-10 lg:grid-cols-[360px_1fr]"
+        >
+          <motion.div className="flex flex-col">
+            <span className="mb-5 w-fit rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium text-slate-200">
+              Testimonial
+            </span>
 
-          {/* Navigation */}
-          <div className="flex items-center justify-center gap-4 mt-8">
-            <button
-              onClick={goToPrev}
-              className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center hover:bg-gray-900 hover:border-accent/50 transition-colors text-white"
-              aria-label="Previous review"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <div className="flex gap-2">
-              {Array.from({ length: maxIndex + 1 }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => {
-                    setIsAutoPlaying(false);
-                    setCurrentIndex(i);
-                  }}
-                  className={cn(
-                    "w-2 h-2 rounded-full transition-all",
-                    i === currentIndex ? "bg-accent w-6" : "bg-gray-700 hover:bg-accent/50"
-                  )}
-                  aria-label={`Go to review ${i + 1}`}
-                />
-              ))}
-            </div>
-            <button
-              onClick={goToNext}
-              className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center hover:bg-gray-900 hover:border-accent/50 transition-colors text-white"
-              aria-label="Next review"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-      </div>
+            <h3 className="text-3xl font-bold leading-tight text-white">
+              Built for the Road,
+              <br />
+              Backed by Adventure
+            </h3>
+
+            <p className="mt-4 text-slate-400">
+              Families, couples, and full-time travellers share their buying and
+              ownership experience so you can choose your next caravan with confidence.
+            </p>
+
+            <motion.div className="mt-8 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => scroll("left")}
+                className="grid h-11 w-11 place-items-center rounded-full border border-white/25 text-slate-200 transition hover:bg-white/10"
+                aria-label="Previous"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scroll("right")}
+                className="grid h-11 w-11 place-items-center rounded-full border border-yellow-400 text-yellow-400 transition hover:bg-white/10"
+                aria-label="Next"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            ref={scrollRef}
+            className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-2 lg:mr-[calc(50%-50vw)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {reviews.map((review) => (
+              <article
+                key={review.id}
+                className="min-w-[360px] max-w-[360px] snap-start"
+              >
+                <motion.div className="rounded-3xl border border-white/10 bg-[#0b0b0b] p-4">
+                  <motion.div className="mb-2.5 flex items-center justify-between">
+                    <motion.div className="flex gap-1">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                        />
+                      ))}
+                    </motion.div>
+                    <Quote className="h-7 w-7 text-yellow-400/55" />
+                  </motion.div>
+
+                  <p className="min-h-[108px] line-clamp-4 text-sm leading-6 text-slate-300">
+                    {review.text}
+                  </p>
+
+                  <motion.div className="my-3 h-px bg-white/10" />
+
+                  <motion.div className="flex items-end justify-between gap-4">
+                    <motion.div>
+                      <p className="text-xl font-semibold leading-tight text-white">
+                        {review.name}
+                      </p>
+                      <p className="mt-1 text-sm text-slate-400">
+                        Purchased: {review.caravan}
+                      </p>
+                    </motion.div>
+                    <p className="pb-1 text-sm text-slate-400">{review.time}</p>
+                  </motion.div>
+                </motion.div>
+              </article>
+            ))}
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

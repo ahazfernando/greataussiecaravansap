@@ -6,6 +6,7 @@ import {
   WhyChooseUs,
   ReviewsSection,
   HomeMetrics,
+  BuiltToLastSection,
 } from "@/components/home";
 import { DealerCTA } from "@/components/home/DealerCTA";
 
@@ -17,6 +18,7 @@ export default function HomePage() {
       {/* <FeaturedCaravans /> */}
       <DealerCTA />
       <WhyChooseUs />
+      <BuiltToLastSection />
       <HomeMetrics />
       <ReviewsSection />
     </Layout>

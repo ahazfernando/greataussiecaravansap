@@ -1,17 +1,43 @@
 "use client";
 
 import { useState } from "react";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { Mail } from "lucide-react";
 
 export function Newsletter() {
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle newsletter subscription here
-    console.log("Subscribing email:", email);
-    setEmail("");
+    const trimmed = email.trim().toLowerCase();
+    if (!trimmed) return;
+
+    setIsSubmitting(true);
+    try {
+      await addDoc(collection(db, "newsletterSubscriptions"), {
+        email: trimmed,
+        subscribedAt: Timestamp.now(),
+      });
+      setEmail("");
+      toast({
+        title: "You're subscribed",
+        description: "Thanks — we'll send updates to your inbox.",
+      });
+    } catch (err) {
+      console.error("Newsletter signup error:", err);
+      toast({
+        title: "Something went wrong",
+        description: "Could not save your email. Please try again shortly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -44,9 +70,10 @@ export function Newsletter() {
                 {/* Subscribe button inside the container */}
                 <Button
                   type="submit"
-                  className="h-[44px] bg-black text-white hover:bg-gray-800 rounded-[24px] px-6 sm:px-8 whitespace-nowrap flex-shrink-0"
+                  disabled={isSubmitting}
+                  className="h-[44px] bg-black text-white hover:bg-gray-800 rounded-[24px] px-6 sm:px-8 whitespace-nowrap flex-shrink-0 disabled:opacity-60"
                 >
-                  Subscribe
+                  {isSubmitting ? "Subscribing…" : "Subscribe"}
                 </Button>
               </div>
             </form>
