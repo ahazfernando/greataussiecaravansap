@@ -9,4 +9,5 @@ export { VideoSection } from "./VideoSection";
 export { MetricsSection } from "./MetricsSection";
 export { HomeMetrics } from "./HomeMetrics";
 export { DealerCTA } from "./DealerCTA";
+export { DealerHeroSection } from "./DealerHeroSection";
 export { BuiltToLastSection } from "./BuiltToLastSection";

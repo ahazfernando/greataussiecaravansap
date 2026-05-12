@@ -2113,6 +2113,16 @@ export default function ModelDetail() {
     { icon: Truck, label: "Suspension", value: caravan.highlights.suspension },
   ];
 
+  const interiorCopy = interiorSectionCopyByModel[caravan.id];
+  const interiorHeading = interiorCopy
+    ? `${interiorCopy.title.toUpperCase()} ${interiorCopy.subtitle.toUpperCase()}`
+    : "REFINED COMFORT ON EVERY JOURNEY";
+  const interiorDescription = interiorCopy
+    ? (caravan.id === "20urer"
+        ? [interiorCopy.paragraphs[0], interiorCopy.paragraphs.slice(1).join(" ")].join(" ")
+        : getBalancedInteriorParagraphs(interiorCopy.paragraphs).join(" "))
+    : `Step inside the ${caravan.name} and discover a world where luxury meets adventure. Choose from expansive club lounges, dinettes, or straight lounges, each finished with premium leather upholstery and thoughtful design. Abundant storage, diesel heating, and oversized ensuites ensure every moment is one of refined comfort.`;
+
   return (
     <div className="min-h-screen bg-black">
       {/* Navigation Bar */}
@@ -2442,53 +2452,13 @@ export default function ModelDetail() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen"
           >
-            <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
-              {/* Image Content — carousel from /public/caravaninterior */}
-              <div className="relative w-full min-w-0 mt-6 md:mt-14 lg:mt-16">
-                <InteriorComfortCarousel modelName={caravan.name} />
-              </div>
-              {/* Text Content */}
-              <div className="space-y-6">
-                <Badge className="bg-accent/20 text-accent border-accent/30 mb-4">
-                  INTERIOR
-                </Badge>
-                {interiorSectionCopyByModel[caravan.id] ? (
-                  <>
-                    <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight uppercase">
-                      {interiorSectionCopyByModel[caravan.id].title.toUpperCase()}
-                      <br />
-                      <span className="text-accent">{interiorSectionCopyByModel[caravan.id].subtitle.toUpperCase()}</span>
-                    </h2>
-                    {(caravan.id === "20urer"
-                      ? [
-                        interiorSectionCopyByModel[caravan.id].paragraphs[0],
-                        interiorSectionCopyByModel[caravan.id].paragraphs.slice(1).join(" "),
-                      ]
-                      : getBalancedInteriorParagraphs(interiorSectionCopyByModel[caravan.id].paragraphs)
-                    ).map((paragraph) => (
-                      <p key={paragraph} className="text-gray-300 text-base md:text-lg leading-relaxed">
-                        {paragraph}
-                      </p>
-                    ))}
-                  </>
-                ) : (
-                  <>
-                    <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                      REFINED COMFORT
-                      <br />
-                      <span className="text-accent">ON EVERY JOURNEY</span>
-                    </h2>
-                    <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-                      Step inside the {caravan.name} and discover a world where luxury meets adventure. Choose from expansive club lounges, dinettes, or straight lounges, each finished with premium leather upholstery and thoughtful design.
-                    </p>
-                    <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-                      The kitchen delivers culinary excellence on the road with Thinscape benchtops, ambient lighting, and premium appliances. Abundant storage, diesel heating, and oversized ensuites ensure every moment is one of refined comfort.
-                    </p>
-                  </>
-                )}
-              </div>
-            </div>
+            <InteriorComfortCarousel
+              modelName={caravan.name}
+              heading={interiorHeading}
+              description={interiorDescription}
+            />
           </motion.div>
         </div>
       </section>

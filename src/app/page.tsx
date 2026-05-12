@@ -7,8 +7,8 @@ import {
   ReviewsSection,
   HomeMetrics,
   BuiltToLastSection,
+  DealerHeroSection,
 } from "@/components/home";
-import { DealerCTA } from "@/components/home/DealerCTA";
 
 export default function HomePage() {
   return (
@@ -18,7 +18,7 @@ export default function HomePage() {
       {/* <FeaturedCaravans /> */}
       <WhyChooseUs />
       <BuiltToLastSection />
-      <DealerCTA />
+      <DealerHeroSection />
       <HomeMetrics />
       <ReviewsSection />
     </Layout>

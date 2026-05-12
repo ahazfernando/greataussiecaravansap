@@ -4,7 +4,7 @@ export function getModelLogo(modelName: string): string {
     "20URER": "/caravanmodels/eourerlogo.png",
     Gravity: "/caravanmodels/gravitylogo.png",
     Xplora: "/caravanmodels/xploralogo.png",
-    Tonka: "/caravanmodels/tonkalogo.png",
+    Tonka: "/caravanmodels/tonkologo.png",
     Paragon: "/caravanlogos/litelogo.png",
   };
 
