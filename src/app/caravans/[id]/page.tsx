@@ -13,6 +13,8 @@ import { Newsletter } from "@/components/home/Newsletter";
 import { Footer } from "@/components/layout/Footer";
 import { InteriorComfortCarousel } from "@/components/caravans/InteriorComfortCarousel";
 import { ConstructionMethodsImageCarousel } from "@/components/caravans/ConstructionMethodsImageCarousel";
+import { ModelShowcaseHero } from "@/components/caravans/ModelShowcaseHero";
+import { modelShowcaseImagesById } from "@/components/caravans/modelShowcaseImages";
 // import { ReviewsSection } from "@/components/home/ReviewsSection";
 import Image from "next/image";
 import caravanInterior from "@/assets/caravan-interior.jpg";
@@ -2904,6 +2906,14 @@ export default function ModelDetail() {
           })()}
         </div>
       </section>
+
+      {modelShowcaseImagesById[id]?.length ? (
+        <ModelShowcaseHero
+          modelName={caravan.name}
+          showcaseImages={modelShowcaseImagesById[id]}
+          description={caravan.shortDescription}
+        />
+      ) : null}
 
       {/* Specifications (Dimensions & Weights / Chassis & Running Gear): removed from all model pages — restore via git history if needed */}
 
