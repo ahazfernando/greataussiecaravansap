@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { getModelLogo } from "@/components/navigation/getModelLogo";
+import { cn } from "@/lib/utils";
 
 type ModelShowcaseHeroProps = {
   modelName: string;
@@ -35,18 +36,6 @@ export function ModelShowcaseHero({
 
   const showcaseBackgroundSrc =
     showcaseImages[showcaseImageIndex % slideCount] ?? showcaseImages[0];
-
-  const getShowcaseImageAtOffset = (offset: number) =>
-    showcaseImages[(showcaseImageIndex + offset) % slideCount] ?? showcaseImages[0];
-
-  const showcaseCards = useMemo(
-    () => [
-      { title: "Interior comfort", image: getShowcaseImageAtOffset(0) },
-      { title: "Built for touring", image: getShowcaseImageAtOffset(1) },
-      { title: "Explore the range", image: getShowcaseImageAtOffset(2) },
-    ],
-    [showcaseImageIndex, showcaseImages]
-  );
 
   return (
     <section className="bg-black">
@@ -95,49 +84,57 @@ export function ModelShowcaseHero({
                 </div>
               </div>
 
-              <div className="grid w-full min-w-0 grid-cols-3 gap-4 justify-self-stretch self-end sm:gap-5 md:max-w-[40rem] md:justify-self-end md:gap-6 lg:max-w-[46rem] lg:gap-8">
-                {showcaseCards.map((card) => (
-                  <div key={card.title} className="group min-w-0">
-                    <div className="relative aspect-[1.25/1] overflow-hidden rounded-[20px] bg-zinc-950 sm:rounded-[24px]">
-                      <Image
-                        src={card.image}
-                        alt={card.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <motion.div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      <div className="absolute inset-x-0 bottom-0 p-3">
-                        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-white/85 md:text-[0.72rem]">
-                          {card.title}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-7 flex justify-center md:mt-10">
               <div
-                className="flex items-center gap-2 md:gap-2.5"
-                role="tablist"
-                aria-label={`${modelName} showcase images`}
+                className={cn(
+                  "grid w-full min-w-0 gap-3 self-end justify-self-stretch sm:gap-3.5 md:max-w-[min(100%,28rem)] md:justify-self-end md:gap-4 lg:max-w-[min(100%,32rem)] lg:gap-4",
+                  slideCount === 1 ? "grid-cols-1 max-w-[15rem]" : "grid-cols-2 sm:grid-cols-3"
+                )}
+                role="group"
+                aria-label={`${modelName} studio images — select a tile to change the hero image`}
               >
-                {showcaseImages.map((_, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    role="tab"
-                    aria-selected={idx === showcaseImageIndex}
-                    aria-label={`Show showcase image ${idx + 1}`}
-                    onClick={() => setShowcaseImageIndex(idx)}
-                    className={`h-2.5 w-2.5 rounded-full border transition-all duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
-                      idx === showcaseImageIndex
-                        ? "scale-125 border-accent bg-accent shadow-[0_0_10px_rgba(242,169,0,0.65)]"
-                        : "border-white/75 bg-transparent hover:border-accent/80 hover:bg-accent/20"
-                    }`}
-                  />
-                ))}
+                {showcaseImages.map((src, idx) => {
+                  const selected = idx === showcaseImageIndex;
+                  return (
+                    <button
+                      key={`${idx}-${src}`}
+                      type="button"
+                      onClick={() => setShowcaseImageIndex(idx)}
+                      aria-current={selected ? "true" : undefined}
+                      aria-label={`Show studio image ${idx + 1} of ${slideCount}`}
+                      className={cn(
+                        "group min-w-0 rounded-2xl text-left outline-none transition-[transform,box-shadow] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:rounded-3xl",
+                        selected && "z-[1] scale-[1.02]"
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          "relative aspect-[5/4] w-full overflow-hidden rounded-2xl bg-zinc-950 ring-2 ring-offset-2 ring-offset-black transition-[ring-color,box-shadow] duration-300 sm:rounded-3xl",
+                          selected
+                            ? "ring-accent shadow-[0_0_22px_rgba(249,115,22,0.4)]"
+                            : "ring-white/15 group-hover:ring-white/45"
+                        )}
+                      >
+                        <Image
+                          src={src}
+                          alt={`${modelName} studio view ${idx + 1}`}
+                          fill
+                          sizes="(max-width: 640px) 45vw, (max-width: 1024px) 28vw, 200px"
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <div
+                          className={cn(
+                            "pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/75 to-transparent transition-opacity",
+                            selected ? "opacity-100" : "opacity-70 group-hover:opacity-90"
+                          )}
+                        />
+                        <span className="pointer-events-none absolute bottom-2 left-2 font-display text-[0.65rem] font-bold tabular-nums text-white/95 md:bottom-2.5 md:left-2.5 md:text-xs">
+                          {idx + 1}
+                          <span className="font-normal text-white/55">/{slideCount}</span>
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>

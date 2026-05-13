@@ -45,10 +45,8 @@ export const modelShowcaseImagesById: Record<string, string[]> = {
   gravity: [
     "/GravityStudioImages/GravityModelD1V1C1.jpeg",
     "/GravityStudioImages/GravityModelD1V2C1.jpeg",
-    "/GravityStudioImages/GravityModelD1V2C2.jpeg",
     "/GravityStudioImages/GravityModelD1V3C1.jpeg",
     "/GravityStudioImages/GravityModelD1V4C1.jpeg",
-    "/GravityStudioImages/I_want_you_to_place_202605061836.jpeg",
   ],
   xplora: [
     "/XploraStudioImages/XPloraModelD1V1C1.jpeg",

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { Layout } from "@/components/layout";
@@ -10,20 +9,15 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import {
   Shield,
-  CheckCircle2,
   FileText,
   Clock,
   Phone,
   Mail,
-  Sparkles,
-  Award,
-  Wrench,
   HelpCircle,
   ChevronDown,
   ChevronUp,
   Users,
   Heart,
-  Zap,
   XCircle,
   ListChecks,
   Store,
@@ -33,7 +27,6 @@ import {
   ReceiptText,
   Factory,
   Bell,
-  ArrowRight,
 } from "lucide-react";
 
 export default function WarrantyPage() {
@@ -54,39 +47,12 @@ export default function WarrantyPage() {
   );
   const claimIntroY = useSpring(claimIntroYRaw, { stiffness: 90, damping: 32, mass: 0.35 });
 
-  const warrantyCoverage = [
-    {
-      icon: Shield,
-      title: "Structural Warranty",
-      duration: "10 Years",
-      description:
-        "Comprehensive coverage for frame, chassis, and structural components. Protection against manufacturing defects and material failures.",
-      features: ["Aluminium frame", "Chassis integrity", "Structural welds", "Load-bearing components"],
-    },
-    {
-      icon: Wrench,
-      title: "Manufacturing Warranty",
-      duration: "5 Years",
-      description:
-        "Full coverage for workmanship and manufacturing defects. Ensures your caravan meets our exacting quality standards.",
-      features: ["Panel integrity", "Seal quality", "Assembly workmanship", "Component installation"],
-    },
-    {
-      icon: Zap,
-      title: "Electrical & Plumbing",
-      duration: "2 Years",
-      description:
-        "Complete protection for all electrical systems, plumbing, and appliances installed in your caravan.",
-      features: ["12V & 240V systems", "Water systems", "Appliances", "Wiring & connections"],
-    },
-    {
-      icon: Award,
-      title: "Extended Protection",
-      duration: "Available",
-      description:
-        "Optional extended warranty plans available for additional peace of mind beyond standard coverage periods.",
-      features: ["Extended terms", "Priority service", "Additional coverage", "Transferable options"],
-    },
+  const structuralWarrantyExamples = [
+    "Chassis fatigue or failure",
+    "Drawbar fatigue or failure",
+    "Wall separation or collapse",
+    "Roof structural collapse",
+    "Major structural integrity issues",
   ];
 
   const warrantySteps: {
@@ -147,11 +113,13 @@ export default function WarrantyPage() {
   const faqItems = [
     {
       question: "What does the warranty cover?",
-      answer: "Our warranty covers manufacturing defects, structural issues, and workmanship problems. This includes frame integrity, panel quality, electrical systems, plumbing, and installed appliances. Normal wear and tear, damage from misuse, or modifications not approved by Great Aussie Caravans are not covered.",
+      answer:
+        "Eligible caravans receive a 2-year general manufacturing warranty (materials and workmanship for construction and assembly by Great Aussie Caravans) and a 5-year structural warranty for major structural defects. Appliances and components not manufactured by Great Aussie Caravans are excluded — use the relevant manufacturer warranties. Normal wear and tear, misuse, or unapproved modifications are not covered.",
     },
     {
       question: "How long is the warranty valid?",
-      answer: "Warranty periods vary by component: 10 years for structural elements, 5 years for manufacturing defects, and 2 years for electrical and plumbing systems. Extended warranty options are also available for additional coverage.",
+      answer:
+        "Eligible caravans receive a 2-year general manufacturing warranty and a 5-year structural warranty. Both periods commence from the original date of purchase on your customer invoice. Refer to your owner's handbook for the full detailed policy.",
     },
     {
       question: "Is the warranty transferable?",
@@ -209,38 +177,6 @@ export default function WarrantyPage() {
     "Extended plans may offer transfer options; standard coverage is primarily for the original owner — contact us for details.",
   ];
 
-  const warrantyHeroMiniCards: {
-    period: string;
-    title: string;
-    hint: string;
-    icon: typeof Shield;
-  }[] = [
-    {
-      period: "10 years",
-      title: "Structural",
-      hint: "Frame, chassis & structural welds.",
-      icon: Shield,
-    },
-    {
-      period: "5 years",
-      title: "Manufacturing",
-      hint: "Workmanship & factory assembly.",
-      icon: Wrench,
-    },
-    {
-      period: "2 years",
-      title: "Electrical & plumbing",
-      hint: "12V, 240V, water & appliances.",
-      icon: Zap,
-    },
-    {
-      period: "Optional",
-      title: "Extended plans",
-      hint: "Extra cover & transfer options.",
-      icon: Award,
-    },
-  ];
-
   return (
     <Layout>
       <section
@@ -290,102 +226,86 @@ export default function WarrantyPage() {
           </nav>
 
           <div className="space-y-10 lg:space-y-14">
-            {/* Top row: headline (wide) + subcopy & pill CTA — matches mockup lg:grid-cols-[2fr_1fr] */}
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start lg:gap-x-12 xl:gap-x-16">
-              <h1 className="font-display text-[clamp(2rem,5vw,4.25rem)] font-black uppercase leading-[0.92] tracking-[-0.02em] text-white">
-                <span className="block">Your investment,</span>
-                <span className="block text-accent">Fully protected</span>
+            {/* Former hero: headline, summary cards, and caravan image — replaced with text-only policy above. */}
+
+            <div
+              id="coverage"
+              ref={coverageRef}
+              className="scroll-mt-28 max-w-4xl space-y-8 text-gray-300 md:space-y-10"
+            >
+              <h1 className="font-display text-[clamp(2.5rem,7vw,5rem)] font-bold leading-[1.02] tracking-[-0.02em] text-white">
+                Warranty Policy
               </h1>
-              <div className="flex max-w-md flex-col gap-6 lg:ml-auto lg:items-end lg:text-right">
-                <p className="text-sm leading-relaxed text-gray-300 md:text-base">
-                  Multi-tier coverage for structural integrity, manufacturing quality, and on-board
-                  systems — backed by Australian build standards and a team behind every caravan we
-                  deliver.
+
+              <div className="space-y-4 text-base leading-relaxed md:text-lg">
+                <h2 className="font-display text-xl font-semibold text-white md:text-2xl">
+                  Warranty Coverage
+                </h2>
+                <p>
+                  Great Aussie Caravans Pty Ltd provides the following warranty coverage for all eligible
+                  caravans:
                 </p>
-                <Button
-                  variant="accent"
-                  size="lg"
-                  className="h-12 shrink-0 rounded-full px-8 text-xs font-bold uppercase tracking-wider text-black shadow-[0_0_28px_rgba(249,115,22,0.45)] hover:shadow-[0_0_36px_rgba(249,115,22,0.55)]"
-                  asChild
-                >
-                  <Link href="#coverage" className="inline-flex items-center gap-2">
-                    View coverage
-                    <ArrowRight className="h-4 w-4 text-black" strokeWidth={2} aria-hidden />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-
-            {/* Bottom: row1 = 2×2 cards | yellow panel (tops aligned); row2 = CTA under cards only */}
-            <div className="mx-auto grid w-full max-w-lg gap-8 overflow-visible lg:mx-0 lg:max-w-none lg:-mt-6 lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:items-start lg:gap-x-12 lg:gap-y-5 xl:-mt-8 xl:gap-x-14">
-              <div className="grid grid-cols-2 gap-3 self-start sm:gap-4 lg:col-start-1 lg:row-start-1">
-                {warrantyHeroMiniCards.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <div
-                      key={item.title}
-                      className="relative z-10 min-h-[132px] overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900/95 p-4 shadow-[0_12px_40px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.04] sm:min-h-[148px] sm:p-5"
-                    >
-                      <div className="relative z-[1] max-w-[85%]">
-                        <p className="font-display text-xl font-bold leading-none text-accent sm:text-2xl">
-                          {item.period}
-                        </p>
-                        <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-white sm:text-sm">
-                          {item.title}
-                        </p>
-                        <p className="mt-1.5 text-[11px] leading-snug text-gray-400 sm:text-xs">
-                          {item.hint}
-                        </p>
-                      </div>
-                      <Icon
-                        className="pointer-events-none absolute -bottom-2 -right-2 h-[6.5rem] w-[6.5rem] text-accent/[0.12] sm:h-28 sm:w-28"
-                        strokeWidth={1.1}
-                        aria-hidden
-                      />
-                    </div>
-                  );
-                })}
+                <ul className="list-disc space-y-2 pl-5 marker:text-accent">
+                  <li>2-Year General Manufacturing Warranty</li>
+                  <li>5-Year Structural Warranty</li>
+                </ul>
+                <p>
+                  The warranty periods commence from the original date of purchase stated on the customer
+                  invoice.
+                </p>
               </div>
 
-              <div
-                className="relative z-[1] min-h-[min(52vw,320px)] min-w-0 rounded-[2rem] lg:col-start-2 lg:row-start-1 [clip-path:inset(-200px_0_-32px_-8rem_round_2rem)]"
-                style={{ WebkitClipPath: "inset(-200px 0 -32px -8rem round 2rem)" }}
-              >
-                {/* Brand yellow panel — solid accent (no gradient) */}
-                <div
-                  className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-[2rem] ring-1 ring-black/10"
-                  aria-hidden
-                >
-                  <div className="absolute inset-0 rounded-[2rem] bg-accent">
-                    <div className="absolute left-5 top-7 h-24 w-24 rounded-full border-2 border-black/[0.08]" />
-                    <div className="absolute bottom-8 right-6 h-36 w-36 rounded-full border border-black/[0.06]" />
-                    <div className="absolute left-[22%] top-[32%] h-16 w-16 rounded-full border border-black/[0.05]" />
-                  </div>
-                </div>
-                {/* Caravan bleeds left past the orange frame; clip-path on parent clips the right after scale/translate */}
-                <div className="pointer-events-none absolute bottom-0 left-[-1.25rem] right-0 top-0 z-[2] sm:left-[-1.75rem] lg:left-[-3rem] xl:left-[-3.75rem]">
-                  <div className="relative h-full w-full origin-bottom translate-x-[9%] scale-[1.09] sm:translate-x-[11%] sm:scale-[1.1] lg:translate-x-[12%] lg:scale-[1.11]">
-                    <Image
-                      src="/modelexterior/TonkaModelD1V5C1%201.png"
-                      alt="Great Aussie Caravans Tonka caravan"
-                      fill
-                      priority
-                      className="object-contain object-bottom object-[90%_100%]"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
-                  </div>
-                </div>
+              <div className="space-y-4 text-base leading-relaxed md:text-lg">
+                <h2 className="font-display text-xl font-semibold text-white md:text-2xl">
+                  2-Year General Manufacturing Warranty
+                </h2>
+                <p>
+                  The 2-year general warranty covers defects relating to the manufacture and installation
+                  of the caravan completed by Great Aussie Caravans Pty Ltd, including defects in
+                  materials and workmanship.
+                </p>
+                <p>
+                  This warranty applies only to the caravan construction and assembly carried out by Great
+                  Aussie Caravans.
+                </p>
               </div>
 
-              <div className="lg:col-start-1 lg:row-start-2">
-                <Button
-                  variant="accent"
-                  className="h-12 w-full rounded-xl text-sm font-bold uppercase tracking-wide text-black shadow-[0_8px_28px_rgba(249,115,22,0.35)]"
-                  asChild
-                >
-                  <Link href="#coverage">View coverage</Link>
-                </Button>
+              <div className="space-y-4 text-base leading-relaxed md:text-lg">
+                <h2 className="font-display text-xl font-semibold text-white md:text-2xl">
+                  5-Year Structural Warranty
+                </h2>
+                <p>
+                  The 5-year structural warranty covers major structural defects, including but not limited
+                  to:
+                </p>
+                <ul className="list-disc space-y-2 pl-5 marker:text-accent">
+                  {structuralWarrantyExamples.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
               </div>
+
+              <div className="space-y-4 text-base leading-relaxed md:text-lg">
+                <h2 className="font-display text-xl font-semibold text-white md:text-2xl">
+                  Appliance and Third-Party Component Warranty
+                </h2>
+                <p>
+                  Appliances and components not manufactured by Great Aussie Caravans Pty Ltd are excluded
+                  from this warranty. Customers should contact the relevant manufacturer directly, as these
+                  items may be covered under separate manufacturer warranties. Any warranty documentation
+                  supplied to Great Aussie Caravans will be provided to the customer at the time of
+                  delivery.
+                </p>
+                <p>
+                  If assistance is required in lodging a claim with a component or appliance manufacturer,
+                  our Customer Care Team will be happy to assist.
+                </p>
+              </div>
+
+              <p className="pt-4 text-balance text-center font-display text-xl font-bold leading-snug text-accent md:text-2xl lg:text-[1.75rem] lg:leading-tight">
+                <span className="italic">Detailed warranty policy</span> could be found in the{" "}
+                <span className="italic">owner&apos;s handbook</span>.
+              </p>
             </div>
 
             <div
@@ -452,84 +372,6 @@ export default function WarrantyPage() {
                   <h3 className="font-semibold text-white">{benefit.title}</h3>
                   <p className="mt-1 text-sm leading-snug text-gray-400">{benefit.description}</p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Warranty Coverage Section */}
-      <section
-        id="coverage"
-        className="scroll-mt-28 section-padding relative overflow-hidden bg-black"
-        ref={coverageRef}
-      >
-        <div className="pointer-events-none absolute inset-0 opacity-[0.06]">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
-              backgroundSize: "48px 48px",
-            }}
-          />
-        </div>
-
-        <div className="container-wide relative z-10">
-          <div className="mb-14 text-center md:mb-16">
-            <div className="mx-auto max-w-3xl">
-              <Badge className="mb-5 border-accent/30 bg-accent/10 text-accent">
-                <Sparkles className="mr-2 h-4 w-4" aria-hidden />
-                Coverage details
-              </Badge>
-            </div>
-            <h2 className="mx-auto max-w-5xl px-2 text-balance font-display text-4xl font-bold leading-[1.05] text-white sm:max-w-6xl sm:px-4 md:text-5xl lg:max-w-7xl lg:text-6xl">
-              <span className="block">
-                What&apos;s Covered <span className="font-semibold text-white/90">in the</span>
-              </span>
-              <span className="mt-2 block">
-                <span className="italic text-accent">Adventure</span>{" "}
-                <span className="text-white">Partner</span>{" "}
-                <span className="italic text-white/90">you</span>{" "}
-                <span className="text-accent">Choose</span>
-              </span>
-            </h2>
-            <p className="mx-auto mt-5 max-w-3xl text-lg leading-relaxed text-gray-300">
-              Each tier targets a different part of your caravan. Read the summary below, then speak
-              with your dealer or our team if you need clarification before travel.
-            </p>
-          </div>
-
-          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-5">
-            {warrantyCoverage.map((coverage) => (
-              <div
-                key={coverage.title}
-                className="group flex h-full min-w-0 flex-col rounded-2xl border border-white/10 bg-gradient-to-b from-zinc-900/95 to-black p-5 transition-colors hover:border-accent/40 md:p-6"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-accent/35 bg-accent/10">
-                    <coverage.icon className="h-6 w-6 text-accent" aria-hidden />
-                  </div>
-                  <Badge className="shrink-0 border-accent/30 bg-accent/15 text-[10px] text-accent sm:text-xs">
-                    {coverage.duration}
-                  </Badge>
-                </div>
-                <h3 className="mt-4 font-display text-lg font-bold leading-snug text-white md:text-xl">
-                  {coverage.title}
-                </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-400">
-                  {coverage.description}
-                </p>
-                <ul className="mt-4 space-y-1.5 border-t border-white/10 pt-4">
-                  {coverage.features.map((feature) => (
-                    <li
-                      key={feature}
-                      className="flex gap-2 text-xs leading-snug text-gray-300 md:text-sm"
-                    >
-                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent md:h-4 md:w-4" aria-hidden />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
             ))}
           </div>
