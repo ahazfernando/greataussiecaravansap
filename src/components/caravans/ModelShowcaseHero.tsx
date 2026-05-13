@@ -95,10 +95,10 @@ export function ModelShowcaseHero({
                 </div>
               </div>
 
-              <div className="grid w-full max-w-[32rem] grid-cols-3 gap-3 justify-self-end self-end md:gap-4">
+              <div className="grid w-full min-w-0 grid-cols-3 gap-4 justify-self-stretch self-end sm:gap-5 md:max-w-[40rem] md:justify-self-end md:gap-6 lg:max-w-[46rem] lg:gap-8">
                 {showcaseCards.map((card) => (
-                  <div key={card.title} className="group">
-                    <div className="relative aspect-[1.25/1] overflow-hidden rounded-[24px] bg-zinc-950">
+                  <div key={card.title} className="group min-w-0">
+                    <div className="relative aspect-[1.25/1] overflow-hidden rounded-[20px] bg-zinc-950 sm:rounded-[24px]">
                       <Image
                         src={card.image}
                         alt={card.title}

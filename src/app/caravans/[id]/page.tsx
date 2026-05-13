@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { Sun, Battery, Droplets, Zap, Truck, Check, ArrowLeft, Shield, Clock, Weight, Wind, Home, Building2, Sofa, ChevronRight, ChefHat, Settings, type LucideIcon } from "lucide-react";
@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/layout/Navbar";
 import { Newsletter } from "@/components/home/Newsletter";
 import { Footer } from "@/components/layout/Footer";
-import { InteriorComfortCarousel } from "@/components/caravans/InteriorComfortCarousel";
+// import { InteriorComfortCarousel } from "@/components/caravans/InteriorComfortCarousel";
 import { ExteriorShowcaseSection } from "@/components/caravans/ExteriorShowcaseSection";
 import { ProductDiscoveryHero } from "@/components/caravans/ProductDiscoveryHero";
 import {
@@ -20,7 +20,7 @@ import {
 } from "@/components/caravans/modelProductDiscovery";
 import { ConstructionMethodsImageCarousel } from "@/components/caravans/ConstructionMethodsImageCarousel";
 import { ModelShowcaseHero } from "@/components/caravans/ModelShowcaseHero";
-import { modelShowcaseImagesById } from "@/components/caravans/modelShowcaseImages";
+import { getModelShowcaseImages } from "@/components/caravans/modelShowcaseImages";
 // import { ReviewsSection } from "@/components/home/ReviewsSection";
 import Image from "next/image";
 import caravanInterior from "@/assets/caravan-interior.jpg";
@@ -157,6 +157,7 @@ const getPerformanceSecondMetric = (modelId: string, sleeps: number): Performanc
   return { kind: "sleeps", sleeps };
 };
 
+/* Interior comfort carousel (per-model copy) — disabled sitewide; restore when section returns.
 type InteriorSectionCopy = {
   title: string;
   subtitle: string;
@@ -321,6 +322,7 @@ const interiorSectionCopyByModel: Record<string, InteriorSectionCopy> = {
     ],
   },
 };
+*/
 
 const exteriorSectionParagraphsByModel: Record<string, string[]> = {
   "outback-explorer-21": [
@@ -671,8 +673,8 @@ const XPLORE_NEW_GALLERY = [
 ] as const;
 
 const OURER_GALLERY = [
-  "/2ourerModel/2ourerImageV01.png",
-  "/2ourerModel/2ourerImageV02.png",
+  "/2ourerStudioImages/2ourerD1C1V1.jpeg",
+  "/2ourerStudioImages/I_want_you_to_place_202605062159.jpeg",
 ] as const;
 
 const GRAVITY_NEW_GALLERY = [
@@ -680,9 +682,6 @@ const GRAVITY_NEW_GALLERY = [
   "/Gravity/GravityImageV02.png",
   "/Gravity/GravityImageV03.png",
 ] as const;
-
-/** Model detail pages that show the hero thumbnail strip + synced main image */
-const HERO_SIDE_PANEL_MODEL_IDS = new Set(["tonka", "xplora", "20urer", "gravity"]);
 
 // Mock data - in production this would come from a database
 const caravanData: Record<string, Caravan> = {
@@ -2106,21 +2105,8 @@ const caravanData: Record<string, Caravan> = {
 export default function ModelDetail() {
   const params = useParams();
   const id = (params.id as string)?.toLowerCase();
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [heroGalleryIndex, setHeroGalleryIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<"chassis" | "build" | "construction">("chassis");
   const [activeFeatureTab, setActiveFeatureTab] = useState<"electrical" | "chassis" | "appliances" | "internal" | "external" | "plumbing">("electrical");
-
-  useEffect(() => {
-    setHeroGalleryIndex(0);
-  }, [id]);
-
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-
-  const watermarkY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
   const caravan = caravanData[id];
 
@@ -2137,20 +2123,7 @@ export default function ModelDetail() {
     );
   }
 
-  const modelCode = caravan.sizes[0]?.replace(/['"]/g, "").substring(0, 4) || caravan.name.substring(0, 4).toUpperCase();
-  const baseHeroSrc = typeof caravan.heroImage === "string" ? caravan.heroImage : (caravan.heroImage as any).src || caravan.heroImage;
-  const heroSidePanelGallery = HERO_SIDE_PANEL_MODEL_IDS.has(id)
-    ? (caravan.gallery as string[]).filter((s): s is string => typeof s === "string")
-    : null;
-  const showHeroSidePanel = Boolean(heroSidePanelGallery && heroSidePanelGallery.length > 1);
-  const heroImageSrc =
-    heroSidePanelGallery?.length ? heroSidePanelGallery[heroGalleryIndex] ?? baseHeroSrc : baseHeroSrc;
-
-  /** Tonka cutouts read smaller in the fixed hero frame — give them a bit more viewport height */
-  const heroImageViewportClass =
-    id === "tonka"
-      ? "h-[54vh] sm:h-[66vh] md:h-[80vh]"
-      : "h-[50vh] sm:h-[60vh] md:h-[75vh]";
+  const showcaseHeroImages = getModelShowcaseImages(id, caravan);
 
   const specItems = [
     { icon: Sun, label: "Solar", value: caravan.highlights.solar },
@@ -2160,12 +2133,14 @@ export default function ModelDetail() {
     { icon: Truck, label: "Suspension", value: caravan.highlights.suspension },
   ];
 
+  /* Interior comfort carousel props (restored with InteriorComfortCarousel section)
   const interiorCopy = interiorSectionCopyByModel[caravan.id];
   const interiorHeading = "Interior";
   const fallbackInteriorDescription = [
     `Step inside the ${caravan.name} and discover a world where luxury meets adventure. Choose from expansive club lounges, dinettes, or straight lounges, each finished with premium leather upholstery and thoughtful design.`,
     "Abundant storage, diesel heating, and oversized ensuites ensure every moment is one of refined comfort.",
   ];
+  */
 
   const exteriorHeading = exteriorSectionHeadingByModel[caravan.id] ?? {
     title: "LUXURY MEETS",
@@ -2184,141 +2159,17 @@ export default function ModelDetail() {
       {/* Navigation Bar */}
       <Navbar />
 
-      {/* Hero Section with Split Background */}
-      <section ref={heroRef} className="relative min-h-screen overflow-hidden pt-[73px]">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(180deg, #1f2937 0%, #111827 30%, #080b12 58%, #030303 78%, #000000 100%)",
-          }}
-        />
+      {/* Legacy hero removed: gradient backdrop, watermark, large product render + optional vertical thumbnail rail, and overlaid breadcrumbs / category / logo / tagline. Restored from git history if needed. */}
 
-        {/* Watermark */}
-        <motion.div
-          style={{ y: watermarkY }}
-          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
-        >
-          <span className="font-display text-[20vw] md:text-[25vw] font-bold text-white opacity-[0.06] tracking-tighter whitespace-nowrap">
-            {caravan.name}
-          </span>
-        </motion.div>
-
-
-        {/* Product Image — padding clears absolute breadcrumb / logo / tagline */}
-        <div className="relative z-10 pt-44 md:pt-48">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className={`relative mx-auto px-4 ${showHeroSidePanel ? "max-w-7xl" : "max-w-6xl"}`}
-          >
-            <div
-              className={`relative ${showHeroSidePanel ? "flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-4 xl:gap-5" : ""}`}
-            >
-              <div className={`relative ${showHeroSidePanel ? "flex-1 min-w-0" : ""}`}>
-                {/* Fixed viewport height so swapping gallery images does not resize the page */}
-                <div className={`relative z-10 flex w-full items-center justify-center ${heroImageViewportClass}`}>
-                  <img
-                    src={heroImageSrc}
-                    alt={caravan.name}
-                    className="h-full w-full object-contain object-center drop-shadow-2xl"
-                    style={{ filter: "drop-shadow(0 40px 60px rgba(0,0,0,0.3))" }}
-                  />
-                </div>
-                <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-gradient-to-b from-black/30 via-black/20 to-transparent blur-xl" />
-              </div>
-              {showHeroSidePanel && heroSidePanelGallery && (
-                <div
-                  className="flex w-full min-w-0 flex-row justify-start gap-1.5 overflow-x-auto overscroll-x-contain pb-1 pl-0 pr-0 [-webkit-overflow-scrolling:touch] [scrollbar-gutter:stable] sm:gap-2 lg:w-20 lg:shrink-0 lg:flex-col lg:justify-center lg:overflow-visible lg:overflow-y-visible lg:pb-0 xl:w-[5.25rem]"
-                  role="tablist"
-                  aria-label={`${caravan.name} photo gallery`}
-                >
-                  {heroSidePanelGallery.map((thumbSrc, idx) => (
-                    <button
-                      key={thumbSrc}
-                      type="button"
-                      role="tab"
-                      aria-selected={heroGalleryIndex === idx}
-                      aria-label={`View image ${idx + 1} of ${heroSidePanelGallery.length}`}
-                      onClick={() => setHeroGalleryIndex(idx)}
-                      className={`relative h-[60px] w-[60px] sm:h-[68px] sm:w-[68px] lg:h-[3.25rem] lg:w-full lg:aspect-square shrink-0 rounded-md overflow-hidden border-2 transition-all bg-zinc-900/80 ${
-                        heroGalleryIndex === idx
-                          ? "border-accent ring-1 ring-accent/40"
-                          : "border-white/20 hover:border-white/40 opacity-90 hover:opacity-100"
-                      }`}
-                    >
-                      <img
-                        src={thumbSrc}
-                        alt=""
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </motion.div>
+      {showcaseHeroImages.length > 0 ? (
+        <div className="pt-[73px]">
+          <ModelShowcaseHero
+            modelName={caravan.name}
+            showcaseImages={showcaseHeroImages}
+            description={caravan.shortDescription}
+          />
         </div>
-
-
-        {/* Breadcrumb and Model Name Section */}
-        <div className="absolute top-[90px] md:top-[100px] left-0 right-0 z-20 mt-2 md:mt-5">
-          <div className="container-wide">
-            <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 lg:col-span-6 xl:col-span-5">
-                {/* Breadcrumb */}
-                <nav className="flex items-center gap-2 text-gray-400 mb-4" aria-label="Breadcrumb">
-                  <Link
-                    href="/"
-                    className="inline-flex items-center hover:text-white transition-colors"
-                  >
-                    <Home className="w-4 h-4" />
-                  </Link>
-                  <span className="text-gray-500">/</span>
-                  <Link
-                    href={`/caravans?category=${caravan.category === "off-road" ? "off-road" : caravan.type || "touring"}`}
-                    className="hover:text-white transition-colors"
-                  >
-                    {getCategoryName(caravan.category, caravan.type, caravan.id)}
-                  </Link>
-                  <span className="text-gray-500">/</span>
-                  <span className="text-white">{caravan.name}</span>
-                </nav>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                  className="flex flex-col"
-                >
-                  <span className="text-accent text-sm font-display uppercase tracking-wider leading-none mb-3 md:mb-0 md:-mt-1">
-                    {caravan.id === "xplora"
-                      ? "OFF-ROAD"
-                      : caravan.id === "gravity"
-                        ? "SEMI OFF-GRID"
-                        : caravan.category === "off-road"
-                          ? "OFF-GRID"
-                          : caravan.category === "family"
-                            ? "FAMILY"
-                            : "On-Road"}
-                  </span>
-                  <div className="relative w-full max-w-xs h-16 md:h-20 lg:h-24 mt-0 md:-mt-1 mb-3 md:mb-0">
-                    <Image
-                      src={getModelLogo(caravan.name)}
-                      alt={`${caravan.name} Logo`}
-                      fill
-                      className="object-contain object-left"
-                      priority
-                    />
-                  </div>
-                  <p className="text-xl text-gray-300 mt-0 md:-mt-1 leading-tight">{caravan.tagline}</p>
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </section>
+      ) : null}
 
       {productDiscoveryImage ? (
         <ProductDiscoveryHero
@@ -2356,6 +2207,7 @@ export default function ModelDetail() {
         paragraphs={exteriorParagraphs}
       />
 
+      {/* Interior comfort carousel — disabled for all models; uncomment import + data block + props above to restore.
       <section className="bg-black">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -2373,14 +2225,7 @@ export default function ModelDetail() {
           />
         </motion.div>
       </section>
-
-      {modelShowcaseImagesById[id]?.length ? (
-        <ModelShowcaseHero
-          modelName={caravan.name}
-          showcaseImages={modelShowcaseImagesById[id]}
-          description={caravan.shortDescription}
-        />
-      ) : null}
+      */}
 
       {/* Technical Details Tabbed Section */}
       <section className="bg-black py-10 md:py-14">
