@@ -1,32 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { COUNTRY_CODES } from "@/data/countryCodes";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { MultiImageUpload } from "@/components/ui/multi-image-upload";
 import {
   Shield,
   CheckCircle2,
@@ -34,207 +15,132 @@ import {
   Clock,
   Phone,
   Mail,
-  ArrowRight,
   Sparkles,
   Award,
   Wrench,
-  AlertCircle,
   HelpCircle,
   ChevronDown,
   ChevronUp,
-  FileCheck,
   Users,
   Heart,
-  Star,
-  Calendar,
-  MapPin,
   Zap,
-  Check,
-  ChevronsUpDown,
+  XCircle,
+  ListChecks,
+  Store,
+  Send,
+  ClipboardList,
+  Waypoints,
+  ReceiptText,
+  Factory,
+  Bell,
+  ArrowRight,
 } from "lucide-react";
 
-const states = [
-  { value: "NSW", label: "New South Wales" },
-  { value: "VIC", label: "Victoria" },
-  { value: "QLD", label: "Queensland" },
-  { value: "WA", label: "Western Australia" },
-  { value: "SA", label: "South Australia" },
-  { value: "TAS", label: "Tasmania" },
-  { value: "NT", label: "Northern Territory" },
-  { value: "ACT", label: "Australian Capital Territory" },
-];
-
 export default function WarrantyPage() {
-  const [scrollY, setScrollY] = useState(0);
-  const [isMounted, setIsMounted] = useState(false);
-  const [particles, setParticles] = useState<Array<{ left: number; top: number; delay: number; duration: number }>>([]);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
+  const coverageRef = useRef<HTMLDivElement>(null);
+  const claimProcessSectionRef = useRef<HTMLElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
-  // Form State
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [stateOpen, setStateOpen] = useState(false);
-  const [countryCodeOpen, setCountryCodeOpen] = useState(false);
-  const [countryCode, setCountryCode] = useState("+61");
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    state: "",
-    postalCode: "",
-    dealerName: "",
-    chassisNumber: "",
-    reason: "",
-    images: [] as string[],
+  const { scrollYProgress: claimScrollProgress } = useScroll({
+    target: claimProcessSectionRef,
+    offset: ["start start", "end end"],
   });
 
-  useEffect(() => {
-    setIsMounted(true);
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
-
-    // Generate particles only on client side
-    const generatedParticles = Array.from({ length: 20 }, () => ({
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      delay: Math.random() * 3,
-      duration: 3 + Math.random() * 2,
-    }));
-    setParticles(generatedParticles);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handlePhoneChange = (value: string) => {
-    setFormData(prev => ({ ...prev, phone: value }));
-  };
-
-  const handleStateSelect = (currentValue: string) => {
-    setFormData(prev => ({ ...prev, state: currentValue }));
-    setStateOpen(false);
-  };
-
-  const handleCountryCodeSelect = (code: string) => {
-    setCountryCode(code);
-    setCountryCodeOpen(false);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      await addDoc(collection(db, 'warranty-claims'), {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: `${countryCode} ${formData.phone}`,
-        state: formData.state,
-        postalCode: formData.postalCode,
-        dealerName: formData.dealerName,
-        chassisNumber: formData.chassisNumber,
-        reason: formData.reason,
-        images: formData.images,
-        status: 'new',
-        createdAt: Timestamp.now(),
-      });
-
-      setIsSubmitted(true);
-      toast({
-        title: "Claim Submitted Successfully",
-        description: "We've received your warranty claim and will be in touch shortly.",
-      });
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        state: "",
-        postalCode: "",
-        dealerName: "",
-        chassisNumber: "",
-        reason: "",
-        images: [],
-      });
-    } catch (error) {
-      console.error("Error submitting claim:", error);
-      toast({
-        title: "Submission Failed",
-        description: "There was an error submitting your claim. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const claimIntroYRaw = useTransform(
+    claimScrollProgress,
+    [0, 1],
+    prefersReducedMotion === true ? [0, 0] : [0, 56]
+  );
+  const claimIntroY = useSpring(claimIntroYRaw, { stiffness: 90, damping: 32, mass: 0.35 });
 
   const warrantyCoverage = [
     {
       icon: Shield,
       title: "Structural Warranty",
       duration: "10 Years",
-      description: "Comprehensive coverage for frame, chassis, and structural components. Protection against manufacturing defects and material failures.",
+      description:
+        "Comprehensive coverage for frame, chassis, and structural components. Protection against manufacturing defects and material failures.",
       features: ["Aluminium frame", "Chassis integrity", "Structural welds", "Load-bearing components"],
-      color: "from-blue-500/20 to-blue-600/10",
     },
     {
       icon: Wrench,
       title: "Manufacturing Warranty",
       duration: "5 Years",
-      description: "Full coverage for workmanship and manufacturing defects. Ensures your caravan meets our exacting quality standards.",
+      description:
+        "Full coverage for workmanship and manufacturing defects. Ensures your caravan meets our exacting quality standards.",
       features: ["Panel integrity", "Seal quality", "Assembly workmanship", "Component installation"],
-      color: "from-accent/20 to-accent/10",
     },
     {
       icon: Zap,
       title: "Electrical & Plumbing",
       duration: "2 Years",
-      description: "Complete protection for all electrical systems, plumbing, and appliances installed in your caravan.",
+      description:
+        "Complete protection for all electrical systems, plumbing, and appliances installed in your caravan.",
       features: ["12V & 240V systems", "Water systems", "Appliances", "Wiring & connections"],
-      color: "from-purple-500/20 to-purple-600/10",
     },
     {
       icon: Award,
       title: "Extended Protection",
       duration: "Available",
-      description: "Optional extended warranty plans available for additional peace of mind beyond standard coverage periods.",
+      description:
+        "Optional extended warranty plans available for additional peace of mind beyond standard coverage periods.",
       features: ["Extended terms", "Priority service", "Additional coverage", "Transferable options"],
-      color: "from-green-500/20 to-green-600/10",
     },
   ];
 
-  const warrantySteps = [
+  const warrantySteps: {
+    step: number;
+    icon: typeof Store;
+    title: string;
+    description: string;
+  }[] = [
     {
       step: 1,
-      icon: FileText,
-      title: "Contact Us",
-      description: "Reach out to our warranty team via phone, email, or through your dealer. Have your caravan details and warranty documentation ready.",
+      icon: Store,
+      title: "Contact your dealer",
+      description: "Lodge your warranty claim with the dealership where you purchased your caravan.",
     },
     {
       step: 2,
-      icon: FileCheck,
-      title: "Assessment",
-      description: "Our team will review your claim and may request photos or arrange an inspection to assess the issue.",
+      icon: Send,
+      title: "Dealer submits the claim",
+      description:
+        "Your dealer contacts Great Aussie Caravans Pty Ltd and submits the warranty claim on your behalf.",
     },
     {
       step: 3,
-      icon: Wrench,
-      title: "Approval & Repair",
-      description: "Once approved, we'll coordinate with authorized service centers to complete repairs using genuine parts.",
+      icon: ClipboardList,
+      title: "Warranty assessment",
+      description:
+        "We assess your claim within approximately 7 business days of receiving all required information.",
     },
     {
       step: 4,
-      icon: CheckCircle2,
-      title: "Completion",
-      description: "Your caravan is repaired and inspected. We ensure everything meets our quality standards before returning it to you.",
+      icon: Waypoints,
+      title: "Repair assessment & approval",
+      description:
+        "Once approved, we decide whether your caravan returns to our factory or is repaired by an authorised third-party repairer closer to you.",
+    },
+    {
+      step: 5,
+      icon: ReceiptText,
+      title: "Third-party repair process",
+      description:
+        "Submit a repair quote to us first — we generally review and approve it within about 7 business days.",
+    },
+    {
+      step: 6,
+      icon: Factory,
+      title: "Factory repair process",
+      description:
+        "At the factory we reassess your caravan; allow roughly 3–5 working days before repairs begin, then we complete the work.",
+    },
+    {
+      step: 7,
+      icon: Bell,
+      title: "Completion notification",
+      description: "We let you know when all warranty repairs are finished.",
     },
   ];
 
@@ -253,7 +159,8 @@ export default function WarrantyPage() {
     },
     {
       question: "What should I do if I need to make a warranty claim?",
-      answer: "Contact our warranty department immediately with your caravan details, warranty documentation, and a description of the issue. We'll guide you through the process and arrange for assessment and repair if covered under warranty.",
+      answer:
+        "Contact our warranty department or your dealer as soon as you notice an issue. Have your caravan details, warranty documentation, and a description of the problem ready. We will guide you through assessment and repair if the issue is covered under warranty.",
     },
     {
       question: "Are repairs done at my location?",
@@ -288,363 +195,263 @@ export default function WarrantyPage() {
     },
   ];
 
+  const notCoveredItems = [
+    "Normal wear and tear from regular use",
+    "Damage caused by misuse, accidents, or overloading",
+    "Modifications or repairs not approved by Great Aussie Caravans",
+    "Cosmetic wear that does not affect function or safety",
+    "Damage from environmental events (hail, flood, fire) unless specified in your policy",
+  ];
+
+  const eligibilityHighlights = [
+    "Warranty applies from the date of purchase through an authorised Great Aussie dealer.",
+    "Keep your handover documentation and service records — they may be requested during a claim.",
+    "Extended plans may offer transfer options; standard coverage is primarily for the original owner — contact us for details.",
+  ];
+
+  const warrantyHeroMiniCards: {
+    period: string;
+    title: string;
+    hint: string;
+    icon: typeof Shield;
+  }[] = [
+    {
+      period: "10 years",
+      title: "Structural",
+      hint: "Frame, chassis & structural welds.",
+      icon: Shield,
+    },
+    {
+      period: "5 years",
+      title: "Manufacturing",
+      hint: "Workmanship & factory assembly.",
+      icon: Wrench,
+    },
+    {
+      period: "2 years",
+      title: "Electrical & plumbing",
+      hint: "12V, 240V, water & appliances.",
+      icon: Zap,
+    },
+    {
+      period: "Optional",
+      title: "Extended plans",
+      hint: "Extra cover & transfer options.",
+      icon: Award,
+    },
+  ];
+
   return (
     <Layout>
-      {/* Modern Hero Section - Split Layout */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-black pt-20">
-        {/* Background with Geometric Pattern */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-black to-gray-950" />
-          <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+      <section
+        id="top"
+        className="relative overflow-x-visible overflow-y-hidden bg-black pt-24 pb-12 md:pb-16 lg:pb-20"
+      >
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-black to-black" />
+          <div className="absolute right-0 top-0 h-[min(420px,70vw)] w-[min(420px,70vw)] rounded-full bg-accent/[0.07] blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-[280px] w-[280px] rounded-full bg-accent/[0.05] blur-3xl" />
         </div>
 
-        <div className="container-wide relative z-10 py-12 md:py-20">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Left Side - Content */}
-            <div className="order-2 lg:order-1">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/30 mb-8">
-                <Shield className="h-4 w-4 text-accent" />
-                <span className="text-accent text-sm font-semibold">Warranty Protection</span>
-              </div>
+        <div className="container-wide relative z-10 overflow-x-visible">
+          <nav
+            className="mb-8 flex flex-wrap gap-2 text-sm md:mb-10"
+            aria-label="Warranty page sections"
+          >
+            {(
+              [
+                { href: "#coverage", label: "Coverage details" },
+                { href: "#claim-process", label: "Claim process" },
+                { href: "#eligibility", label: "Eligibility" },
+                { href: "#not-covered", label: "What is not covered" },
+                { href: "#faq", label: "FAQ" },
+                { href: "/contact", label: "Contact us", highlight: true },
+              ] as { href: string; label: string; highlight?: boolean }[]
+            ).map((item) => {
+              const className = cn(
+                "rounded-full border px-4 py-2 transition-colors",
+                item.highlight
+                  ? "border-accent/50 bg-accent/10 text-accent hover:bg-accent/20"
+                  : "border-white/10 bg-white/[0.04] text-gray-300 hover:border-accent/35 hover:text-white"
+              );
+              if (item.href.startsWith("#")) {
+                return (
+                  <a key={item.href} href={item.href} className={className}>
+                    {item.label}
+                  </a>
+                );
+              }
+              return (
+                <Link key={item.href} href={item.href} className={className}>
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
 
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-                Your Investment,{" "}
-                <span className="text-accent block mt-2">Fully Protected</span>
+          <div className="space-y-10 lg:space-y-14">
+            {/* Top row: headline (wide) + subcopy & pill CTA — matches mockup lg:grid-cols-[2fr_1fr] */}
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start lg:gap-x-12 xl:gap-x-16">
+              <h1 className="font-display text-[clamp(2rem,5vw,4.25rem)] font-black uppercase leading-[0.92] tracking-[-0.02em] text-white">
+                <span className="block">Your investment,</span>
+                <span className="block text-accent">Fully protected</span>
               </h1>
-
-              <p className="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed">
-                Comprehensive warranty coverage that gives you confidence in every adventure.
-                Built with Australian quality, backed by our commitment to your peace of mind.
-              </p>
-
-              {/* Key Points */}
-              <div className="space-y-4 mb-10">
-                {[
-                  { icon: CheckCircle2, text: "10-Year Structural Warranty" },
-                  { icon: CheckCircle2, text: "5-Year Manufacturing Coverage" },
-                  { icon: CheckCircle2, text: "2-Year Electrical & Plumbing" },
-                ].map((point, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-accent/20 border border-accent/30 flex items-center justify-center flex-shrink-0">
-                      <point.icon className="h-4 w-4 text-accent" />
-                    </div>
-                    <span className="text-gray-300">{point.text}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="p-8 bg-gray-900/50 border border-gray-800 rounded-3xl mb-8">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
-                    <Phone className="h-6 w-6 text-accent" />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-bold">Priority Support</h3>
-                    <p className="text-gray-400 text-sm">Need immediate assistance?</p>
-                  </div>
-                </div>
-                <p className="text-gray-300 mb-6">Our dedicated warranty team is standing by to help you with any concerns or claims.</p>
-                <Button variant="outline" className="w-full border-gray-800 text-white hover:bg-gray-800" asChild>
-                  <Link href="tel:+61393088511">Call (03) 9308 8511</Link>
+              <div className="flex max-w-md flex-col gap-6 lg:ml-auto lg:items-end lg:text-right">
+                <p className="text-sm leading-relaxed text-gray-300 md:text-base">
+                  Multi-tier coverage for structural integrity, manufacturing quality, and on-board
+                  systems — backed by Australian build standards and a team behind every caravan we
+                  deliver.
+                </p>
+                <Button
+                  variant="accent"
+                  size="lg"
+                  className="h-12 shrink-0 rounded-full px-8 text-xs font-bold uppercase tracking-wider text-black shadow-[0_0_28px_rgba(249,115,22,0.45)] hover:shadow-[0_0_36px_rgba(249,115,22,0.55)]"
+                  asChild
+                >
+                  <Link href="#coverage" className="inline-flex items-center gap-2">
+                    View coverage
+                    <ArrowRight className="h-4 w-4 text-black" strokeWidth={2} aria-hidden />
+                  </Link>
                 </Button>
               </div>
             </div>
 
-            {/* Right Side - Warranty Claim Form */}
-            <div className="order-1 lg:order-2">
-              <div className="relative">
-                <div className="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-8 md:p-10 shadow-2xl relative z-10">
-                  {isSubmitted ? (
-                    <div className="text-center py-12">
-                      <div className="w-20 h-20 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center mx-auto mb-6">
-                        <CheckCircle2 className="h-10 w-10 text-green-500" />
+            {/* Bottom: row1 = 2×2 cards | yellow panel (tops aligned); row2 = CTA under cards only */}
+            <div className="mx-auto grid w-full max-w-lg gap-8 overflow-visible lg:mx-0 lg:max-w-none lg:-mt-6 lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:items-start lg:gap-x-12 lg:gap-y-5 xl:-mt-8 xl:gap-x-14">
+              <div className="grid grid-cols-2 gap-3 self-start sm:gap-4 lg:col-start-1 lg:row-start-1">
+                {warrantyHeroMiniCards.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={item.title}
+                      className="relative z-10 min-h-[132px] overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900/95 p-4 shadow-[0_12px_40px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.04] sm:min-h-[148px] sm:p-5"
+                    >
+                      <div className="relative z-[1] max-w-[85%]">
+                        <p className="font-display text-xl font-bold leading-none text-accent sm:text-2xl">
+                          {item.period}
+                        </p>
+                        <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-white sm:text-sm">
+                          {item.title}
+                        </p>
+                        <p className="mt-1.5 text-[11px] leading-snug text-gray-400 sm:text-xs">
+                          {item.hint}
+                        </p>
                       </div>
-                      <h2 className="text-3xl font-display font-bold text-white mb-4">Claim Received!</h2>
-                      <p className="text-gray-400 mb-8 leading-relaxed text-lg">
-                        Thank you for reaching out. Your warranty claim has been submitted successfully.
-                        Our team will review the details and contact you via email or phone within 1-2 business days.
-                      </p>
-                      <Button variant="accent" className="w-full" onClick={() => setIsSubmitted(false)}>
-                        Submit Another Claim
-                      </Button>
+                      <Icon
+                        className="pointer-events-none absolute -bottom-2 -right-2 h-[6.5rem] w-[6.5rem] text-accent/[0.12] sm:h-28 sm:w-28"
+                        strokeWidth={1.1}
+                        aria-hidden
+                      />
                     </div>
-                  ) : (
-                    <>
-                      <div className="mb-8">
-                        <h2 className="text-3xl font-display font-bold text-white mb-2">Warranty Claim Form</h2>
-                        <p className="text-gray-400 text-lg">Please fill in the details below to submit your claim.</p>
-                      </div>
+                  );
+                })}
+              </div>
 
-                      <form onSubmit={handleSubmit} className="space-y-5">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="firstName" className="text-gray-300 ml-1">First Name *</Label>
-                            <Input
-                              id="firstName"
-                              name="firstName"
-                              value={formData.firstName}
-                              onChange={handleInputChange}
-                              required
-                              placeholder="John"
-                              className="bg-black/40 border-gray-800 h-12 focus:border-accent/50 text-white"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="lastName" className="text-gray-300 ml-1">Last Name *</Label>
-                            <Input
-                              id="lastName"
-                              name="lastName"
-                              value={formData.lastName}
-                              onChange={handleInputChange}
-                              required
-                              placeholder="Doe"
-                              className="bg-black/40 border-gray-800 h-12 focus:border-accent/50 text-white"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="email" className="text-gray-300 ml-1">Email Address *</Label>
-                          <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            required
-                            placeholder="john.doe@example.com"
-                            className="bg-black/40 border-gray-800 h-12 focus:border-accent/50 text-white"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="phone" className="text-gray-300 ml-1">Phone Number *</Label>
-                          <div className="flex gap-2">
-                            <Popover open={countryCodeOpen} onOpenChange={setCountryCodeOpen}>
-                              <PopoverTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  role="combobox"
-                                  aria-expanded={countryCodeOpen}
-                                  className="w-[110px] justify-between px-3 h-12 rounded-xl border-gray-800 bg-black/40 text-white hover:bg-black/60 hover:text-white"
-                                >
-                                  <span className="flex items-center gap-2 truncate">
-                                    <span className="text-lg">
-                                      {COUNTRY_CODES.find((c) => c.code === countryCode)?.flag}
-                                    </span>
-                                    <span className="text-gray-300">{countryCode}</span>
-                                  </span>
-                                  <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-50" />
-                                </Button>
-                              </PopoverTrigger>
-                              <PopoverContent className="w-[300px] p-0 bg-gray-900 border-gray-800" align="start">
-                                <Command className="bg-transparent">
-                                  <CommandInput placeholder="Search country..." className="h-9 text-white" />
-                                  <CommandList className="bg-gray-900 border-t border-gray-800">
-                                    <CommandEmpty className="text-gray-400 py-2 px-4 text-sm">No country found.</CommandEmpty>
-                                    <CommandGroup>
-                                      {COUNTRY_CODES.map((country) => (
-                                        <CommandItem
-                                          key={country.name}
-                                          value={country.name}
-                                          onSelect={() => handleCountryCodeSelect(country.code)}
-                                          className="text-white hover:bg-accent/20 cursor-pointer flex items-center"
-                                        >
-                                          <Check
-                                            className={cn(
-                                              "mr-2 h-4 w-4",
-                                              countryCode === country.code
-                                                ? "opacity-100"
-                                                : "opacity-0"
-                                            )}
-                                          />
-                                          <span className="mr-2 text-lg">{country.flag}</span>
-                                          <span className="flex-1 truncate">{country.name}</span>
-                                          <span className="text-gray-400 ml-2">{country.code}</span>
-                                        </CommandItem>
-                                      ))}
-                                    </CommandGroup>
-                                  </CommandList>
-                                </Command>
-                              </PopoverContent>
-                            </Popover>
-
-                            <Input
-                              id="phone"
-                              name="phone"
-                              type="tel"
-                              placeholder="0400 000 000"
-                              value={formData.phone}
-                              onChange={handleInputChange}
-                              required
-                              className="flex-1 bg-black/40 border-gray-800 h-12 focus:border-accent/50 text-white"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="state" className="text-gray-300 ml-1">State *</Label>
-                            <Popover open={stateOpen} onOpenChange={setStateOpen}>
-                              <PopoverTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  role="combobox"
-                                  aria-expanded={stateOpen}
-                                  className="w-full justify-between bg-black/40 border-gray-800 h-12 hover:bg-black/60 text-white text-left font-normal"
-                                >
-                                  {formData.state
-                                    ? states.find((s) => s.value === formData.state)?.label
-                                    : "Select state..."}
-                                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                </Button>
-                              </PopoverTrigger>
-                              <PopoverContent className="w-full p-0 bg-gray-900 border-gray-800">
-                                <Command className="bg-transparent">
-                                  <CommandInput placeholder="Search state..." className="h-9 text-white" />
-                                  <CommandList className="bg-gray-900">
-                                    <CommandEmpty className="text-gray-400 py-2 px-4 text-sm">No state found.</CommandEmpty>
-                                    <CommandGroup>
-                                      {states.map((s) => (
-                                        <CommandItem
-                                          key={s.value}
-                                          value={s.value}
-                                          onSelect={handleStateSelect}
-                                          className="text-white hover:bg-accent/20 cursor-pointer"
-                                        >
-                                          <Check
-                                            className={cn(
-                                              "mr-2 h-4 w-4",
-                                              formData.state === s.value ? "opacity-100" : "opacity-0"
-                                            )}
-                                          />
-                                          {s.label}
-                                        </CommandItem>
-                                      ))}
-                                    </CommandGroup>
-                                  </CommandList>
-                                </Command>
-                              </PopoverContent>
-                            </Popover>
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="postalCode" className="text-gray-300 ml-1">Postal Code *</Label>
-                            <Input
-                              id="postalCode"
-                              name="postalCode"
-                              value={formData.postalCode}
-                              onChange={handleInputChange}
-                              required
-                              placeholder="3000"
-                              className="bg-black/40 border-gray-800 h-12 focus:border-accent/50 text-white"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="dealerName" className="text-gray-300 ml-1">Dealer Name *</Label>
-                            <Input
-                              id="dealerName"
-                              name="dealerName"
-                              value={formData.dealerName}
-                              onChange={handleInputChange}
-                              required
-                              placeholder="Authorized Dealer"
-                              className="bg-black/40 border-gray-800 h-12 focus:border-accent/50 text-white"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="chassisNumber" className="text-gray-300 ml-1">Chassis Number *</Label>
-                            <Input
-                              id="chassisNumber"
-                              name="chassisNumber"
-                              value={formData.chassisNumber}
-                              onChange={handleInputChange}
-                              required
-                              placeholder="GAC12345678"
-                              className="bg-black/40 border-gray-800 h-12 focus:border-accent/50 text-white font-mono"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="reason" className="text-gray-300 ml-1">Reason for Warranty Claim *</Label>
-                          <Textarea
-                            id="reason"
-                            name="reason"
-                            value={formData.reason}
-                            onChange={handleInputChange}
-                            required
-                            placeholder="Please describe the issue in detail..."
-                            className="bg-black/40 border-gray-800 min-h-[120px] focus:border-accent/50 text-white resize-none"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <MultiImageUpload
-                            value={formData.images}
-                            onChange={(urls) => setFormData(prev => ({ ...prev, images: urls }))}
-                            label="Supporting Images (Optional)"
-                            maxFiles={5}
-                          />
-                        </div>
-
-                        <Button
-                          type="submit"
-                          variant="accent"
-                          className="w-full h-14 text-lg font-bold shadow-xl shadow-accent/10 mt-4 group"
-                          disabled={isSubmitting}
-                        >
-                          {isSubmitting ? (
-                            <span className="flex items-center gap-2">
-                              <span className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                              Submitting...
-                            </span>
-                          ) : (
-                            <span className="flex items-center gap-2">
-                              Submit Warranty Claim
-                              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                            </span>
-                          )}
-                        </Button>
-                      </form>
-
-                      <p className="text-center text-gray-500 text-xs mt-6">
-                        By submitting this form, you agree to our <Link href="#" className="underline">Warranty Terms & Conditions</Link>.
-                      </p>
-                    </>
-                  )}
+              <div
+                className="relative z-[1] min-h-[min(52vw,320px)] min-w-0 rounded-[2rem] lg:col-start-2 lg:row-start-1 [clip-path:inset(-200px_0_-32px_-8rem_round_2rem)]"
+                style={{ WebkitClipPath: "inset(-200px 0 -32px -8rem round 2rem)" }}
+              >
+                {/* Brand yellow panel — solid accent (no gradient) */}
+                <div
+                  className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-[2rem] ring-1 ring-black/10"
+                  aria-hidden
+                >
+                  <div className="absolute inset-0 rounded-[2rem] bg-accent">
+                    <div className="absolute left-5 top-7 h-24 w-24 rounded-full border-2 border-black/[0.08]" />
+                    <div className="absolute bottom-8 right-6 h-36 w-36 rounded-full border border-black/[0.06]" />
+                    <div className="absolute left-[22%] top-[32%] h-16 w-16 rounded-full border border-black/[0.05]" />
+                  </div>
                 </div>
+                {/* Caravan bleeds left past the orange frame; clip-path on parent clips the right after scale/translate */}
+                <div className="pointer-events-none absolute bottom-0 left-[-1.25rem] right-0 top-0 z-[2] sm:left-[-1.75rem] lg:left-[-3rem] xl:left-[-3.75rem]">
+                  <div className="relative h-full w-full origin-bottom translate-x-[9%] scale-[1.09] sm:translate-x-[11%] sm:scale-[1.1] lg:translate-x-[12%] lg:scale-[1.11]">
+                    <Image
+                      src="/modelexterior/TonkaModelD1V5C1%201.png"
+                      alt="Great Aussie Caravans Tonka caravan"
+                      fill
+                      priority
+                      className="object-contain object-bottom object-[90%_100%]"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  </div>
+                </div>
+              </div>
 
-                {/* Decorative Background Elements */}
-                <div className="absolute -top-10 -right-10 w-40 h-40 bg-accent/20 rounded-full blur-[80px] -z-10" />
-                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-accent/10 rounded-full blur-[80px] -z-10" />
+              <div className="lg:col-start-1 lg:row-start-2">
+                <Button
+                  variant="accent"
+                  className="h-12 w-full rounded-xl text-sm font-bold uppercase tracking-wide text-black shadow-[0_8px_28px_rgba(249,115,22,0.35)]"
+                  asChild
+                >
+                  <Link href="#coverage">View coverage</Link>
+                </Button>
+              </div>
+            </div>
+
+            <div
+              id="eligibility"
+              className="scroll-mt-28 space-y-8 border-t border-white/10 pt-10 lg:pt-12"
+            >
+              <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-6 md:p-8">
+                <div className="mb-4 flex items-center gap-2 text-accent">
+                  <ListChecks className="h-5 w-5 shrink-0" aria-hidden />
+                  <span className="text-sm font-semibold uppercase tracking-wider">
+                    Eligibility &amp; records
+                  </span>
+                </div>
+                <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-gray-300 marker:text-accent md:text-base">
+                  {eligibilityHighlights.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                <Button
+                  variant="outline"
+                  className="h-12 border-gray-700 bg-zinc-900/60 text-white hover:bg-zinc-800"
+                  asChild
+                >
+                  <Link href="tel:+61393088511" className="inline-flex items-center gap-2">
+                    <Phone className="h-4 w-4 text-accent" aria-hidden />
+                    Call (03) 9308 8511
+                  </Link>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-12 border-gray-700 bg-zinc-900/60 text-white hover:bg-zinc-800"
+                  asChild
+                >
+                  <Link
+                    href="mailto:info@greataussiecaravans.com.au"
+                    className="inline-flex items-center gap-2"
+                  >
+                    <Mail className="h-4 w-4 text-accent" aria-hidden />
+                    Email the team
+                  </Link>
+                </Button>
+                <Button variant="ghost" className="h-12 text-gray-400 hover:text-white" asChild>
+                  <Link href="/contact">Visit contact page</Link>
+                </Button>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Warranty Benefits */}
-      <section className="py-16 bg-black border-y border-gray-800">
+      {/* At-a-glance benefits */}
+      <section className="border-y border-white/10 bg-zinc-950/80 py-10 md:py-12">
         <div className="container-wide">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {benefits.map((benefit, index) => (
-              <div
-                key={benefit.title}
-                className="text-center opacity-0 animate-fade-up"
-                style={{
-                  animationDelay: `${index * 0.1}s`,
-                  animationFillMode: "forwards",
-                }}
-              >
-                <div className="w-16 h-16 rounded-2xl bg-accent/10 border border-accent/30 flex items-center justify-center mx-auto mb-4">
-                  <benefit.icon className="h-8 w-8 text-accent" />
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+            {benefits.map((benefit) => (
+              <div key={benefit.title} className="flex gap-4 lg:block lg:text-center">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-accent/30 bg-accent/10 lg:mx-auto lg:mb-4">
+                  <benefit.icon className="h-7 w-7 text-accent" aria-hidden />
                 </div>
-                <h3 className="font-semibold text-white mb-2">{benefit.title}</h3>
-                <p className="text-sm text-gray-400">{benefit.description}</p>
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-white">{benefit.title}</h3>
+                  <p className="mt-1 text-sm leading-snug text-gray-400">{benefit.description}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -652,60 +459,77 @@ export default function WarrantyPage() {
       </section>
 
       {/* Warranty Coverage Section */}
-      <section id="coverage" className="section-padding bg-black relative overflow-hidden" ref={sectionRef}>
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "50px 50px" }} />
+      <section
+        id="coverage"
+        className="scroll-mt-28 section-padding relative overflow-hidden bg-black"
+        ref={coverageRef}
+      >
+        <div className="pointer-events-none absolute inset-0 opacity-[0.06]">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
+            }}
+          />
         </div>
 
         <div className="container-wide relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <Badge className="mb-6 bg-accent/10 text-accent border-accent/30">
-              <Sparkles className="h-4 w-4 mr-2" />
-              Coverage Details
-            </Badge>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              What's{" "}
-              <span className="text-accent">Covered</span>
+          <div className="mb-14 text-center md:mb-16">
+            <div className="mx-auto max-w-3xl">
+              <Badge className="mb-5 border-accent/30 bg-accent/10 text-accent">
+                <Sparkles className="mr-2 h-4 w-4" aria-hidden />
+                Coverage details
+              </Badge>
+            </div>
+            <h2 className="mx-auto max-w-5xl px-2 text-balance font-display text-4xl font-bold leading-[1.05] text-white sm:max-w-6xl sm:px-4 md:text-5xl lg:max-w-7xl lg:text-6xl">
+              <span className="block">
+                What&apos;s Covered <span className="font-semibold text-white/90">in the</span>
+              </span>
+              <span className="mt-2 block">
+                <span className="italic text-accent">Adventure</span>{" "}
+                <span className="text-white">Partner</span>{" "}
+                <span className="italic text-white/90">you</span>{" "}
+                <span className="text-accent">Choose</span>
+              </span>
             </h2>
-            <p className="text-lg text-gray-300">
-              Our comprehensive warranty program provides multi-tier protection for your Great Aussie Caravan,
-              ensuring peace of mind for years to come.
+            <p className="mx-auto mt-5 max-w-3xl text-lg leading-relaxed text-gray-300">
+              Each tier targets a different part of your caravan. Read the summary below, then speak
+              with your dealer or our team if you need clarification before travel.
             </p>
           </div>
 
-          {/* Warranty Cards Grid */}
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-            {warrantyCoverage.map((coverage, index) => (
+          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-5">
+            {warrantyCoverage.map((coverage) => (
               <div
                 key={coverage.title}
-                className="group relative bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-gray-800 rounded-3xl p-8 hover:border-accent/50 transition-all duration-300 hover:-translate-y-2 overflow-hidden"
+                className="group flex h-full min-w-0 flex-col rounded-2xl border border-white/10 bg-gradient-to-b from-zinc-900/95 to-black p-5 transition-colors hover:border-accent/40 md:p-6"
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${coverage.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="w-16 h-16 rounded-2xl bg-accent/10 border border-accent/30 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                      <coverage.icon className="h-8 w-8 text-accent" />
-                    </div>
-                    <Badge className="bg-accent/20 text-accent border-accent/30">
-                      {coverage.duration}
-                    </Badge>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-accent/35 bg-accent/10">
+                    <coverage.icon className="h-6 w-6 text-accent" aria-hidden />
                   </div>
-                  <h3 className="font-display text-2xl font-bold text-white mb-3">
-                    {coverage.title}
-                  </h3>
-                  <p className="text-gray-300 mb-6 leading-relaxed">
-                    {coverage.description}
-                  </p>
-                  <div className="space-y-2">
-                    {coverage.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-accent flex-shrink-0" />
-                        <span className="text-sm text-gray-300">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <Badge className="shrink-0 border-accent/30 bg-accent/15 text-[10px] text-accent sm:text-xs">
+                    {coverage.duration}
+                  </Badge>
                 </div>
+                <h3 className="mt-4 font-display text-lg font-bold leading-snug text-white md:text-xl">
+                  {coverage.title}
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-400">
+                  {coverage.description}
+                </p>
+                <ul className="mt-4 space-y-1.5 border-t border-white/10 pt-4">
+                  {coverage.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex gap-2 text-xs leading-snug text-gray-300 md:text-sm"
+                    >
+                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent md:h-4 md:w-4" aria-hidden />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
@@ -713,57 +537,128 @@ export default function WarrantyPage() {
       </section>
 
       {/* How to Claim Warranty */}
-      <section className="section-padding bg-gradient-to-b from-black via-gray-950 to-black relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-accent/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+      <section
+        ref={claimProcessSectionRef}
+        id="claim-process"
+        className="scroll-mt-28 section-padding relative bg-gradient-to-b from-black via-zinc-950 to-black"
+      >
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute left-10 top-24 h-72 w-72 animate-pulse rounded-full bg-accent/10 blur-3xl" />
+          <div className="absolute bottom-24 right-10 h-96 w-96 animate-pulse rounded-full bg-accent/[0.06] blur-3xl [animation-delay:1s]" />
         </div>
 
         <div className="container-wide relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <Badge className="mb-6 bg-accent/10 text-accent border-accent/30">
-              <FileText className="h-4 w-4 mr-2" />
-              Simple Process
-            </Badge>
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6">
-              How to{" "}
-              <span className="text-accent">Claim Warranty</span>
-            </h2>
-            <p className="text-lg text-gray-300">
-              Making a warranty claim is straightforward. Follow these simple steps to get your caravan
-              back to perfect condition.
-            </p>
-          </div>
+          <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:items-stretch lg:gap-14 xl:max-w-7xl xl:gap-16">
+            {/* Left: sticky for full height of timeline column */}
+            <motion.aside
+              style={{ y: claimIntroY }}
+              className="relative z-[1] flex min-h-0 flex-col gap-6 will-change-transform lg:sticky lg:top-28 lg:max-w-xl"
+            >
+              <div className="pointer-events-none absolute -right-8 bottom-0 h-48 w-48 rounded-full bg-accent/[0.08] blur-3xl lg:h-56 lg:w-56" />
+              <Badge className="relative w-fit shrink-0 border-accent/30 bg-accent/10 px-3 py-1.5 text-accent">
+                <FileText className="mr-2 h-4 w-4" aria-hidden />
+                Simple process
+              </Badge>
+              <h2 className="relative font-display text-4xl font-bold leading-tight text-white md:text-5xl">
+                How to claim
+                <br />
+                <span className="text-accent">Your Warranty</span>
+              </h2>
+              <p className="relative text-base leading-relaxed text-gray-300 md:text-lg">
+                Seven steps from your dealer to completion. Scroll the timeline on the right; this
+                summary stays with you on larger screens.
+              </p>
+              <Button
+                variant="outline"
+                className="relative w-fit shrink-0 border-white/15 bg-white/[0.04] px-5 text-white hover:bg-white/10"
+                asChild
+              >
+                <Link href="/contact">Contact us about a claim</Link>
+              </Button>
+            </motion.aside>
 
-          <div className="relative">
-            <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-accent via-accent/50 to-accent transform translate-x-8" />
-
-            <div className="space-y-12 lg:space-y-16">
-              {warrantySteps.map((step, index) => (
-                <div key={step.step} className="relative flex gap-8 lg:gap-12 items-start">
-                  <div className="relative z-10 flex-shrink-0">
-                    <div className="w-16 h-16 rounded-2xl border-2 bg-gray-900 border-accent flex items-center justify-center">
-                      <step.icon className="h-8 w-8 text-accent" />
+            {/* Right: vertical timeline + step cards */}
+            <div className="relative min-w-0">
+              <div
+                className="pointer-events-none absolute left-[19px] top-8 bottom-8 hidden w-[3px] rounded-full bg-gradient-to-b from-accent via-orange-500 to-accent/25 md:block lg:left-[21px]"
+                aria-hidden
+              />
+              <ol className="relative space-y-8 md:space-y-10">
+                {warrantySteps.map((step) => (
+                  <li key={step.step} className="relative">
+                    <div className="grid gap-4 md:grid-cols-[44px_minmax(0,1fr)] md:gap-6">
+                      <div className="hidden justify-center pt-1 md:flex">
+                        <span className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-accent bg-zinc-950 text-xs font-bold text-white shadow-md shadow-black/40">
+                          {step.step}
+                        </span>
+                      </div>
+                      <article
+                        role="group"
+                        aria-label={`Step ${step.step}: ${step.title}`}
+                        className="relative min-w-0 overflow-hidden rounded-[1.75rem] border border-white/10 bg-zinc-900/70 p-6 shadow-lg shadow-black/20 md:rounded-[2rem] md:p-7"
+                      >
+                        <div className="relative z-10 flex flex-col">
+                          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-accent md:hidden">
+                            Step {String(step.step).padStart(2, "0")}
+                          </p>
+                          <div className="mb-4 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-accent/35 bg-accent/10">
+                            <step.icon className="h-5 w-5 text-accent" aria-hidden />
+                          </div>
+                          <h3 className="font-display text-lg font-bold text-white md:text-xl">
+                            {step.title}
+                          </h3>
+                          <p className="mt-2 text-sm leading-relaxed text-gray-400 md:text-[0.9375rem]">
+                            {step.description}
+                          </p>
+                        </div>
+                        <span
+                          className="pointer-events-none absolute -bottom-3 -right-1 select-none font-display text-[5.5rem] font-bold leading-[0.7] text-accent/[0.14] sm:text-[6.25rem] md:-bottom-4 md:-right-2 md:text-[7.25rem] lg:text-[8rem]"
+                          aria-hidden
+                        >
+                          {step.step}
+                        </span>
+                      </article>
                     </div>
-                    <div className="absolute -z-10 inset-0 bg-accent/20 blur-2xl rounded-full scale-150" />
-                  </div>
-
-                  <div className="flex-1 bg-gray-900 border-2 border-gray-800 rounded-3xl p-8 hover:border-accent/50 transition-all duration-300">
-                    <div className="text-accent text-sm font-semibold mb-2">Step {step.step}</div>
-                    <h3 className="font-display text-2xl md:text-3xl font-bold text-white mb-4">
-                      {step.title}
-                    </h3>
-                    <p className="text-gray-300 leading-relaxed">{step.description}</p>
-                  </div>
-                </div>
-              ))}
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
         </div>
       </section>
 
+      {/* What is not covered */}
+      <section id="not-covered" className="scroll-mt-28 border-t border-white/10 bg-black py-16 md:py-20">
+        <div className="container-wide">
+          <div className="mx-auto max-w-3xl text-center">
+            <Badge className="mb-5 border-white/15 bg-white/5 text-gray-200">
+              <XCircle className="mr-2 h-4 w-4 text-gray-400" aria-hidden />
+              Important
+            </Badge>
+            <h2 className="font-display text-3xl font-bold text-white md:text-4xl">
+              What is <span className="text-gray-400">not</span> covered
+            </h2>
+            <p className="mt-4 text-gray-400">
+              Transparency matters. Typical exclusions include the following (refer to your written
+              warranty for the full legal list).
+            </p>
+          </div>
+          <ul className="mx-auto mt-10 max-w-2xl space-y-3 text-left">
+            {notCoveredItems.map((item) => (
+              <li
+                key={item}
+                className="flex gap-3 rounded-xl border border-white/10 bg-zinc-900/40 px-4 py-3 text-gray-300"
+              >
+                <XCircle className="mt-0.5 h-5 w-5 shrink-0 text-gray-500" aria-hidden />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* FAQ Section */}
-      <section className="section-padding bg-black">
+      <section id="faq" className="scroll-mt-28 section-padding bg-black">
         <div className="container-wide">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <Badge className="mb-6 bg-accent/10 text-accent border-accent/30">

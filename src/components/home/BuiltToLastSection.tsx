@@ -15,7 +15,7 @@ const backgroundImage =
 
 export function BuiltToLastSection() {
   return (
-    <section className="bg-black py-8 md:py-12">
+    <section className="bg-black pb-8 md:pb-12">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}

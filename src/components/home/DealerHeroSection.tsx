@@ -6,16 +6,17 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 type DealerHeroSectionProps = {
-  backgroundSrc?: string;
+  /** Image for the right column (large screens); path under `/public`. */
+  rightImageSrc?: string;
   journeyHref?: string;
   dealersHref?: string;
   contactHref?: string;
 };
 
-const defaultBackgroundSrc = "/home/TonkaCamping.jpeg";
+const defaultRightImageSrc = "/modelexterior/ge%20gat.png";
 
 export function DealerHeroSection({
-  backgroundSrc = defaultBackgroundSrc,
+  rightImageSrc = defaultRightImageSrc,
   journeyHref = "/contact",
   dealersHref = "/dealers",
   contactHref = "/contact",
@@ -27,19 +28,10 @@ export function DealerHeroSection({
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: "some" }}
         transition={{ duration: 0.6 }}
-        className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] min-h-[520px] w-screen overflow-hidden md:min-h-[640px] lg:min-h-[720px]"
+        className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen overflow-hidden"
       >
-        <Image
-          src={backgroundSrc}
-          alt="Connect with Great Aussie Caravans dealers"
-          fill
-          className="object-cover"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-black/60" />
-
-        <div className="relative z-10 h-full">
-          <div className="container-wide flex h-full min-h-[520px] items-center px-6 py-12 md:min-h-[640px] md:px-10 md:py-16 lg:min-h-[720px] lg:px-12 lg:py-20">
+        <div className="flex min-h-[520px] w-full flex-col bg-black lg:min-h-[640px] lg:flex-row lg:items-stretch">
+          <div className="flex w-full flex-col justify-center px-6 py-12 sm:px-10 lg:w-1/2 lg:py-16 lg:pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:pr-10 xl:py-20">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -85,6 +77,17 @@ export function DealerHeroSection({
                 </Link>
               </div>
             </motion.div>
+          </div>
+
+          <div className="relative min-h-[280px] w-full lg:w-1/2 lg:min-h-0">
+            <Image
+              src={rightImageSrc}
+              alt="Great Aussie Caravans — connect with our dealers"
+              fill
+              className="object-cover object-center"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              priority={false}
+            />
           </div>
         </div>
       </motion.div>
