@@ -57,8 +57,8 @@ export function ModelShowcaseHero({
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
 
         <div className="relative z-10 flex min-h-[440px] flex-col justify-end md:min-h-[560px] lg:min-h-[640px]">
-          <div className="container-wide px-6 pb-4 md:px-10 md:pb-6 lg:px-12 lg:pb-8">
-            <div className="grid items-center gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
+          <div className="container-wide px-6 pb-6 md:px-10 md:pb-8 lg:px-12 lg:pb-10">
+            <div className="grid min-w-0 items-center gap-8 md:grid-cols-2 md:gap-10 lg:gap-12">
               <div className="max-w-lg justify-self-start">
                 <motion.div className="relative mb-3 h-16 w-64 md:h-20 md:w-80 lg:h-24 lg:w-[26rem]">
                   <Image
@@ -86,7 +86,7 @@ export function ModelShowcaseHero({
 
               <div
                 className={cn(
-                  "flex max-w-[calc(100vw-2.5rem)] flex-nowrap justify-self-end gap-2 self-end overflow-x-auto overscroll-x-contain pb-0.5 sm:gap-2.5 md:max-w-[min(100%,26rem)] lg:max-w-[min(100%,28rem)]",
+                  "flex w-full min-w-0 max-w-[calc(100vw-2.5rem)] flex-nowrap justify-end gap-2 self-end overflow-x-auto overscroll-x-contain px-1 py-2 sm:gap-2.5 md:max-w-none",
                   "[scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.25)_transparent]"
                 )}
                 role="group"
@@ -102,16 +102,16 @@ export function ModelShowcaseHero({
                       aria-current={selected ? "true" : undefined}
                       aria-label={`Show studio image ${idx + 1} of ${slideCount}`}
                       className={cn(
-                        "group w-[3.5rem] shrink-0 rounded-lg text-left outline-none transition-[transform,box-shadow] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:w-16 sm:rounded-xl md:w-[4.25rem]",
+                        "group w-[3.75rem] shrink-0 rounded-lg p-0.5 text-left outline-none transition-[transform,box-shadow] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0 sm:w-[4.25rem] sm:rounded-xl md:w-[4.5rem]",
                         selected && "z-[1] scale-[1.02]"
                       )}
                     >
                       <div
                         className={cn(
-                          "relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-zinc-950 ring-1 ring-offset-1 ring-offset-black transition-[ring-color,box-shadow] duration-300 sm:rounded-xl",
+                          "relative aspect-[4/3] w-full overflow-hidden rounded-md bg-zinc-950 border-2 transition-[border-color,box-shadow] duration-300 sm:rounded-lg",
                           selected
-                            ? "ring-2 ring-accent shadow-[0_0_12px_rgba(249,115,22,0.32)]"
-                            : "ring-white/20 group-hover:ring-white/45"
+                            ? "border-accent shadow-[0_0_12px_rgba(249,115,22,0.32)]"
+                            : "border-white/20 group-hover:border-white/50"
                         )}
                       >
                         <Image
