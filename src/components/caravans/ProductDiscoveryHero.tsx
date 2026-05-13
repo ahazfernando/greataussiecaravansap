@@ -41,14 +41,21 @@ export function ProductDiscoveryHero({
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/35 to-black/80" />
 
-        <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/10 bg-black/30 backdrop-blur-[2px]">
-          <div className="mx-auto grid max-w-lg grid-cols-2 gap-x-5 gap-y-2.5 px-4 py-3 sm:max-w-2xl sm:gap-x-6 sm:px-5 sm:py-3.5 md:max-w-3xl md:grid-cols-4 md:gap-x-5 md:gap-y-0 md:px-5 md:py-4 lg:max-w-[56rem] lg:gap-x-7">
+        <div className="absolute inset-x-0 bottom-0 z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
             {specs.map((spec, index) => (
-              <div key={`${spec.label}-${index}`} className="min-w-0">
-                <p className="font-display text-[1.35rem] font-semibold leading-tight text-white sm:text-[1.5rem] md:text-[1.65rem] lg:text-[1.85rem] break-words">
+              <div
+                key={`${spec.label}-${index}`}
+                className={`min-w-[12rem] px-5 py-4 sm:min-w-0 sm:px-6 md:px-8 md:py-5 lg:px-10 ${
+                  index < specs.length - 1 ? "border-b border-white/10 xl:border-b-0 xl:border-r" : ""
+                } ${index % 2 === 0 ? "sm:border-r sm:border-white/10 xl:border-r" : "sm:border-r-0"} ${
+                  index < 2 ? "sm:border-b sm:border-white/10 xl:border-b-0" : ""
+                }`}
+              >
+                <p className="font-display whitespace-nowrap text-[1.75rem] font-semibold leading-none text-white md:text-[2.2rem]">
                   {spec.value}
                 </p>
-                <p className="mt-0.5 text-xs text-white/75 md:text-sm">{spec.label}</p>
+                <p className="mt-1 text-xs text-white/75 md:text-sm">{spec.label}</p>
               </div>
             ))}
           </div>

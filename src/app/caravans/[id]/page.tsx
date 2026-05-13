@@ -13,6 +13,7 @@ import { Newsletter } from "@/components/home/Newsletter";
 import { Footer } from "@/components/layout/Footer";
 // import { InteriorComfortCarousel } from "@/components/caravans/InteriorComfortCarousel";
 import { ExteriorShowcaseSection } from "@/components/caravans/ExteriorShowcaseSection";
+import { getExteriorShowcaseBackground } from "@/components/caravans/modelExteriorBackgrounds";
 import { ProductDiscoveryHero } from "@/components/caravans/ProductDiscoveryHero";
 import {
   getProductDiscoveryFourthSpec,
@@ -2205,6 +2206,7 @@ export default function ModelDetail() {
         title={exteriorHeading.title}
         subtitle={exteriorHeading.subtitle}
         paragraphs={exteriorParagraphs}
+        backgroundSrc={getExteriorShowcaseBackground(id)}
       />
 
       {/* Interior comfort carousel — disabled for all models; uncomment import + data block + props above to restore.
