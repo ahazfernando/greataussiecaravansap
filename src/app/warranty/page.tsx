@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { Layout } from "@/components/layout";
@@ -13,9 +13,6 @@ import {
   Clock,
   Phone,
   Mail,
-  HelpCircle,
-  ChevronDown,
-  ChevronUp,
   Users,
   Heart,
   XCircle,
@@ -30,7 +27,6 @@ import {
 } from "lucide-react";
 
 export default function WarrantyPage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const coverageRef = useRef<HTMLDivElement>(null);
   const claimProcessSectionRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -110,6 +106,7 @@ export default function WarrantyPage() {
     },
   ];
 
+  /* Warranty FAQ — restore with section below + nav link #faq + useState(openFaq) + HelpCircle, ChevronDown, ChevronUp
   const faqItems = [
     {
       question: "What does the warranty cover?",
@@ -139,6 +136,7 @@ export default function WarrantyPage() {
       answer: "Even if your standard warranty has expired, we offer service and parts support for all Great Aussie Caravans. Extended warranty plans can also be purchased to extend coverage beyond the standard period.",
     },
   ];
+  */
 
   const benefits = [
     {
@@ -200,7 +198,6 @@ export default function WarrantyPage() {
                 { href: "#claim-process", label: "Claim process" },
                 { href: "#eligibility", label: "Eligibility" },
                 { href: "#not-covered", label: "What is not covered" },
-                { href: "#faq", label: "FAQ" },
                 { href: "/contact", label: "Contact us", highlight: true },
               ] as { href: string; label: string; highlight?: boolean }[]
             ).map((item) => {
@@ -499,7 +496,7 @@ export default function WarrantyPage() {
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* Warranty FAQ section (commented out)
       <section id="faq" className="scroll-mt-28 section-padding bg-black">
         <div className="container-wide">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -547,6 +544,7 @@ export default function WarrantyPage() {
           </div>
         </div>
       </section>
+      */}
     </Layout>
   );
 }
