@@ -34,7 +34,7 @@ const features = [
 
 export function WhyChooseUs() {
   return (
-    <section className="relative overflow-hidden bg-black pt-16 md:pt-24 lg:pt-32">
+    <section className="relative overflow-hidden bg-black pb-8 pt-16 md:pb-10 md:pt-24 lg:pb-12 lg:pt-32">
       <img
         src={backgroundImage}
         alt="Built for Australian Adventures"
